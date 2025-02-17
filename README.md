@@ -38,15 +38,19 @@ Facilitar a revisão de conteúdos fundamentais da Ciência da Computação, tor
 - **Professores** que desejam recomendar uma ferramenta complementar para os alunos.  
 
 ## Principais Funcionalidades
-- **Módulos de aprendizado** organizados por temas e níveis de dificuldade.  
-- **Quizzes interativos** com feedback instantâneo.  
-- **Sistema de progresso** com XP, conquistas e desafios diários.  
-- **Explicações detalhadas** para respostas erradas, incentivando o aprendizado contínuo.  
+- **Módulos de aprendizado** organizados por temas e níveis de dificuldade.
+- **Quizzes interativos** com feedback instantâneo.
+- **Sistema de progresso** com XP, conquistas e desafios diários.
+- **Explicações detalhadas** para respostas erradas, incentivando o aprendizado contínuo.
 
 ## User Stories
 
-### 1. Criar uma Disciplina
-**Como** administrador do app,  
+### Admin
+
+#### Gerenciamento de Disciplinas
+
+##### 1. Criar uma Disciplina
+**Como** administrador do app,
 **Quero** poder criar uma nova disciplina com o nome ícone e número de período,  
 **Para que** eu possa organizar as disciplinas de acordo com o conteúdo e o período correspondente.
 
@@ -63,7 +67,43 @@ Então a disciplina é criada e redirecionado para uma página de exibição da 
 ```
 ---
 
-### 2. Criar um Módulo
+##### 4. Editar disciplina
+**Como** administrador do app,
+**Quero** poder editar o nome, ícone e período de uma disciplina,
+**Para que** eu possa atualizar as informações conforme necessário.
+
+**Critérios de aceitação:**
+- O administrador pode editar o nome da disciplina.
+- O administrador pode alterar o ícone da disciplina.
+- O administrador pode modificar o período da disciplina.
+
+```
+Dado que o administrador está na página de edição de disciplina
+Quando ele altera o nome da disciplina, o ícone e o período
+E clica no botão de salvar alterações
+Então as informações da disciplina são atualizadas e redirecionado para a página de exibição da disciplina
+```
+---
+##### 7. Excluir disciplina
+**Como** administrador do app,
+**Quero** poder excluir uma disciplina,
+**Para que** eu possa remover disciplinas que não são mais necessárias.
+
+**Critérios de aceitação:**
+- O administrador pode excluir uma disciplina.
+- O administrador deve confirmar a exclusão antes de prosseguir.
+
+```
+Dado que o administrador está na página de exibição da disciplina
+Quando ele clica no botão de excluir disciplina
+E confirma a exclusão
+Então a disciplina é removida e redirecionado para a página inicial do app
+```
+---
+
+#### Gerenciamento de Módulos
+
+##### 2. Criar um Módulo
 **Como** administrador do app,
 **Quero** poder criar um novo módulo dentro de uma disciplina,
 **Para que** eu possa organizar os conteúdos de acordo com os temas e níveis de dificuldade.
@@ -82,7 +122,44 @@ Então o módulo é criado e redirecionado para uma página de exibição do mó
 ```
 ---
 
-### 3. Criar uma Pergunta
+##### 5. Editar módulo
+**Como** administrador do app,  
+**Quero** poder editar o nome, descrição e nível de dificuldade de um módulo,
+**Para que** eu possa atualizar as informações conforme necessário.
+
+**Critérios de aceitação:**
+- O administrador pode editar o nome do módulo.
+- O administrador pode alterar a descrição do módulo.
+- O administrador pode modificar o nível de dificuldade do módulo.
+
+```
+Dado que o administrador está na página de edição de módulo
+Quando ele altera o nome do módulo, a descrição e o nível de dificuldade
+E clica no botão de salvar alterações
+Então as informações do módulo são atualizadas e redirecionado para a página de exibição do módulo
+```
+---
+
+##### 8. Excluir módulo
+**Como** administrador do app,
+**Quero** poder excluir um módulo,
+**Para que** eu possa remover módulos que não são mais necessários.
+
+**Critérios de aceitação:**
+- O administrador pode excluir um módulo.
+- O administrador deve confirmar a exclusão antes de prosseguir.
+
+```
+Dado que o administrador está na página de exibição do módulo
+Quando ele clica no botão de excluir módulo
+E confirma a exclusão
+Então o módulo é removido e redirecionado para a página de exibição da disciplina
+```
+---
+
+#### Gerenciamento de Perguntas
+
+##### 3. Criar uma Pergunta
 **Como** administrador do app,
 **Quero** poder criar uma nova pergunta dentro de um módulo,
 **Para que** eu possa oferecer quizzes interativos para os usuários.
@@ -100,42 +177,7 @@ Então a pergunta é criada e redirecionado para a página de exibição do mód
 ```
 ---
 
-### 4. Editar disciplina
-**Como** administrador do app,
-**Quero** poder editar o nome, ícone e período de uma disciplina,
-**Para que** eu possa atualizar as informações conforme necessário.
-
-**Critérios de aceitação:**
-- O administrador pode editar o nome da disciplina.
-- O administrador pode alterar o ícone da disciplina.
-- O administrador pode modificar o período da disciplina.
-
-```
-Dado que o administrador está na página de edição de disciplina
-Quando ele altera o nome da disciplina, o ícone e o período
-E clica no botão de salvar alterações
-Então as informações da disciplina são atualizadas e redirecionado para a página de exibição da disciplina
-```
----
-### 5. Editar módulo
-**Como** administrador do app,
-**Quero** poder editar o nome, descrição e nível de dificuldade de um módulo,
-**Para que** eu possa atualizar as informações conforme necessário.
-
-**Critérios de aceitação:**
-- O administrador pode editar o nome do módulo.
-- O administrador pode alterar a descrição do módulo.
-- O administrador pode modificar o nível de dificuldade do módulo.
-
-```
-Dado que o administrador está na página de edição de módulo
-Quando ele altera o nome do módulo, a descrição e o nível de dificuldade
-E clica no botão de salvar alterações
-Então as informações do módulo são atualizadas e redirecionado para a página de exibição do módulo
-```
----
-
-### 6. Editar pergunta
+##### 6. Editar pergunta
 **Como** administrador do app,
 **Quero** poder editar o enunciado, alternativas e resposta correta de uma pergunta,
 **Para que** eu possa corrigir ou atualizar as perguntas conforme necessário.
@@ -152,41 +194,8 @@ E clica no botão de salvar alterações
 Então as informações da pergunta são atualizadas e redirecionado para a página de exibição do módulo
 ```
 ---
-### 7. Excluir disciplina
-**Como** administrador do app,
-**Quero** poder excluir uma disciplina,
-**Para que** eu possa remover disciplinas que não são mais necessárias.
 
-**Critérios de aceitação:**
-- O administrador pode excluir uma disciplina.
-- O administrador deve confirmar a exclusão antes de prosseguir.
-
-```
-Dado que o administrador está na página de exibição da disciplina
-Quando ele clica no botão de excluir disciplina
-E confirma a exclusão
-Então a disciplina é removida e redirecionado para a página inicial do app
-```
----
-
-### 8. Excluir módulo
-**Como** administrador do app,
-**Quero** poder excluir um módulo,
-**Para que** eu possa remover módulos que não são mais necessários.
-
-**Critérios de aceitação:**
-- O administrador pode excluir um módulo.
-- O administrador deve confirmar a exclusão antes de prosseguir.
-
-```
-Dado que o administrador está na página de exibição do módulo
-Quando ele clica no botão de excluir módulo
-E confirma a exclusão
-Então o módulo é removido e redirecionado para a página de exibição da disciplina
-```
----
-
-### 9. Excluir pergunta
+##### 9. Excluir pergunta
 **Como** administrador do app,
 **Quero** poder excluir uma pergunta,
 **Para que** eu possa remover perguntas que não são mais necessárias.
@@ -203,7 +212,11 @@ Então a pergunta é removida e redirecionado para a página de exibição do m�
 ```
 ---
 
-### 10. Visualizar disciplina
+### Usuário
+
+#### Visualização e Estudo
+
+##### 10. Visualizar disciplina
 **Como** usuário do app,
 **Quero** poder visualizar as disciplinas disponíveis,
 **Para que** eu possa escolher uma disciplina para estudar.
@@ -214,13 +227,13 @@ Então a pergunta é removida e redirecionado para a página de exibição do m�
 - O usuário pode ver o período da disciplina.
 
 ```
-
 Dado que o usuário está na página inicial do app
 Quando ele clica em uma disciplina
 Então ele é redirecionado para a página de exibição da disciplina, para ver os módulos
 ```
 ---
-### 11. Visualizar módulos
+
+##### 11. Visualizar módulos
 **Como** usuário do app,
 **Quero** poder visualizar os módulos de uma disciplina,
 **Para que** eu possa escolher um módulo para estudar.
@@ -237,7 +250,7 @@ Então ele podera iniciar o quiz do módulo
 ```
 ---
 
-### 12. Responder perguntas
+##### 12. Responder perguntas
 **Como** usuário do app,
 **Quero** poder responder perguntas de um quiz,
 **Para que** eu possa testar meus conhecimentos.
