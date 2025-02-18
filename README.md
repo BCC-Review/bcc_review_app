@@ -23,7 +23,7 @@ Facilitar a revisão de conteúdos fundamentais da Ciência da Computação, tor
 - **Sistema de progresso** com XP, conquistas e desafios diários.
 - **Explicações detalhadas** para respostas erradas, incentivando o aprendizado contínuo.
 
-## User Stories
+## Histórias de Usuário
 
 ### Admin
 
@@ -246,4 +246,13 @@ Quando ele responde uma pergunta
 E clica no botão de confirmar resposta
 Então ele recebe um feedback e pode avançar para a próxima pergunta
 ```
+## Protótipo Baseado nas Histórias de Usuário
+![image](https://github.com/user-attachments/assets/55f8b2d0-1ce9-4b78-b3c0-8d6dbb0a25fe)
+![image](https://github.com/user-attachments/assets/cc2cfa41-ad48-4729-aacf-d377c211f799)
+![image](https://github.com/user-attachments/assets/9d47d862-d2b7-42f0-b456-f0b60833947e)
+![image](https://github.com/user-attachments/assets/2d887560-aaab-4617-aa1b-d562778c198d)
+![image](https://github.com/user-attachments/assets/6093a001-13d8-432e-8cd8-62d919fa1476)
+![image](https://github.com/user-attachments/assets/8f360308-1ae3-4eb1-bf64-058ac1ccb918)
+![image](https://github.com/user-attachments/assets/952aeb07-a064-45c9-806a-0c1c83b247f0)
+- Acesse-o para testar suas interações em: https://www.figma.com/design/uLxVGj8tXJdMrkRz757CHf/Aplicativo-M%C3%B3vel-de-Aprendizado?node-id=0-1&t=DF2C2DhIDVDda6ZK-1
 ---
