@@ -254,5 +254,7 @@ Então ele recebe um feedback e pode avançar para a próxima pergunta
 ![image](https://github.com/user-attachments/assets/6093a001-13d8-432e-8cd8-62d919fa1476)
 ![image](https://github.com/user-attachments/assets/8f360308-1ae3-4eb1-bf64-058ac1ccb918)
 ![image](https://github.com/user-attachments/assets/952aeb07-a064-45c9-806a-0c1c83b247f0)
-- Acesse-o para testar suas interações em: https://www.figma.com/design/uLxVGj8tXJdMrkRz757CHf/Aplicativo-M%C3%B3vel-de-Aprendizado?node-id=0-1&t=DF2C2DhIDVDda6ZK-1
+- [Figma](https://www.figma.com/design/uLxVGj8tXJdMrkRz757CHf/Aplicativo-M%C3%B3vel-de-Aprendizado?node-id=0-1&t=DF2C2DhIDVDda6ZK-1)
+
+- [Protótipo](https://www.figma.com/proto/uLxVGj8tXJdMrkRz757CHf/Aplicativo-M%C3%B3vel-de-Aprendizado?node-id=0-1&t=TlEgc9Dn4jZ2Gxnl-1)
 ---
