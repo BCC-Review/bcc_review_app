@@ -10,11 +10,13 @@ O **BCC Review** é um aplicativo gamificado de revisão voltado para estudantes
 
 Com uma abordagem baseada em gamificação, o BCC Review torna o aprendizado uma experiência envolvente e divertida. Os usuários são desafiados por meio de perguntas de múltipla escolha, atividades de completar código, identificação de erros e questões teóricas, tudo isso integrado a mecânicas gamificadas como XP, níveis, vidas, sequência diária e feedback visual instantâneo.
 
+Uma funcionalidade chave do BCC Review é a capacidade dos usuários de expandirem o conteúdo do aplicativo. Além das disciplinas, módulos e perguntas já existentes, os estudantes poderão criar seus próprios materiais de estudo, adaptando o app às suas necessidades específicas. No entanto, o ganho de XP e a progressão de nível são restritos aos materiais de estudo oficiais do BCC Review, e não se aplicam a materiais personalizados criados pelos usuários.
+
 ### Sistema de Gamificação
 Para tornar a experiência de aprendizado ainda mais envolvente, o BCC Review conta com as seguintes mecânicas de gamificação:
 
 - **Vidas (Corações):** Ao iniciar um quiz, o usuário possui **3 vidas (corações)**. A cada resposta incorreta, o usuário perde 1 vida. Caso perca todas as vidas, o quiz é reiniciado.
-- **XP por Perguntas:** Cada pergunta respondida corretamente concede uma quantidade de **XP**. O XP varia dependendo se a pergunta está sendo realizada pela primeira vez ou durante uma revisão do conteúdo.
+- **XP por Perguntas:** Cada pergunta respondida corretamente concede uma quantidade de **XP**. O XP varia dependendo se a pergunta está sendo realizada pela primeira vez ou durante uma revisão do conteúdo. O ganho de XP é aplicável apenas aos materiais de estudo oficiais do BCC Review.
   - **Pergunta inédita:** 10 XP
   - **Pergunta revisada:** 2 XP
 - **Níveis de Usuário:** O usuário acumula XP, subindo de nível conforme avança. A quantidade de XP necessária para subir de nível aumenta progressivamente conforme o usuário atinge novos marcos de experiência.
