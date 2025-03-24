@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppConfigUI {
   AppConfigUI._();
@@ -63,12 +64,12 @@ class AppConfigUI {
     cardTheme: CardTheme(
       color: const Color(0xFF151530),
       elevation: 16,
-      shadowColor: const Color(0xFF8A2BE2).withOpacity(0.4),
+      shadowColor: const Color(0xFF8A2BE2).withAlpha(40),
       margin: const EdgeInsets.all(12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: const Color(0xFFAA77FF).withOpacity(0.3),
+          color: const Color(0xFFAA77FF).withAlpha(30),
           width: 1,
         ),
       ),
@@ -81,8 +82,8 @@ class AppConfigUI {
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'Exo2',
-    splashColor: const Color(0xFF00FFFF).withOpacity(0.2),
-    highlightColor: const Color(0xFFAA77FF).withOpacity(0.15),
+    splashColor: const Color(0xFF00FFFF).withAlpha(20),
+    highlightColor: const Color(0xFFAA77FF).withAlpha(15),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -93,6 +94,11 @@ class AppConfigUI {
         fontSize: 20,
         letterSpacing: 1.2,
         color: Colors.white,
+      ),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
       ),
     ),
     textSelectionTheme: const TextSelectionThemeData(
@@ -162,12 +168,12 @@ class AppConfigUI {
     cardTheme: CardTheme(
       color: Colors.white,
       elevation: 6,
-      shadowColor: const Color(0xFF8A2BE2).withOpacity(0.2),
+      shadowColor: const Color(0xFF8A2BE2).withAlpha(20),
       margin: const EdgeInsets.all(12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: const Color(0xFFAA77FF).withOpacity(0.2),
+          color: const Color(0xFFAA77FF).withAlpha(20),
           width: 1,
         ),
       ),
@@ -180,8 +186,8 @@ class AppConfigUI {
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'Exo2',
-    splashColor: const Color(0xFF00FFFF).withOpacity(0.15),
-    highlightColor: const Color(0xFFAA77FF).withOpacity(0.1),
+    splashColor: const Color(0xFF00FFFF).withAlpha(15),
+    highlightColor: const Color(0xFFAA77FF).withAlpha(10),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -192,6 +198,11 @@ class AppConfigUI {
         fontSize: 20,
         letterSpacing: 1.2,
         color: Color(0xFF1A1040),
+      ),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
       ),
     ),
     textSelectionTheme: const TextSelectionThemeData(
