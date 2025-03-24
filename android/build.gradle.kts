@@ -5,6 +5,14 @@ allprojects {
     }
 }
 
+subprojects {
+    plugins.withType<com.android.build.gradle.BasePlugin> {
+        configure<com.android.build.gradle.BaseExtension> {
+            namespace = namespace ?: project.group.toString()
+        }
+    }
+}
+
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
