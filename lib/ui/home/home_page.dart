@@ -17,56 +17,39 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    viewModel.logoutCommand.addListener(_listenable);
     viewModel.getUser(context);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    viewModel.logoutCommand.removeListener(_listenable);
-    super.dispose();
-  }
-
-  void _listenable() {
-    if (viewModel.logoutCommand.isSuccess) {
-      Routefly.navigate(routePaths.login);
-    } else if (viewModel.logoutCommand.isFailure) {
-      final failure = viewModel.logoutCommand.value as FailureCommand;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(failure.error.toString()),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AnimatedBuilder(
-          animation: viewModel,
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Routefly.push(routePaths.settings);
+            },
+            icon: const Icon(Icons.settings),
+          ),
+        ],
+        title: ListenableBuilder(
+          listenable: viewModel,
           builder: (context, _) {
-            if (viewModel.user != null) {
-              return Text('Bem vindo ${viewModel.user!.name}!');
-            }
-            return const Text('Bem vindo...');
+            return AnimatedCrossFade(
+              duration: const Duration(milliseconds: 300),
+              firstChild: const Text('Carregando...'),
+              secondChild: Text('Bem vindo ${viewModel.user?.name ?? "..."}!'),
+              crossFadeState:
+                  viewModel.user == null
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+            );
           },
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                viewModel.logoutCommand.execute();
-              },
-              child: const Text('Sair'),
-            ),
-          ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         ],
       ),
     );

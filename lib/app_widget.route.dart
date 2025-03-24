@@ -5,11 +5,14 @@ import 'package:routefly/routefly.dart';
 
 import 'ui/home/home_page.dart' as a0;
 import 'ui/login/login_page.dart' as a1;
-import 'ui/splash/splash_page.dart' as a2;
+import 'ui/settings/settings_page.dart' as a2;
+import 'ui/splash/splash_page.dart' as a3;
 
 Route b0Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(ctx, settings, const a0.HomePage());
 Route b1Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(ctx, settings, const a1.LoginPage());
 Route b2Builder(BuildContext ctx, RouteSettings settings) =>
-    Routefly.defaultRouteBuilder(ctx, settings, const a2.SplashPage());
+    Routefly.defaultRouteBuilder(ctx, settings, const a2.SettingsPage());
+Route b3Builder(BuildContext ctx, RouteSettings settings) =>
+    Routefly.defaultRouteBuilder(ctx, settings, const a3.SplashPage());

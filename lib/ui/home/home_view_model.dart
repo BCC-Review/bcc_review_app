@@ -11,8 +11,6 @@ class HomeViewModel extends ChangeNotifier {
 
   User? user;
 
-  late final logoutCommand = Command0(_logout);
-
   Future<void> getUser(BuildContext context) async {
     await _userRepository.getUser()
       ..onSuccess((user) {
@@ -27,9 +25,5 @@ class HomeViewModel extends ChangeNotifier {
           ),
         );
       });
-  }
-
-  AsyncResult<Unit> _logout() async {
-    return _userRepository.logout();
   }
 }

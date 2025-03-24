@@ -3,6 +3,7 @@ import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  setupDependencies();
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupDependencies();
   runApp(const AppWidget());
 }

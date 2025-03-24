@@ -6,9 +6,14 @@ List<RouteEntity> get routes => [
   RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b0Builder),
   RouteEntity(key: '/login', uri: Uri.parse('/login'), routeBuilder: b1Builder),
   RouteEntity(
+    key: '/settings',
+    uri: Uri.parse('/settings'),
+    routeBuilder: b2Builder,
+  ),
+  RouteEntity(
     key: '/splash',
     uri: Uri.parse('/splash'),
-    routeBuilder: b2Builder,
+    routeBuilder: b3Builder,
   ),
 ];
 
@@ -16,5 +21,6 @@ const routePaths = (
   path: '/',
   home: '/home',
   login: '/login',
+  settings: '/settings',
   splash: '/splash',
 );

@@ -1,17 +1,22 @@
 import 'package:auto_injector/auto_injector.dart';
 import 'package:bcc_review_app/core/database/database.dart';
+import 'package:bcc_review_app/data/repositories/settings/settings_repository.dart';
+import 'package:bcc_review_app/data/repositories/settings/settings_repository_impl.dart';
 import 'package:bcc_review_app/data/repositories/subject/subject_repository.dart';
 import 'package:bcc_review_app/data/repositories/subject/subject_repository_impl.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository_impl.dart';
+import 'package:bcc_review_app/data/services/settings/local_storage_preferences_service.dart';
 import 'package:bcc_review_app/data/services/subject/subject_local_service.dart';
 import 'package:bcc_review_app/data/services/user/user_local_service.dart';
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
 import 'package:bcc_review_app/ui/login/login_view_model.dart';
+import 'package:bcc_review_app/ui/settings/settings_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final injector = AutoInjector();
 
-void setupDependencies() {
+Future<void> setupDependencies() async {
   injector.addSingleton(Database.new);
 
   // Subject dependencies
@@ -24,6 +29,13 @@ void setupDependencies() {
 
   injector.addLazySingleton(LoginViewModel.new);
   injector.addLazySingleton(HomeViewModel.new);
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  injector.addInstance<SharedPreferences>(prefs);
+  injector.addSingleton(LocalStoragePreferencesService.new);
+  injector.addSingleton<SettingsRepository>(SettingsRepositoryImpl.new);
+
+  injector.addLazySingleton(SettingsViewModel.new);
 
   injector.commit();
 }
