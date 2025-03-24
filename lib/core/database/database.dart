@@ -1,3 +1,4 @@
+import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/domain/entities/answer_user.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';

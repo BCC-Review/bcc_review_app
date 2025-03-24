@@ -2,7 +2,7 @@ import 'package:bcc_review_app/data/services/subject/subject_local_service.dart'
 import 'package:bcc_review_app/domain/entities/subject.dart';
 import 'package:result_dart/result_dart.dart';
 
-import './subject_repository.dart';
+import 'subject_repository.dart';
 
 class SubjectRepositoryImpl implements SubjectRepository {
   final SubjectLocalService _subjectLocalService;

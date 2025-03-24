@@ -88,11 +88,11 @@ User _userDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = User(
-    dailySequence: reader.readLong(offsets[0]),
+    dailySequence: reader.readLongOrNull(offsets[0]) ?? 0,
     id: id,
-    level: reader.readLong(offsets[1]),
+    level: reader.readLongOrNull(offsets[1]) ?? 0,
     name: reader.readString(offsets[2]),
-    totalXp: reader.readLong(offsets[3]),
+    totalXp: reader.readLongOrNull(offsets[3]) ?? 0,
   );
   return object;
 }
@@ -105,13 +105,13 @@ P _userDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }

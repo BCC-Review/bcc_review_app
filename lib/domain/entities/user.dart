@@ -16,8 +16,8 @@ class User {
   User({
     this.id,
     required this.name,
-    required this.level,
-    required this.totalXp,
-    required this.dailySequence,
+    this.level = 0,
+    this.totalXp = 0,
+    this.dailySequence = 0,
   });
 }

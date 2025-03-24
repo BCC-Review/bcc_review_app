@@ -7,6 +7,6 @@ class AppException implements Exception {
 
   @override
   String toString() {
-    return '$runtimeType:$message${stackTrace != null ? '\n$stackTrace' : ''}';
+    return '$runtimeType: $message${stackTrace != null ? '\n$stackTrace' : ''}';
   }
 }
