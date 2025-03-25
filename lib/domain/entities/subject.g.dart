@@ -31,6 +31,11 @@ const SubjectSchema = CollectionSchema(
       id: 2,
       name: r'name',
       type: IsarType.string,
+    ),
+    r'period': PropertySchema(
+      id: 3,
+      name: r'period',
+      type: IsarType.long,
     )
   },
   estimateSize: _subjectEstimateSize,
@@ -75,6 +80,7 @@ void _subjectSerialize(
   writer.writeString(offsets[0], object.description);
   writer.writeString(offsets[1], object.icon);
   writer.writeString(offsets[2], object.name);
+  writer.writeLong(offsets[3], object.period);
 }
 
 Subject _subjectDeserialize(
@@ -88,6 +94,7 @@ Subject _subjectDeserialize(
     icon: reader.readString(offsets[1]),
     id: id,
     name: reader.readString(offsets[2]),
+    period: reader.readLong(offsets[3]),
   );
   return object;
 }
@@ -105,6 +112,8 @@ P _subjectDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -658,6 +667,59 @@ extension SubjectQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> periodEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'period',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> periodGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'period',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> periodLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'period',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> periodBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'period',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension SubjectQueryObject
@@ -759,6 +821,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByPeriod() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'period', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByPeriodDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'period', Sort.desc);
+    });
+  }
 }
 
 extension SubjectQuerySortThenBy
@@ -810,6 +884,18 @@ extension SubjectQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByPeriod() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'period', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByPeriodDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'period', Sort.desc);
+    });
+  }
 }
 
 extension SubjectQueryWhereDistinct
@@ -832,6 +918,12 @@ extension SubjectQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QDistinct> distinctByPeriod() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'period');
     });
   }
 }
@@ -859,6 +951,12 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<Subject, int, QQueryOperations> periodProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'period');
     });
   }
 }

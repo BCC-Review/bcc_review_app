@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final injector = AutoInjector();
 
 Future<void> setupDependencies() async {
-  injector.addSingleton(Database.new);
+  injector.addSingleton(Database.new);  
 
   // Subject dependencies
   injector.addLazySingleton<SubjectLocalService>(SubjectLocalService.new);

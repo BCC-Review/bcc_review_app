@@ -1,3 +1,4 @@
+import 'package:asuka/asuka.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/ui/app_config_ui.dart';
 import 'package:bcc_review_app/data/repositories/settings/settings_repository.dart';
@@ -31,6 +32,7 @@ class _AppWidgetState extends State<AppWidget> {
                   ? AppConfigUI.darkTheme
                   : AppConfigUI.lightTheme,
           debugShowCheckedModeBanner: false,
+          builder: Asuka.builder,
           routerConfig: Routefly.routerConfig(
             routes: routes,
             initialPath: routePaths.splash,

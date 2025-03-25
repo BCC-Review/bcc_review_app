@@ -7,6 +7,7 @@ part 'subject.g.dart';
 class Subject {
   Id? id;
   String name;
+  int period;
   String description;
   String icon;
 
@@ -17,5 +18,6 @@ class Subject {
     required this.name,
     required this.description,
     required this.icon,
+    required this.period,
   });
 }

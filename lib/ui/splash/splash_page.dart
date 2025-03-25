@@ -5,6 +5,7 @@ import 'package:bcc_review_app/core/ui/widgets/logo_widget.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -27,6 +28,7 @@ class _SplashPageState extends State<SplashPage> {
 
   init() async {
     await database.openConnection();
+    await database.seed(injector.get<SharedPreferences>());
     final user = await userRepository.getUser();
     await Future.delayed(const Duration(seconds: 2));
     if (user.isSuccess()) {

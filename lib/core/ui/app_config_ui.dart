@@ -33,15 +33,16 @@ class AppConfigUI {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(color: Color(0xFFAA77FF), width: 1.5),
+        borderSide: BorderSide(color: Color(0xFFAA77FF), width: 0.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(color: Color(0xFFBB88FF), width: 2.0),
+        borderSide: BorderSide(color: Color(0xFFBB88FF), width: 1.5),
       ),
       filled: true,
       fillColor: Color(0xFF151530),
       labelStyle: TextStyle(color: Colors.white70),
+      hintStyle: TextStyle(color: Colors.white60),
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -106,6 +107,66 @@ class AppConfigUI {
       selectionColor: Color(0xFF00FFFF),
       selectionHandleColor: Color(0xFF00FFFF),
     ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: Color(0xFF8A2BE2),
+      linearTrackColor: Color(0xFFAA77FF),
+      strokeCap: StrokeCap.round,
+      refreshBackgroundColor: Color(0xFF151530),
+    ),
+    expansionTileTheme: ExpansionTileThemeData(
+      backgroundColor: Color(0xFF151530),
+      collapsedBackgroundColor: Color(0xFF0D0D20),
+      tilePadding: EdgeInsets.symmetric(horizontal: 8),
+      childrenPadding: EdgeInsets.all(0),
+      expandedAlignment: Alignment.topLeft,
+      iconColor: Color(0xFF8A2BE2),
+      collapsedIconColor: Color(0xFFAA77FF),
+      textColor: Colors.white,
+      collapsedTextColor: Colors.white70,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        side: BorderSide(color: Color(0xFFAA77FF), width: 1),
+      ),
+      collapsedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        side: BorderSide(color: Color(0xFFAA77FF).withAlpha(30), width: 1),
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: const Color(0xFF151530),
+      selectedItemColor: const Color(0xFF00FFFF), // Ciano neon
+      unselectedItemColor: Colors.white60,
+      selectedIconTheme: const IconThemeData(size: 26, opacity: 1),
+      unselectedIconTheme: const IconThemeData(size: 22, opacity: 0.7),
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
+      elevation: 0,
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'Exo2',
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.5,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'Exo2',
+        fontSize: 11,
+        letterSpacing: 0.3,
+      ),
+    ),
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: const Color(0xFF151530),
+      elevation: 8,
+      shape: const AutomaticNotchedShape(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        StadiumBorder(),
+      ),
+      surfaceTintColor: const Color(0xFF00FFFF).withOpacity(0.1),
+      shadowColor: const Color(0xFF8A2BE2).withOpacity(0.3),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+    ),
   );
 
   static final ThemeData lightTheme = ThemeData(
@@ -137,15 +198,16 @@ class AppConfigUI {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(color: Color(0xFFAA77FF), width: 1.5),
+        borderSide: BorderSide(color: Color(0xFFAA77FF), width: 0.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(color: Color(0xFF8A2BE2), width: 2.0),
+        borderSide: BorderSide(color: Color(0xFF8A2BE2), width: 1.5),
       ),
       filled: true,
       fillColor: Colors.white,
       labelStyle: TextStyle(color: Color(0xFF3A1A70)),
+      hintStyle: TextStyle(color: Color(0xFF3A1A70)),
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -209,6 +271,66 @@ class AppConfigUI {
       cursorColor: Color(0xFF00B4D8),
       selectionColor: Color(0xFF00FFFF),
       selectionHandleColor: Color(0xFF00B4D8),
+    ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: Color(0xFF8A2BE2),
+      linearTrackColor: Color(0xFFAA77FF).withAlpha(30),
+      circularTrackColor: Color(0xFFAA77FF).withAlpha(15),
+      refreshBackgroundColor: Colors.white,
+    ),
+    expansionTileTheme: ExpansionTileThemeData(
+      backgroundColor: Colors.white,
+      collapsedBackgroundColor: Colors.white,
+      tilePadding: EdgeInsets.symmetric(horizontal: 8),
+      childrenPadding: EdgeInsets.all(0),
+      expandedAlignment: Alignment.topLeft,
+      iconColor: Color(0xFF8A2BE2),
+      collapsedIconColor: Color(0xFFAA77FF),
+      textColor: Color(0xFF1A1040),
+      collapsedTextColor: Color(0xFF3A1A70),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        side: BorderSide(color: Color(0xFFAA77FF), width: 1),
+      ),
+      collapsedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        side: BorderSide(color: Color(0xFFAA77FF).withAlpha(30), width: 1),
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedItemColor: const Color(0xFF8A2BE2), // Roxo vibrante
+      unselectedItemColor: const Color(0xFF3A1A70).withOpacity(0.6),
+      selectedIconTheme: const IconThemeData(size: 26, opacity: 1),
+      unselectedIconTheme: const IconThemeData(size: 22, opacity: 0.7),
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
+      elevation: 0,
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'Exo2',
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.5,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'Exo2',
+        fontSize: 11,
+        letterSpacing: 0.3,
+      ),
+    ),
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: Colors.white,
+      elevation: 6,
+      shape: const AutomaticNotchedShape(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        StadiumBorder(),
+      ),
+      surfaceTintColor: const Color(0xFF8A2BE2).withOpacity(0.05),
+      shadowColor: const Color(0xFFAA77FF).withOpacity(0.2),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
     ),
   );
 }
