@@ -10,6 +10,7 @@ classDiagram
         -int id
         -String nome
         -int nivel
+        -int period
         -int xpTotal
         -int sequenciaDiaria
         -List~RespostaUsuario~ respostas
