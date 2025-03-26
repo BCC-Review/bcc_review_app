@@ -11,7 +11,7 @@ class SubjectLocalService {
 
   AsyncResult<List<Subject>> getSubjects() async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final allSubjects = await connection.subjects.where().findAll();
       return Success(allSubjects);
     } catch (e, s) {
@@ -21,7 +21,7 @@ class SubjectLocalService {
 
   AsyncResult<Subject> getSubject(int subjectId) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final subject = await connection.subjects.get(subjectId);
       if (subject == null) {
         return Failure(SubjectNotFoundException('Disciplina não encontrada'));
@@ -34,7 +34,7 @@ class SubjectLocalService {
 
   AsyncResult<int> addSubject(Subject subject) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       int id = await connection.subjects.put(subject);
       return Success(id);
     } catch (e, s) {
@@ -44,7 +44,7 @@ class SubjectLocalService {
 
   AsyncResult<Unit> updateSubject(Subject subject) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       await connection.subjects.put(subject);
       return Success(unit);
     } catch (e, s) {
@@ -54,7 +54,7 @@ class SubjectLocalService {
 
   AsyncResult<Unit> deleteSubject(int subjectId) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       await connection.subjects.delete(subjectId);
       return Success(unit);
     } catch (e, s) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:asuka/asuka.dart';
 import 'package:bcc_review_app/data/repositories/subject/subject_repository.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';

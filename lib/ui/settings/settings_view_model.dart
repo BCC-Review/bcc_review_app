@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bcc_review_app/data/repositories/settings/settings_repository.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:flutter/material.dart';
