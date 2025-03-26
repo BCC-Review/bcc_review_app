@@ -27,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   init() async {
-    await database.openConnection();
+    await database.connection;
     await database.seed(injector.get<SharedPreferences>());
     final user = await userRepository.getUser();
     await Future.delayed(const Duration(seconds: 2));

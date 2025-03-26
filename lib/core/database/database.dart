@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bcc_review_app/core/database/seed_data.dart';
 import 'package:bcc_review_app/domain/entities/answer_user.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';
@@ -6,18 +9,34 @@ import 'package:bcc_review_app/domain/entities/user.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 class Database {
-  Isar? _dabaseInstance;
+  Isar? _databaseInstance;
 
-  Database() {
-    init();
+  Database._internal();
+
+  static final Database _instance = Database._internal();
+
+  factory Database() {
+    return _instance;
   }
 
-  Future<Isar> openConnection() async {
-    if (_dabaseInstance == null) {
+  Future<Isar> get connection async {
+    if (_databaseInstance == null || !_databaseInstance!.isOpen) {
+      await _openConnection();
+    }
+    return _databaseInstance!;
+  }
+
+  Future<void> _openConnection() async {
+    if (_databaseInstance != null && _databaseInstance!.isOpen) {
+      log('Database connection already open.');
+      return;
+    }
+    try {
       final dir = await getApplicationDocumentsDirectory();
-      _dabaseInstance = await Isar.open(
+      _databaseInstance = await Isar.open(
         [
           SubjectSchema,
           UserSchema,
@@ -26,128 +45,133 @@ class Database {
           MultipleChoiceSchema,
         ],
         directory: dir.path,
-        inspector: true,
+        inspector: kDebugMode,
+        name: 'bccReviewAppDB',
       );
-      return _dabaseInstance!;
+      log('Database connection opened successfully at ${dir.path}');
+    } catch (e) {
+      log('Error opening database connection: $e');
+      rethrow;
     }
-
-    return _dabaseInstance!;
   }
 
-  Future<void> init() async {
-    final db = await openConnection();
+  Future<void> init(SharedPreferences prefs) async {
+    await connection; // Garante que a conexão esteja aberta
+    await seed(prefs);
   }
 
   Future<void> seed(SharedPreferences prefs) async {
-    if (prefs.getBool('seeded') == null || prefs.getBool('seeded') == false) {
-      await _seedDefaultData();
-      prefs.setBool('seeded', true);
+    // _resetData(); // ! Descomente se quiser limpar os dados antes de semear
+    const seededKey = 'database_seeded_v1';
+    if (prefs.getBool(seededKey) ?? false) {
+      log('Database already seeded.');
+      return;
+    }
+
+    log('Starting database seeding...');
+    try {
+      await _seedFromStructuredData();
+      await prefs.setBool(seededKey, true);
+      log('Database seeding completed successfully.');
+    } catch (e) {
+      log('Error during database seeding: $e');
     }
   }
 
-  Future<void> _seedDefaultData() async {
-    final db = await openConnection();
+  Future<void> _seedFromStructuredData() async {
+    final isar = await connection;
 
-    // Criar Subject
-    final subject = Subject(
-      name: 'Introdução à Programação',
-      description: 'Introdução à Programação',
-      period: 1,
-      icon: 'phone_android',
-    );
+    await isar.writeTxn(() async {
+      for (final subjectData in seedSubjectsData) {
+        // Salva as disciplinas
+        final subject = Subject(
+          name: subjectData['name'],
+          description: subjectData['description'],
+          period: subjectData['period'],
+          icon: subjectData['icon'],
+        );
+        await isar.subjects.put(subject);
+        // Lista para armazenar instâncias de módulos para vincular a cada disciplina depois
+        final List<Module> subjectModuleInstances = [];
 
-    await db.writeTxn(() async {
-      await db.subjects.put(subject);
-    });
+        if (subjectData['modules'] != null) {
+          // Salva os módulos de cada disciplina
+          for (final moduleData
+              in subjectData['modules'] as List<Map<String, dynamic>>) {
+            final module = Module(
+              name: moduleData['name'],
+              description: moduleData['description'],
+              difficultyLevel: moduleData['difficultyLevel'],
+              isOfficial: moduleData['isOfficial'],
+            );
 
-    // Criar Module e vincular ao Subject
-    final module = Module(
-      name: 'Algoritmos e Lógica de Programação',
-      description: 'Fundamentos de algoritmos...',
-      difficultyLevel: DifficultyLevel.easy,
-      isOfficial: true,
-    );
+            module.subject.value = subject; // Vincula Module ao Subject
+            await isar.modules.put(module); // Salva Module
+            await module.subject.save(); // Salva o vínculo com Subject
 
-    module.subject.value = subject;
-    await db.writeTxn(() async {
-      await db.modules.put(module);
-      await module.subject.save();
-      subject.modules.add(module);
-      await subject.modules.save();
-    });
+            subjectModuleInstances.add(module);
 
-    // Criar Question e vincular ao Module
-    final question = MultipleChoice(
-      statement: 'Qual é a saída do seguinte código: print(2 + 2)?',
-      alternatives: ['4', '22', 'Erro de Sintaxe', 'Nenhuma das alternativas'],
-      correctAnswerIndex: 0,
-      xpInitial: 10,
-      xpReview: 3,
-      isOfficial: true,
-    );
+            final List<MultipleChoice> moduleQuestionInstances = [];
 
-    question.module.value = module;
-    await db.writeTxn(() async {
-      await db.multipleChoices.put(question);
-      await question.module.save();
-      module.multipleChoiceQuestions.add(question);
-      await module.multipleChoiceQuestions.save();
+            if (moduleData['questions'] != null) {
+              // Salva as questões de cada módulo
+              for (final questionData
+                  in moduleData['questions'] as List<Map<String, dynamic>>) {
+                if (questionData['type'] == QuestionType.multipleChoice) {
+                  final question = MultipleChoice(
+                    statement: questionData['statement'],
+                    alternatives: List<String>.from(
+                      questionData['alternatives'],
+                    ),
+                    correctAnswerIndex: questionData['correctAnswerIndex'],
+                    xpInitial: questionData['xpInitial'],
+                    xpReview: questionData['xpReview'],
+                    isOfficial: questionData['isOfficial'],
+                  );
+
+                  question.module.value = module;
+                  await isar.multipleChoices.put(question);
+                  await question.module.save();
+
+                  moduleQuestionInstances.add(question);
+                }
+                // Adicione outros tipos de perguntas aqui, se necessário
+              }
+            }
+            // --- Salva Links Module -> Questions ---
+            if (moduleQuestionInstances.isNotEmpty) {
+              module.multipleChoiceQuestions.addAll(moduleQuestionInstances);
+              await module.multipleChoiceQuestions.save();
+            }
+          }
+        }
+        // --- Salva Links Subject -> Modules ---
+        if (subjectModuleInstances.isNotEmpty) {
+          subject.modules.addAll(subjectModuleInstances);
+          await subject.modules.save();
+        }
+        log('Seeded Subject: ${subject.name}');
+      }
     });
   }
 
-  Future<void> _seedDefaultData2() async {
-    final db = await openConnection();
-    List<Subject> periodo1 = [
-      Subject(
-        name: 'Introdução à Programação',
-        description: 'Introdução à Programação',
-        period: 1,
-        icon: 'phone_android',
-      ),
-    ];
+  Future<void> _resetData() async {
+    final isar = await connection;
+    await isar.writeTxn(() async {
+      await isar.subjects.clear();
+      // await isar.users.clear();
+      await isar.answerUsers.clear();
+      await isar.modules.clear();
+      await isar.multipleChoices.clear();
+      log('Database reset completed successfully.');
+    });
+  }
 
-    final subjectModules = {
-      'Introdução à Programação': [
-        Module(
-          name: 'Algoritmos e Lógica de Programação',
-          description:
-              'Fundamentos de algoritmos, estruturas de decisão e repetição, e lógica básica de programação.',
-          difficultyLevel: DifficultyLevel.easy,
-          isOfficial: true,
-        ),
-        Module(
-          name: 'Variáveis e Tipos de Dados',
-          description:
-              'Aprendizado sobre diferentes tipos de dados, declaração de variáveis e operações básicas.',
-          difficultyLevel: DifficultyLevel.medium,
-          isOfficial: true,
-        ),
-        Module(
-          name: 'Estruturas de Dados Fundamentais',
-          description:
-              'Introdução a arrays, listas, pilhas e filas para armazenamento e manipulação de dados.',
-          difficultyLevel: DifficultyLevel.medium,
-          isOfficial: true,
-        ),
-      ],
-    };
-
-    final moduleQuestions = {
-      'Algoritmos e Lógica de Programação': [
-        MultipleChoice(
-          statement: 'Qual é a saída do seguinte código: print(2 + 2)?',
-          alternatives: [
-            '4',
-            '22',
-            'Erro de Sintaxe',
-            'Nenhuma das alternativas',
-          ],
-          correctAnswerIndex: 0,
-          isOfficial: true,
-          xpInitial: 10,
-          xpReview: 3,
-        ),
-      ],
-    };
+  Future<void> close() async {
+    if (_databaseInstance != null && _databaseInstance!.isOpen) {
+      await _databaseInstance!.close();
+      _databaseInstance = null;
+      log('Database connection closed.');
+    }
   }
 }

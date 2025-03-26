@@ -11,7 +11,7 @@ class UserLocalService {
 
   AsyncResult<User> getUser() async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final users = await connection.users.where().findAll();
 
       if (users.isEmpty) {
@@ -26,7 +26,7 @@ class UserLocalService {
 
   AsyncResult<User> saveUser(User user) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final users = await connection.users.where().findAll();
 
       if (users.isNotEmpty) {
@@ -49,7 +49,7 @@ class UserLocalService {
 
   AsyncResult<Unit> updateUser(User user) async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final users = await connection.users.where().findAll();
 
       if (users.isEmpty) {
@@ -71,7 +71,7 @@ class UserLocalService {
 
   AsyncResult<Unit> logout() async {
     try {
-      final connection = await _database.openConnection();
+      final connection = await _database.connection;
       final users = await connection.users.where().findAll();
 
       if (users.isEmpty) {
