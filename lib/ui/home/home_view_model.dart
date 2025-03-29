@@ -11,15 +11,16 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel(this._subjectRepository, this._userRepository);
 
   User? user;
-
   bool isLoading = false;
-
   final List<Subject> _subjects = [];
+  List<Subject> _filteredSubjects = [];
+  String _searchQuery = "";
 
   List<MapEntry<int, List<Subject>>> get subjectsGroupedByPeriod {
+    final List<Subject> source = _searchQuery.isEmpty ? _subjects : _filteredSubjects;
     final Map<int, List<Subject>> groupedSubjects = {};
 
-    for (var subject in _subjects) {
+    for (var subject in source) {
       if (groupedSubjects[subject.period] == null) {
         groupedSubjects[subject.period] = [];
       }
@@ -54,6 +55,7 @@ class HomeViewModel extends ChangeNotifier {
       ..onSuccess((subjects) {
         _subjects.clear();
         _subjects.addAll(subjects);
+        _filteredSubjects = List.from(_subjects);
         isLoading = false;
         notifyListeners();
       })
@@ -62,5 +64,16 @@ class HomeViewModel extends ChangeNotifier {
         notifyListeners();
         AsukaSnackbar.alert(error.toString()).show();
       });
+  }
+
+  void filterSubjects(String query) {
+    _searchQuery = query.trim().toLowerCase();
+    if (_searchQuery.isEmpty) {
+      _filteredSubjects = List.from(_subjects);
+    } else {
+      _filteredSubjects = _subjects.where((subject) =>
+          subject.name.toLowerCase().contains(_searchQuery)).toList();
+    }
+    notifyListeners();
   }
 }

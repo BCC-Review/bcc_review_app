@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
                 hintText: 'Pesquisar disciplina',
                 prefixIcon: Icon(Icons.search),
               ),
-              onChanged: (value) {},
+              onChanged: (value) {
+                viewModel.filterSubjects(value);
+              },
             ),
             ListenableBuilder(
               listenable: viewModel,
