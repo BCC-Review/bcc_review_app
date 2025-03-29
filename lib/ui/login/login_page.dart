@@ -2,6 +2,7 @@ import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/exceptions/app_exception.dart';
 import 'package:bcc_review_app/core/ui/widgets/logo_widget.dart';
+import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:bcc_review_app/domain/entities/user.dart';
 import 'package:bcc_review_app/domain/validators/user_validator.dart';
 import 'package:bcc_review_app/ui/login/login_view_model.dart';

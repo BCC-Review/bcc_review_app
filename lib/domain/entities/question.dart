@@ -10,6 +10,7 @@ abstract class Question {
   int xpReview;
 
   bool isOfficial;
+  bool isResponded;
 
   final module = IsarLink<Module>();
 
@@ -22,6 +23,7 @@ abstract class Question {
     required this.xpReview,
     required this.isOfficial,
     required this.questionType,
+    this.isResponded = false,
   });
 
   int getXpValue(bool isInedit) {

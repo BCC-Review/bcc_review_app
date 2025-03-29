@@ -1,4 +1,3 @@
-import 'package:bcc_review_app/domain/entities/answer_user.dart';
 import 'package:isar/isar.dart';
 
 part 'user.g.dart';
@@ -10,8 +9,6 @@ class User {
   int level;
   int totalXp;
   int dailySequence;
-
-  final answers = IsarLinks<AnswerUser>();
 
   User({
     this.id,

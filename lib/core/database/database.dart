@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bcc_review_app/core/database/seed_data.dart';
-import 'package:bcc_review_app/domain/entities/answer_user.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';
 import 'package:bcc_review_app/domain/entities/subject.dart';
@@ -37,13 +36,7 @@ class Database {
     try {
       final dir = await getApplicationDocumentsDirectory();
       _databaseInstance = await Isar.open(
-        [
-          SubjectSchema,
-          UserSchema,
-          AnswerUserSchema,
-          ModuleSchema,
-          MultipleChoiceSchema,
-        ],
+        [SubjectSchema, UserSchema, ModuleSchema, MultipleChoiceSchema],
         directory: dir.path,
         inspector: kDebugMode,
         name: 'bccReviewAppDB',
@@ -160,7 +153,6 @@ class Database {
     await isar.writeTxn(() async {
       await isar.subjects.clear();
       // await isar.users.clear();
-      await isar.answerUsers.clear();
       await isar.modules.clear();
       await isar.multipleChoices.clear();
       log('Database reset completed successfully.');
