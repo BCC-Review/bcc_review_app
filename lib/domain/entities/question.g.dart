@@ -32,24 +32,29 @@ const MultipleChoiceSchema = CollectionSchema(
       name: r'isOfficial',
       type: IsarType.bool,
     ),
-    r'questionType': PropertySchema(
+    r'isResponded': PropertySchema(
       id: 3,
+      name: r'isResponded',
+      type: IsarType.bool,
+    ),
+    r'questionType': PropertySchema(
+      id: 4,
       name: r'questionType',
       type: IsarType.string,
       enumMap: _MultipleChoicequestionTypeEnumValueMap,
     ),
     r'statement': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'statement',
       type: IsarType.string,
     ),
     r'xpInitial': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'xpInitial',
       type: IsarType.long,
     ),
     r'xpReview': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'xpReview',
       type: IsarType.long,
     )
@@ -102,10 +107,11 @@ void _multipleChoiceSerialize(
   writer.writeStringList(offsets[0], object.alternatives);
   writer.writeLong(offsets[1], object.correctAnswerIndex);
   writer.writeBool(offsets[2], object.isOfficial);
-  writer.writeString(offsets[3], object.questionType.name);
-  writer.writeString(offsets[4], object.statement);
-  writer.writeLong(offsets[5], object.xpInitial);
-  writer.writeLong(offsets[6], object.xpReview);
+  writer.writeBool(offsets[3], object.isResponded);
+  writer.writeString(offsets[4], object.questionType.name);
+  writer.writeString(offsets[5], object.statement);
+  writer.writeLong(offsets[6], object.xpInitial);
+  writer.writeLong(offsets[7], object.xpReview);
 }
 
 MultipleChoice _multipleChoiceDeserialize(
@@ -118,13 +124,14 @@ MultipleChoice _multipleChoiceDeserialize(
     alternatives: reader.readStringList(offsets[0]) ?? [],
     correctAnswerIndex: reader.readLong(offsets[1]),
     isOfficial: reader.readBool(offsets[2]),
-    statement: reader.readString(offsets[4]),
-    xpInitial: reader.readLong(offsets[5]),
-    xpReview: reader.readLong(offsets[6]),
+    statement: reader.readString(offsets[5]),
+    xpInitial: reader.readLong(offsets[6]),
+    xpReview: reader.readLong(offsets[7]),
   );
   object.id = id;
+  object.isResponded = reader.readBool(offsets[3]);
   object.questionType = _MultipleChoicequestionTypeValueEnumMap[
-          reader.readStringOrNull(offsets[3])] ??
+          reader.readStringOrNull(offsets[4])] ??
       QuestionType.multipleChoice;
   return object;
 }
@@ -143,14 +150,16 @@ P _multipleChoiceDeserializeProp<P>(
     case 2:
       return (reader.readBool(offset)) as P;
     case 3:
+      return (reader.readBool(offset)) as P;
+    case 4:
       return (_MultipleChoicequestionTypeValueEnumMap[
               reader.readStringOrNull(offset)] ??
           QuestionType.multipleChoice) as P;
-    case 4:
-      return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 6:
+      return (reader.readLong(offset)) as P;
+    case 7:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -626,6 +635,16 @@ extension MultipleChoiceQueryFilter
   }
 
   QueryBuilder<MultipleChoice, MultipleChoice, QAfterFilterCondition>
+      isRespondedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isResponded',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QAfterFilterCondition>
       questionTypeEqualTo(
     QuestionType value, {
     bool caseSensitive = true,
@@ -1061,6 +1080,20 @@ extension MultipleChoiceQuerySortBy
   }
 
   QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
+      sortByIsResponded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isResponded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
+      sortByIsRespondedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isResponded', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
       sortByQuestionType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'questionType', Sort.asc);
@@ -1157,6 +1190,20 @@ extension MultipleChoiceQuerySortThenBy
   }
 
   QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
+      thenByIsResponded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isResponded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
+      thenByIsRespondedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isResponded', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QAfterSortBy>
       thenByQuestionType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'questionType', Sort.asc);
@@ -1234,6 +1281,13 @@ extension MultipleChoiceQueryWhereDistinct
   }
 
   QueryBuilder<MultipleChoice, MultipleChoice, QDistinct>
+      distinctByIsResponded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isResponded');
+    });
+  }
+
+  QueryBuilder<MultipleChoice, MultipleChoice, QDistinct>
       distinctByQuestionType({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'questionType', caseSensitive: caseSensitive);
@@ -1286,6 +1340,12 @@ extension MultipleChoiceQueryProperty
   QueryBuilder<MultipleChoice, bool, QQueryOperations> isOfficialProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isOfficial');
+    });
+  }
+
+  QueryBuilder<MultipleChoice, bool, QQueryOperations> isRespondedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isResponded');
     });
   }
 
