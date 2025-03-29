@@ -11,9 +11,14 @@ List<RouteEntity> get routes => [
   ),
   RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b2Builder),
   RouteEntity(
+    key: '/module/[id]/show',
+    uri: Uri.parse('/module/[id]/show'),
+    routeBuilder: b3Builder,
+  ),
+  RouteEntity(
     key: '/settings',
     uri: Uri.parse('/settings'),
-    routeBuilder: b3Builder,
+    routeBuilder: b4Builder,
   ),
 ];
 
@@ -22,5 +27,9 @@ const routePaths = (
   login: '/login',
   splash: '/splash',
   home: '/home',
+  module: (
+    path: '/module',
+    $id: (path: '/module/[id]', show: '/module/[id]/show'),
+  ),
   settings: '/settings',
 );

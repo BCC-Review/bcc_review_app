@@ -90,8 +90,14 @@ class _HomePageState extends State<HomePage> {
                           children:
                               subjects
                                   .map(
-                                    (subject) =>
-                                        SubjectListTile(subject: subject),
+                                    (subject) => SubjectListTile(
+                                      subject: subject,
+                                      onTap: () {
+                                        Routefly.push(
+                                          '/module/${subject.id}/show',
+                                        );
+                                      },
+                                    ),
                                   )
                                   .toList(),
                         );
