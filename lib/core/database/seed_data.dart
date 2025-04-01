@@ -20,6 +20,7 @@ final List<Map<String, dynamic>> seedSubjectsData = [
             'Fundamentos de algoritmos, estruturas de decisão (if/else) e repetição (while/for), e lógica básica de programação.',
         'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
+        'icon': 'functions', // Adicionando ícone
         'questions': [
           {
             'type': QuestionType.multipleChoice,
@@ -55,6 +56,122 @@ final List<Map<String, dynamic>> seedSubjectsData = [
             'xpReview': 3,
             'isOfficial': true,
           },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement':
+                'Qual o propósito principal de um fluxograma em programação?',
+            'alternatives': [
+              'Escrever código eficiente',
+              'Representar visualmente a lógica de um algoritmo',
+              'Depurar erros de sintaxe',
+              'Gerenciar versões de código',
+            ],
+            'correctAnswerIndex': 1,
+            'xpInitial': 9,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement':
+                'Em pseudocódigo, qual palavra-chave geralmente inicia um bloco de decisão?',
+            'alternatives': ['INICIO', 'PARA', 'SE', 'ENQUANTO'],
+            'correctAnswerIndex': 2,
+            'xpInitial': 8,
+            'xpReview': 2,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement': 'Qual operador lógico representa "E" (conjunção)?',
+            'alternatives': ['OU', 'NAO', 'E', '|'],
+            'correctAnswerIndex': 2,
+            'xpInitial': 10,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement': 'Qual operador lógico representa "OU" (disjunção)?',
+            'alternatives': ['E', 'NAO', 'OU', '&'],
+            'correctAnswerIndex': 2,
+            'xpInitial': 10,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement': 'O que significa "concatenar" strings?',
+            'alternatives': [
+              'Dividir uma string em partes menores',
+              'Comparar duas strings',
+              'Juntar duas ou mais strings em uma única string',
+              'Converter uma string para número',
+            ],
+            'correctAnswerIndex': 2,
+            'xpInitial': 9,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement':
+                'Qual estrutura de repetição executa o bloco de código pelo menos uma vez, antes de verificar a condição?',
+            'alternatives': ['for', 'while', 'do-while', 'if'],
+            'correctAnswerIndex':
+                2, // Assumindo que 'do-while' seria a representação conceitual
+            'xpInitial': 11,
+            'xpReview': 4,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement': 'O que é uma variável "contador" em um loop?',
+            'alternatives': [
+              'Uma variável que armazena texto',
+              'Uma variável que controla o número de vezes que o loop executa',
+              'Uma variável que guarda um valor booleano',
+              'Uma variável que armazena um resultado de cálculo',
+            ],
+            'correctAnswerIndex': 1,
+            'xpInitial': 9,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement':
+                'Qual o resultado da expressão lógica: (5 > 3) E (10 < 20)?',
+            'alternatives': ['Verdadeiro', 'Falso', 'Erro', 'Indefinido'],
+            'correctAnswerIndex': 0,
+            'xpInitial': 10,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement':
+                'Qual o resultado da expressão lógica: (10 == 10) OU (5 != 5)?',
+            'alternatives': ['Verdadeiro', 'Falso', 'Erro', 'Indefinido'],
+            'correctAnswerIndex': 0,
+            'xpInitial': 10,
+            'xpReview': 3,
+            'isOfficial': true,
+          },
+          {
+            'type': QuestionType.multipleChoice,
+            'statement': 'Para que serve a indentação no código?',
+            'alternatives': [
+              'Apenas para estética, não afeta a execução',
+              'Para indicar blocos de código e melhorar a legibilidade',
+              'Para declarar variáveis',
+              'Para comentar o código',
+            ],
+            'correctAnswerIndex': 1,
+            'xpInitial': 8,
+            'xpReview': 2,
+            'isOfficial': true,
+          },
         ],
       },
       {
@@ -63,6 +180,7 @@ final List<Map<String, dynamic>> seedSubjectsData = [
             'Aprendizado sobre diferentes tipos de dados (inteiro, real, caractere, lógico), declaração de variáveis e operações básicas.',
         'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
+        'icon': 'data_object', // Adicionando ícone
         'questions': [
           {
             'type': QuestionType.multipleChoice,
@@ -92,6 +210,7 @@ final List<Map<String, dynamic>> seedSubjectsData = [
             'Introdução a vetores (arrays) para armazenamento de coleções de dados do mesmo tipo.',
         'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
+        'icon': 'view_list', // Adicionando ícone
         'questions': [
           // Questão 1.3.1
           {
@@ -130,6 +249,7 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'description': 'Implementação e uso de listas lineares dinâmicas.',
         'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
+        'icon': 'link', // Adicionando ícone
         'questions': [
           {
             'type': QuestionType.multipleChoice,
