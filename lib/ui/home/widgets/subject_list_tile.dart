@@ -13,6 +13,18 @@ class SubjectListTile extends StatelessWidget {
     this.progressValue = 0.34,
   });
 
+  double _calcProgress() {
+    final allModules = subject.modules.toList();
+    List allQuestions =
+        allModules.expand((module) => module.multipleChoiceQuestions).toList();
+    final responded = allQuestions.where((question) {
+      return question.isResponded;
+    });
+    return allQuestions.isNotEmpty
+        ? ((100 * responded.length) / allQuestions.length) / 100
+        : 0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -86,13 +98,13 @@ class SubjectListTile extends StatelessWidget {
                               ),
                               // Barra de progresso
                               FractionallySizedBox(
-                                widthFactor: progressValue,
+                                widthFactor: _calcProgress(),
                                 child: Container(
                                   height: 8,
                                   decoration: BoxDecoration(
                                     color: _getProgressColor(
                                       colorScheme,
-                                      progressValue,
+                                      _calcProgress(),
                                     ),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -103,7 +115,7 @@ class SubjectListTile extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${(progressValue * 100).toInt()}%',
+                          '${(_calcProgress() * 100).toInt()}%',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],

@@ -13,10 +13,17 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   late final logoutCommand = Command0(_logout);
+  late final restoreAppCommand = Command0(_restoreApp);
 
   AsyncResult<Unit> _logout() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
     return _userRepository.logout();
+  }
+
+  AsyncResult<Unit> _restoreApp() async {
+    // Simula um pequeno delay para feedback visual
+    await Future.delayed(const Duration(milliseconds: 500));
+    return _settingsRepository.restoreApp();
   }
 
   bool isDarkMode = false;
