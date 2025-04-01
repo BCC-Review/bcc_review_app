@@ -53,12 +53,7 @@ class AppConfigUI {
         shadowColor: const Color(0xFFAA77FF),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(16),
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(4),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       ),
     ),
@@ -163,9 +158,13 @@ class AppConfigUI {
         ),
         StadiumBorder(),
       ),
-      surfaceTintColor: const Color(0xFF00FFFF).withOpacity(0.1),
-      shadowColor: const Color(0xFF8A2BE2).withOpacity(0.3),
+      surfaceTintColor: const Color(0xFF00FFFF).withAlpha(10),
+      shadowColor: const Color(0xFF8A2BE2).withAlpha(30),
       padding: const EdgeInsets.symmetric(horizontal: 12),
+    ),
+    dividerTheme: DividerThemeData(
+      color: const Color(0xFFAA77FF).withAlpha(130),
+      thickness: 1,
     ),
   );
 
@@ -218,12 +217,7 @@ class AppConfigUI {
         shadowColor: const Color(0xFFAA77FF),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(16),
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(4),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
       ),
     ),
@@ -328,9 +322,13 @@ class AppConfigUI {
         ),
         StadiumBorder(),
       ),
-      surfaceTintColor: const Color(0xFF8A2BE2).withOpacity(0.05),
-      shadowColor: const Color(0xFFAA77FF).withOpacity(0.2),
+      surfaceTintColor: const Color(0xFF8A2BE2).withAlpha(5),
+      shadowColor: const Color(0xFFAA77FF).withAlpha(20),
       padding: const EdgeInsets.symmetric(horizontal: 12),
+    ),
+    dividerTheme: DividerThemeData(
+      color: Color(0xFF3A1A70).withAlpha(130),
+      thickness: 1,
     ),
   );
 }

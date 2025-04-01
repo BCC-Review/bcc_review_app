@@ -54,7 +54,6 @@ class Database {
   }
 
   Future<void> seed(SharedPreferences prefs) async {
-    // _resetData(); // ! Descomente se quiser limpar os dados antes de semear
     const seededKey = 'database_seeded_v1';
     if (prefs.getBool(seededKey) ?? false) {
       log('Database already seeded.');
@@ -69,6 +68,22 @@ class Database {
     } catch (e) {
       log('Error during database seeding: $e');
     }
+  }
+
+  Future<void> resetAndSeedDatabase({
+    SharedPreferences? prefs,
+    bool clearSeedingFlag = false,
+  }) async {
+    log('Starting database reset and seed...');
+    await _resetData();
+    await _seedFromStructuredData();
+
+    if (clearSeedingFlag && prefs != null) {
+      const seededKey = 'database_seeded_v1';
+      await prefs.remove(seededKey);
+      log('Seeding flag cleared from SharedPreferences.');
+    }
+    log('Database reset and seed completed successfully.');
   }
 
   Future<void> _seedFromStructuredData() async {
@@ -96,6 +111,7 @@ class Database {
               description: moduleData['description'],
               difficultyLevel: moduleData['difficultyLevel'],
               isOfficial: moduleData['isOfficial'],
+              icon: moduleData['icon'],
             );
 
             module.subject.value = subject; // Vincula Module ao Subject
@@ -146,16 +162,18 @@ class Database {
         log('Seeded Subject: ${subject.name}');
       }
     });
+    log('Finished seeding data from structured source.');
   }
 
   Future<void> _resetData() async {
+    log('Resetting database data...');
     final isar = await connection;
     await isar.writeTxn(() async {
       await isar.subjects.clear();
-      // await isar.users.clear();
+      await isar.users.clear();
       await isar.modules.clear();
       await isar.multipleChoices.clear();
-      log('Database reset completed successfully.');
+      log('Database collections cleared successfully.');
     });
   }
 

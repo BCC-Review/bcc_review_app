@@ -9,6 +9,7 @@ class Module {
   Id? id;
   String name;
   String description;
+  String icon;
 
   @Enumerated(EnumType.name)
   DifficultyLevel difficultyLevel;
@@ -24,13 +25,14 @@ class Module {
     required this.description,
     required this.difficultyLevel,
     required this.isOfficial,
+    required this.icon,
   });
 }
 
 enum DifficultyLevel {
-  easy(label: 'Easy'),
-  medium(label: 'Medium'),
-  hard(label: 'Hard');
+  easy(label: 'Fácil'),
+  medium(label: 'Médio'),
+  hard(label: 'Difícil');
 
   final String label;
 
