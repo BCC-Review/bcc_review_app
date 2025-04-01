@@ -10,10 +10,13 @@ class ModuleLocalService {
 
   ModuleLocalService(this._database);
 
-  AsyncResult<List<Module>> getModules() async {
+  AsyncResult<List<Module>> getAllModules() async {
     try {
       final connection = await _database.connection;
       final allModules = await connection.modules.where().findAll();
+      for (final module in allModules) {
+        await module.multipleChoiceQuestions.load();
+      }
       return Success(allModules);
     } catch (e) {
       return Failure(Exception("Erro ao buscar módulos: $e"));
@@ -27,6 +30,7 @@ class ModuleLocalService {
       if (module == null) {
         return Failure(ModuleNotFoundException("Módulo não encontrado"));
       }
+      await module.multipleChoiceQuestions.load();
       return Success(module);
     } catch (e) {
       return Failure(Exception("Erro ao buscar módulo: $e"));
@@ -48,7 +52,7 @@ class ModuleLocalService {
       final connection = await _database.connection;
       await connection.modules.put(module);
       return Success(unit);
-    } catch(e) {
+    } catch (e) {
       return Failure(Exception("Erro ao atualizar módulo: $e"));
     }
   }

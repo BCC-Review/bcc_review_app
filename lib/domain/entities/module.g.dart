@@ -28,13 +28,18 @@ const ModuleSchema = CollectionSchema(
       type: IsarType.string,
       enumMap: _ModuledifficultyLevelEnumValueMap,
     ),
-    r'isOfficial': PropertySchema(
+    r'icon': PropertySchema(
       id: 2,
+      name: r'icon',
+      type: IsarType.string,
+    ),
+    r'isOfficial': PropertySchema(
+      id: 3,
       name: r'isOfficial',
       type: IsarType.bool,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -74,6 +79,7 @@ int _moduleEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.description.length * 3;
   bytesCount += 3 + object.difficultyLevel.name.length * 3;
+  bytesCount += 3 + object.icon.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -86,8 +92,9 @@ void _moduleSerialize(
 ) {
   writer.writeString(offsets[0], object.description);
   writer.writeString(offsets[1], object.difficultyLevel.name);
-  writer.writeBool(offsets[2], object.isOfficial);
-  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[2], object.icon);
+  writer.writeBool(offsets[3], object.isOfficial);
+  writer.writeString(offsets[4], object.name);
 }
 
 Module _moduleDeserialize(
@@ -101,9 +108,10 @@ Module _moduleDeserialize(
     difficultyLevel: _ModuledifficultyLevelValueEnumMap[
             reader.readStringOrNull(offsets[1])] ??
         DifficultyLevel.easy,
+    icon: reader.readString(offsets[2]),
     id: id,
-    isOfficial: reader.readBool(offsets[2]),
-    name: reader.readString(offsets[3]),
+    isOfficial: reader.readBool(offsets[3]),
+    name: reader.readString(offsets[4]),
   );
   return object;
 }
@@ -122,8 +130,10 @@ P _moduleDeserializeProp<P>(
               reader.readStringOrNull(offset)] ??
           DifficultyLevel.easy) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
+      return (reader.readBool(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -494,6 +504,135 @@ extension ModuleQueryFilter on QueryBuilder<Module, Module, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'icon',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'icon',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'icon',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'icon',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterFilterCondition> iconIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'icon',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Module, Module, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -809,6 +948,18 @@ extension ModuleQuerySortBy on QueryBuilder<Module, Module, QSortBy> {
     });
   }
 
+  QueryBuilder<Module, Module, QAfterSortBy> sortByIcon() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'icon', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterSortBy> sortByIconDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'icon', Sort.desc);
+    });
+  }
+
   QueryBuilder<Module, Module, QAfterSortBy> sortByIsOfficial() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isOfficial', Sort.asc);
@@ -856,6 +1007,18 @@ extension ModuleQuerySortThenBy on QueryBuilder<Module, Module, QSortThenBy> {
   QueryBuilder<Module, Module, QAfterSortBy> thenByDifficultyLevelDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'difficultyLevel', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterSortBy> thenByIcon() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'icon', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Module, Module, QAfterSortBy> thenByIconDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'icon', Sort.desc);
     });
   }
 
@@ -912,6 +1075,13 @@ extension ModuleQueryWhereDistinct on QueryBuilder<Module, Module, QDistinct> {
     });
   }
 
+  QueryBuilder<Module, Module, QDistinct> distinctByIcon(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'icon', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Module, Module, QDistinct> distinctByIsOfficial() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isOfficial');
@@ -943,6 +1113,12 @@ extension ModuleQueryProperty on QueryBuilder<Module, Module, QQueryProperty> {
       difficultyLevelProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'difficultyLevel');
+    });
+  }
+
+  QueryBuilder<Module, String, QQueryOperations> iconProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'icon');
     });
   }
 
