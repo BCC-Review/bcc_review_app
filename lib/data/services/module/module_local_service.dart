@@ -31,6 +31,7 @@ class ModuleLocalService {
         return Failure(ModuleNotFoundException("Módulo não encontrado"));
       }
       await module.multipleChoiceQuestions.load();
+      await module.subject.load();
       return Success(module);
     } catch (e) {
       return Failure(Exception("Erro ao buscar módulo: $e"));

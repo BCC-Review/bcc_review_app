@@ -17,7 +17,7 @@ class AppConfigUI {
       // Fundo mais escuro com tom azulado
       surface: const Color(0xFF0D0D20), // Quase preto com tom azulado
       // Vermelho mais neon para erro
-      error: const Color(0xFFFF0055), // Vermelho neon
+      error: const Color.fromARGB(255, 255, 72, 56),
       onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.white,
@@ -181,7 +181,7 @@ class AppConfigUI {
       // Fundo muito claro com toque de roxo
       surface: const Color(0xFFF5F0FF), // Branco com tom roxo
       // Vermelho mais vibrante
-      error: const Color(0xFFE50057), // Vermelho mais vibrante
+      error: const Color.fromARGB(255, 255, 72, 56), // Vermelho mais vibrante
       onPrimary: Colors.white,
       onSecondary: Colors.white,
       onSurface: const Color(0xFF1A1040), // Roxo quase preto
