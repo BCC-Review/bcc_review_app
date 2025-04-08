@@ -162,7 +162,7 @@ class IconModule extends StatelessWidget {
           child: Icon(
             _getIconFromString(icon),
             size: size,
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         SizedBox(
@@ -172,7 +172,7 @@ class IconModule extends StatelessWidget {
             value: progress,
             strokeWidth: 4,
             color: Colors.blue,
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
             year2023: false,
           ),

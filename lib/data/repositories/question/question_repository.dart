@@ -7,4 +7,5 @@ abstract interface class QuestionRepository {
   AsyncResult<int> addMultipleChoiceQuestion(MultipleChoice question);
   AsyncResult<Unit> updateMultipleChoiceQuestion(MultipleChoice question);
   AsyncResult<Unit> deleteMultipleChoiceQuestion(int id);
+  AsyncResult<List<MultipleChoice>> getQuizQuestions(int moduleId);
 }
