@@ -17,7 +17,8 @@ class HomeViewModel extends ChangeNotifier {
   String _searchQuery = "";
 
   List<MapEntry<int, List<Subject>>> get subjectsGroupedByPeriod {
-    final List<Subject> source = _searchQuery.isEmpty ? _subjects : _filteredSubjects;
+    final List<Subject> source =
+        _searchQuery.isEmpty ? _subjects : _filteredSubjects;
     final Map<int, List<Subject>> groupedSubjects = {};
 
     for (var subject in source) {
@@ -31,19 +32,14 @@ class HomeViewModel extends ChangeNotifier {
       ..sort((a, b) => a.key.compareTo(b.key));
   }
 
-  Future<void> getUser(BuildContext context) async {
+  Future<void> getUser() async {
     await _userRepository.getUser()
       ..onSuccess((user) {
         this.user = user;
         notifyListeners();
       })
       ..onFailure((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error.toString()),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AsukaSnackbar.alert(error.toString()).show();
       });
   }
 
@@ -71,8 +67,12 @@ class HomeViewModel extends ChangeNotifier {
     if (_searchQuery.isEmpty) {
       _filteredSubjects = List.from(_subjects);
     } else {
-      _filteredSubjects = _subjects.where((subject) =>
-          subject.name.toLowerCase().contains(_searchQuery)).toList();
+      _filteredSubjects =
+          _subjects
+              .where(
+                (subject) => subject.name.toLowerCase().contains(_searchQuery),
+              )
+              .toList();
     }
     notifyListeners();
   }

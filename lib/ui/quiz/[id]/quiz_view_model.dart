@@ -1,18 +1,27 @@
 import 'package:bcc_review_app/data/repositories/module/module_repository.dart';
 import 'package:bcc_review_app/data/repositories/question/question_repository.dart';
+import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';
+import 'package:bcc_review_app/domain/entities/user.dart';
 import 'package:flutter/material.dart';
+import 'package:result_dart/result_dart.dart';
 
 class QuizViewModel extends ChangeNotifier {
+  final UserRepository userRepository;
   final QuestionRepository questionRepository;
   final ModuleRepository moduleRepository;
 
-  QuizViewModel(this.questionRepository, this.moduleRepository);
+  QuizViewModel(
+    this.userRepository,
+    this.questionRepository,
+    this.moduleRepository,
+  );
 
   bool isLoading = false;
   String? errorMessage;
   List<MultipleChoice> quizQuestions = [];
+  List<MultipleChoice> questionsToUpdate = [];
   List<MultipleChoice> get answeredQuestions =>
       quizQuestions.where((question) => question.isResponded).toList();
   int currentQuestionIndex = 0;
@@ -87,14 +96,13 @@ class QuizViewModel extends ChangeNotifier {
     selectedAnswerIndex = answerIndex;
     final isCorrect = currentQuestion!.checkAnswer(answerIndex);
 
-    if (isCorrect) {
-      // Calcular XP baseado se é questão inédita ou revisão
-      final xpEarned = currentQuestion!.getXpValue(
-        !currentQuestion!.isResponded,
-      );
-      totalXPEarned += xpEarned;
-
+    if (isCorrect && currentQuestion!.isResponded) {
+      totalXPEarned += currentQuestion!.xpReview;
+      questionsToUpdate.add(currentQuestion!);
+    } else if (isCorrect) {
       currentQuestion!.isResponded = true;
+      totalXPEarned += currentQuestion!.xpInitial;
+      questionsToUpdate.add(currentQuestion!);
     } else {
       lives--;
     }
@@ -119,6 +127,22 @@ class QuizViewModel extends ChangeNotifier {
         },
       );
     }
+
+    User? user;
+
+    await userRepository
+        .getUser()
+        .onSuccess((fetchedUser) {
+          user = fetchedUser;
+        })
+        .onFailure((error) {
+          errorMessage = error.toString();
+        });
+
+    user?.totalXp += totalXPEarned;
+    user?.updateLevel();
+
+    await userRepository.updateUser(user!);
   }
 
   void nextQuestion() {

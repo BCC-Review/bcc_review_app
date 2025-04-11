@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    viewModel.getUser(context);
+    viewModel.getUser();
     viewModel.refreshSubjects();
     super.initState();
   }
@@ -38,14 +38,40 @@ class _HomePageState extends State<HomePage> {
         title: ListenableBuilder(
           listenable: viewModel,
           builder: (context, _) {
-            return AnimatedCrossFade(
-              duration: const Duration(milliseconds: 300),
-              firstChild: const Text('Carregando...'),
-              secondChild: Text('Bem vindo ${viewModel.user?.name ?? "..."}!'),
-              crossFadeState:
-                  viewModel.user == null
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
+            return Row(
+              spacing: 8,
+              children: [
+                const CircleAvatar(
+                  radius: 17,
+                  child: Icon(Icons.person, size: 20),
+                ),
+                AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 300),
+                  firstChild: const Text('Carregando...'),
+                  secondChild: Text(viewModel.user?.name ?? "..."),
+                  crossFadeState:
+                      viewModel.user == null
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                ),
+                Spacer(flex: 2),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Icon(Icons.school, color: Colors.blue),
+                    Text('${viewModel.user!.level}'),
+
+                    Icon(
+                      Icons.local_fire_department,
+                      color: Colors.orange[900],
+                    ),
+                    Text('${viewModel.user!.dailySequence}'),
+
+                    Icon(Icons.star, color: Colors.yellow[700]),
+                    Text('${viewModel.user!.totalXp} XP'),
+                  ],
+                ),
+              ],
             );
           },
         ),
@@ -99,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                                           '/module/${subject.id}/show',
                                         ).then((value) {
                                           viewModel.refreshSubjects();
+                                          viewModel.getUser();
                                         });
                                       },
                                     ),
