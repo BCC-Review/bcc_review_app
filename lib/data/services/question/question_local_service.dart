@@ -49,7 +49,9 @@ class QuestionLocalService {
   ) async {
     try {
       final connection = await _database.connection;
-      await connection.multipleChoices.put(question);
+      connection.writeTxnSync(() {
+        connection.multipleChoices.putSync(question);
+      });
       return Success(unit);
     } catch (e, s) {
       return Failure(QuestionLocalServiceException(e.toString(), s));

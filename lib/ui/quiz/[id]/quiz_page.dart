@@ -5,6 +5,8 @@ import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/life_indicator.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/progress_bar.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_alternative.dart';
+import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_defeat_state.dart';
+import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_victory_state.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
 
@@ -31,7 +33,7 @@ class _QuizPageState extends State<QuizPage> {
   Future<void> _handleAnswerSubmission(int answerIndex) async {
     if (viewModel.selectedAnswerIndex != null) return;
 
-    final isCorrect = viewModel.submitAnswer(answerIndex);
+    final isCorrect = await viewModel.submitAnswer(answerIndex);
 
     if (isCorrect) {
       // Adicionar feedback positivo
@@ -45,13 +47,14 @@ class _QuizPageState extends State<QuizPage> {
               minHeight: MediaQuery.of(context).size.height * 0.1,
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               spacing: 16,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   spacing: 8,
                   children: [
                     Icon(Icons.check_circle, color: Colors.green[900]),
+                    const SizedBox(width: 8),
                     Text(
                       'Correto',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -66,8 +69,14 @@ class _QuizPageState extends State<QuizPage> {
                   foregroundColor: Colors.green,
                   shadowColor: Colors.green[700],
                   onPressed: () {
-                    viewModel.nextQuestion();
                     Routefly.pop(context);
+                    if (viewModel.isQuizFinished) {
+                      setState(() {
+                        _showFinalResults = true;
+                      });
+                    } else {
+                      viewModel.nextQuestion();
+                    }
                   },
                   text: 'Continuar',
                 ),
@@ -120,13 +129,14 @@ class _QuizPageState extends State<QuizPage> {
                               ?.correctAnswerIndex ??
                           0] ??
                       '',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 CustomElevatedButton(
                   backgroundColor: Colors.black,
-                  foregroundColor: Color(0xFF36C8FD),
+                  foregroundColor: const Color(0xFF36C8FD),
                   shadowColor: Colors.red[900],
                   text: 'EXPLIQUE MEU ERRO COM IA',
                   onPressed: () {
@@ -139,8 +149,14 @@ class _QuizPageState extends State<QuizPage> {
                   shadowColor: Colors.red[900],
                   text: 'Ok',
                   onPressed: () {
-                    viewModel.nextQuestion();
                     Routefly.pop(context);
+                    if (viewModel.isQuizFinished) {
+                      setState(() {
+                        _showFinalResults = true;
+                      });
+                    } else {
+                      viewModel.nextQuestion();
+                    }
                   },
                 ),
               ],
@@ -151,13 +167,7 @@ class _QuizPageState extends State<QuizPage> {
         isScrollControlled: false,
         enableDrag: false,
       );
-    }
-
-    if (viewModel.isQuizFinished) {
-      setState(() {
-        _showFinalResults = true;
-      });
-    }
+    } // A lógica foi movida para os callbacks onPressed dos modais
   }
 
   void _handleCloseQuiz() async {
@@ -181,7 +191,7 @@ class _QuizPageState extends State<QuizPage> {
               Row(
                 spacing: 8,
                 children: [
-                  Icon(Icons.question_mark_rounded),
+                  const Icon(Icons.question_mark_rounded),
                   Text(
                     'Sair do Quiz',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -190,12 +200,11 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
               Text(
                 'Você realmente deseja sair do quiz? Você perderá seu progresso.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Row(
                 spacing: 8,
                 children: [
@@ -228,8 +237,24 @@ class _QuizPageState extends State<QuizPage> {
     );
 
     if (result == true) {
-      Routefly.pop(context);
+      _backToModules();
     }
+  }
+
+  void _retryQuiz() {
+    setState(() {
+      _showFinalResults = false;
+      canPop = false;
+      canClose = false;
+    });
+    viewModel.resetQuiz();
+    viewModel.loadQuiz(moduleId);
+  }
+
+  void _backToModules() {
+    canPop = true;
+    canClose = true;
+    Routefly.pop(context);
   }
 
   @override
@@ -249,7 +274,7 @@ class _QuizPageState extends State<QuizPage> {
                     children: [
                       IconButton(
                         onPressed: _handleCloseQuiz,
-                        icon: Icon(Icons.close_outlined),
+                        icon: const Icon(Icons.close_outlined),
                       ),
                       Expanded(
                         child: Padding(
@@ -299,56 +324,17 @@ class _QuizPageState extends State<QuizPage> {
             }
 
             if (_showFinalResults) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Quiz Finalizado!',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'XP Total: ${viewModel.totalXPEarned}',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      viewModel.lives <= 0
-                          ? 'Você perdeu todas as vidas!'
-                          : 'Você completou todas as questões!',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: TextButton(
-                            onPressed: () {
-                              Routefly.navigate('/module/$moduleId');
-                            },
-                            child: const Text('Voltar aos Módulos'),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: FilledButton(
-                            onPressed: () {
-                              viewModel.loadQuiz(moduleId);
-                              setState(() {
-                                _showFinalResults = false;
-                              });
-                            },
-                            child: const Text('Tentar Novamente'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+              return viewModel.lives <= 0
+                  ? QuizDefeatState(
+                    totalXPEarned: viewModel.totalXPEarned,
+                    onRetry: _retryQuiz,
+                    onBackToModules: _backToModules,
+                  )
+                  : QuizVictoryState(
+                    totalXPEarned: viewModel.totalXPEarned,
+                    onRetry: _retryQuiz,
+                    onBackToModules: _backToModules,
+                  );
             }
 
             final currentQuestion = viewModel.currentQuestion;

@@ -66,8 +66,20 @@ class QuizViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool submitAnswer(int answerIndex) {
-    if (currentQuestion == null || isQuizFinished) return false;
+  void resetQuiz() {
+    quizQuestions.clear();
+    currentQuestionIndex = 0;
+    lives = 3;
+    totalXPEarned = 0;
+    selectedAnswerIndex = null;
+    module = null;
+    errorMessage = null;
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<bool> submitAnswer(int answerIndex) async {
+    if (currentQuestion == null) return false;
 
     selectedAnswerIndex = answerIndex;
     final isCorrect = currentQuestion!.checkAnswer(answerIndex);
@@ -79,14 +91,31 @@ class QuizViewModel extends ChangeNotifier {
       );
       totalXPEarned += xpEarned;
 
-      // Marcar questão como respondida
       currentQuestion!.isResponded = true;
     } else {
       lives--;
     }
-
+    if (isQuizFinished && lives > 0) {
+      await saveQuizResults();
+    }
     notifyListeners();
     return isCorrect;
+  }
+
+  Future<void> saveQuizResults() async {
+    for (var question in answeredQuestions) {
+      final result = await questionRepository.updateMultipleChoiceQuestion(
+        question,
+      );
+      result.fold(
+        (success) {
+          // success
+        },
+        (failure) {
+          errorMessage = failure.toString();
+        },
+      );
+    }
   }
 
   void nextQuestion() {
