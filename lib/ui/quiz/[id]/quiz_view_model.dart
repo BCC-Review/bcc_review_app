@@ -28,6 +28,9 @@ class QuizViewModel extends ChangeNotifier {
 
   bool get hasNextQuestion => currentQuestionIndex < quizQuestions.length - 1;
   bool get isQuizFinished => lives <= 0 || !hasNextQuestion;
+  bool get isQuizSuccessful =>
+      lives > 0 && currentQuestionIndex == quizQuestions.length - 1;
+  bool get isQuizFailed => lives <= 0;
 
   Future<void> loadQuiz(int moduleId) async {
     isLoading = true;
@@ -95,7 +98,7 @@ class QuizViewModel extends ChangeNotifier {
     } else {
       lives--;
     }
-    if (isQuizFinished && lives > 0) {
+    if (isQuizSuccessful) {
       await saveQuizResults();
     }
     notifyListeners();

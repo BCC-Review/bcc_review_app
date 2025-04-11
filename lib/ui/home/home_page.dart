@@ -97,7 +97,9 @@ class _HomePageState extends State<HomePage> {
                                       onTap: () {
                                         Routefly.push(
                                           '/module/${subject.id}/show',
-                                        );
+                                        ).then((value) {
+                                          viewModel.refreshSubjects();
+                                        });
                                       },
                                     ),
                                   )

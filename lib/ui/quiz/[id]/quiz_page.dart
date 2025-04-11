@@ -254,7 +254,10 @@ class _QuizPageState extends State<QuizPage> {
   void _backToModules() {
     canPop = true;
     canClose = true;
-    Routefly.pop(context);
+    Routefly.pop(
+      context,
+      result: viewModel.isQuizFinished && viewModel.lives > 0,
+    );
   }
 
   @override
