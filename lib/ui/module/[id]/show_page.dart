@@ -1,6 +1,4 @@
-import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
-import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/widgets/module_list_item.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +122,12 @@ class _ModulePageState extends State<ModulePage> {
                     final module = viewModel.modules[index];
                     return ModuleListItem(
                       module: module,
-                      onTap: () => Routefly.push('/quiz/${module.id}/quiz'),
+                      onTap:
+                          () => Routefly.push('/quiz/${module.id}/quiz').then((
+                            value,
+                          ) {
+                            viewModel.refreshModules(subjectId);
+                          }),
                     );
                   },
                 ),

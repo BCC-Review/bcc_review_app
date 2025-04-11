@@ -30,6 +30,7 @@ class CustomElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? Colors.white,
+          padding: const EdgeInsets.all(0),
           foregroundColor:
               foregroundColor ?? Theme.of(context).colorScheme.error,
           textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
