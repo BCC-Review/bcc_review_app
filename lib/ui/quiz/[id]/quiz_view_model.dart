@@ -13,6 +13,8 @@ class QuizViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
   List<MultipleChoice> quizQuestions = [];
+  List<MultipleChoice> get answeredQuestions =>
+      quizQuestions.where((question) => question.isResponded).toList();
   int currentQuestionIndex = 0;
   int lives = 3;
   int totalXPEarned = 0;
@@ -79,7 +81,6 @@ class QuizViewModel extends ChangeNotifier {
 
       // Marcar questão como respondida
       currentQuestion!.isResponded = true;
-      questionRepository.updateMultipleChoiceQuestion(currentQuestion!);
     } else {
       lives--;
     }

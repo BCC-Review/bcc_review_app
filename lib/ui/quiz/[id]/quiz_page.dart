@@ -18,6 +18,9 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   final moduleId = int.tryParse(Routefly.query['id'].toString()) ?? 0;
   final viewModel = injector.get<QuizViewModel>();
+  bool _showFinalResults = false;
+  bool canPop = false;
+  bool canClose = false;
 
   @override
   void initState() {
@@ -25,8 +28,8 @@ class _QuizPageState extends State<QuizPage> {
     viewModel.loadQuiz(moduleId);
   }
 
-  void _handleAnswerSubmission(int answerIndex) {
-    if (viewModel.selectedAnswerIndex != null) return; // Já respondeu
+  Future<void> _handleAnswerSubmission(int answerIndex) async {
+    if (viewModel.selectedAnswerIndex != null) return;
 
     final isCorrect = viewModel.submitAnswer(answerIndex);
 
@@ -76,7 +79,7 @@ class _QuizPageState extends State<QuizPage> {
       );
     } else {
       // Adicionar feedback negativo
-      Asuka.showModalBottomSheet(
+      await Asuka.showModalBottomSheet(
         builder: (context) {
           return Container(
             padding: const EdgeInsets.all(16),
@@ -150,53 +153,18 @@ class _QuizPageState extends State<QuizPage> {
       );
     }
 
-    // Se perdeu todas as vidas ou terminou as questões
     if (viewModel.isQuizFinished) {
-      Future.delayed(const Duration(seconds: 1), () {
-        _showResultDialog();
+      setState(() {
+        _showFinalResults = true;
       });
     }
   }
 
-  void _showResultDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Quiz Finalizado!'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('XP Total: ${viewModel.totalXPEarned}'),
-                const SizedBox(height: 8),
-                if (viewModel.lives <= 0)
-                  const Text('Você perdeu todas as vidas!')
-                else
-                  const Text('Você completou todas as questões!'),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Routefly.navigate('/module/$moduleId');
-                },
-                child: const Text('Voltar aos Módulos'),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  viewModel.loadQuiz(moduleId);
-                },
-                child: const Text('Tentar Novamente'),
-              ),
-            ],
-          ),
-    );
-  }
-
   void _handleCloseQuiz() async {
+    if (canClose) return;
+    setState(() {
+      canPop = false;
+    });
     final result = await Asuka.showModalBottomSheet(
       builder: (context) {
         return Container(
@@ -234,6 +202,10 @@ class _QuizPageState extends State<QuizPage> {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
+                        setState(() {
+                          canPop = true;
+                          canClose = true;
+                        });
                         Routefly.pop(context, result: true);
                       },
                       child: const Text('Sair'),
@@ -262,110 +234,175 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            IconButton(
-              onPressed: _handleCloseQuiz,
-              icon: Icon(Icons.close_outlined),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: AnimatedBuilder(
-                  animation: viewModel,
-                  builder:
-                      (context, _) => ProgressBar(
-                        current: viewModel.currentQuestionIndex,
-                        total: viewModel.quizQuestions.length,
-                      ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: AnimatedBuilder(
-                animation: viewModel,
-                builder: (context, _) => LifeIndicator(lives: viewModel.lives),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: AnimatedBuilder(
-        animation: viewModel,
-        builder: (context, _) {
-          if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (viewModel.errorMessage != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(viewModel.errorMessage!),
-                  TextButton(
-                    onPressed: () => viewModel.loadQuiz(moduleId),
-                    child: const Text('Tentar Novamente'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final currentQuestion = viewModel.currentQuestion;
-          if (currentQuestion == null) {
-            return const Center(child: Text('Nenhuma questão disponível.'));
-          }
-
-          return Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, result) {
+        _handleCloseQuiz();
+      },
+      child: Scaffold(
+        appBar:
+            _showFinalResults
+                ? null
+                : AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Row(
                     children: [
-                      Card(
-                        elevation: 4,
-                        margin: const EdgeInsets.only(bottom: 24),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                      IconButton(
+                        onPressed: _handleCloseQuiz,
+                        icon: Icon(Icons.close_outlined),
+                      ),
+                      Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            currentQuestion.statement,
-                            style: Theme.of(context).textTheme.titleLarge,
+                          child: AnimatedBuilder(
+                            animation: viewModel,
+                            builder:
+                                (context, _) => ProgressBar(
+                                  current: viewModel.currentQuestionIndex,
+                                  total: viewModel.quizQuestions.length,
+                                ),
                           ),
                         ),
                       ),
-                      ...List.generate(
-                        currentQuestion.alternatives.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: QuizAlternative(
-                            index: index,
-                            text: currentQuestion.alternatives[index],
-                            isSelected: viewModel.selectedAnswerIndex == index,
-                            showResult: viewModel.selectedAnswerIndex != null,
-                            isCorrect:
-                                viewModel.selectedAnswerIndex != null &&
-                                index == currentQuestion.correctAnswerIndex,
-                            onTap: () => _handleAnswerSubmission(index),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: AnimatedBuilder(
+                          animation: viewModel,
+                          builder:
+                              (context, _) =>
+                                  LifeIndicator(lives: viewModel.lives),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+        body: AnimatedBuilder(
+          animation: viewModel,
+          builder: (context, _) {
+            if (viewModel.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (viewModel.errorMessage != null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(viewModel.errorMessage!),
+                    TextButton(
+                      onPressed: () => viewModel.loadQuiz(moduleId),
+                      child: const Text('Tentar Novamente'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (_showFinalResults) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Quiz Finalizado!',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'XP Total: ${viewModel.totalXPEarned}',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      viewModel.lives <= 0
+                          ? 'Você perdeu todas as vidas!'
+                          : 'Você completou todas as questões!',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: TextButton(
+                            onPressed: () {
+                              Routefly.navigate('/module/$moduleId');
+                            },
+                            child: const Text('Voltar aos Módulos'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: FilledButton(
+                            onPressed: () {
+                              viewModel.loadQuiz(moduleId);
+                              setState(() {
+                                _showFinalResults = false;
+                              });
+                            },
+                            child: const Text('Tentar Novamente'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final currentQuestion = viewModel.currentQuestion;
+            if (currentQuestion == null) {
+              return const Center(child: Text('Nenhuma questão disponível.'));
+            }
+
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Card(
+                          elevation: 4,
+                          margin: const EdgeInsets.only(bottom: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              currentQuestion.statement,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                        ),
+                        ...List.generate(
+                          currentQuestion.alternatives.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: QuizAlternative(
+                              index: index,
+                              text: currentQuestion.alternatives[index],
+                              isSelected:
+                                  viewModel.selectedAnswerIndex == index,
+                              showResult: viewModel.selectedAnswerIndex != null,
+                              isCorrect:
+                                  viewModel.selectedAnswerIndex != null &&
+                                  index == currentQuestion.correctAnswerIndex,
+                              onTap: () => _handleAnswerSubmission(index),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
