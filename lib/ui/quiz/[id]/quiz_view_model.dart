@@ -1,3 +1,4 @@
+import 'package:bcc_review_app/core/extensions/date_only_compare.dart';
 import 'package:bcc_review_app/data/repositories/module/module_repository.dart';
 import 'package:bcc_review_app/data/repositories/question/question_repository.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
@@ -141,6 +142,11 @@ class QuizViewModel extends ChangeNotifier {
 
     user?.totalXp += totalXPEarned;
     user?.updateLevel();
+    if (user?.lastDailySequenceDate == null ||
+        user?.lastDailySequenceDate!.isSameDate(DateTime.now()) == false) {
+      user?.dailySequence++;
+      user?.lastDailySequenceDate = DateTime.now();
+    }
 
     await userRepository.updateUser(user!);
   }

@@ -22,18 +22,23 @@ const UserSchema = CollectionSchema(
       name: r'dailySequence',
       type: IsarType.long,
     ),
-    r'level': PropertySchema(
+    r'lastDailySequenceDate': PropertySchema(
       id: 1,
+      name: r'lastDailySequenceDate',
+      type: IsarType.dateTime,
+    ),
+    r'level': PropertySchema(
+      id: 2,
       name: r'level',
       type: IsarType.long,
     ),
     r'name': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     ),
     r'totalXp': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'totalXp',
       type: IsarType.long,
     )
@@ -69,9 +74,10 @@ void _userSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.dailySequence);
-  writer.writeLong(offsets[1], object.level);
-  writer.writeString(offsets[2], object.name);
-  writer.writeLong(offsets[3], object.totalXp);
+  writer.writeDateTime(offsets[1], object.lastDailySequenceDate);
+  writer.writeLong(offsets[2], object.level);
+  writer.writeString(offsets[3], object.name);
+  writer.writeLong(offsets[4], object.totalXp);
 }
 
 User _userDeserialize(
@@ -83,9 +89,10 @@ User _userDeserialize(
   final object = User(
     dailySequence: reader.readLongOrNull(offsets[0]) ?? 0,
     id: id,
-    level: reader.readLongOrNull(offsets[1]) ?? 0,
-    name: reader.readString(offsets[2]),
-    totalXp: reader.readLongOrNull(offsets[3]) ?? 0,
+    lastDailySequenceDate: reader.readDateTimeOrNull(offsets[1]),
+    level: reader.readLongOrNull(offsets[2]) ?? 1,
+    name: reader.readString(offsets[3]),
+    totalXp: reader.readLongOrNull(offsets[4]) ?? 0,
   );
   return object;
 }
@@ -100,10 +107,12 @@ P _userDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset) ?? 0) as P;
     case 1:
-      return (reader.readLongOrNull(offset) ?? 0) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 1) as P;
     case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readLongOrNull(offset) ?? 0) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -311,6 +320,78 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition>
+      lastDailySequenceDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastDailySequenceDate',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition>
+      lastDailySequenceDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastDailySequenceDate',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> lastDailySequenceDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastDailySequenceDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition>
+      lastDailySequenceDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastDailySequenceDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> lastDailySequenceDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastDailySequenceDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> lastDailySequenceDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastDailySequenceDate',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -569,6 +650,18 @@ extension UserQuerySortBy on QueryBuilder<User, User, QSortBy> {
     });
   }
 
+  QueryBuilder<User, User, QAfterSortBy> sortByLastDailySequenceDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDailySequenceDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<User, User, QAfterSortBy> sortByLastDailySequenceDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDailySequenceDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<User, User, QAfterSortBy> sortByLevel() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'level', Sort.asc);
@@ -631,6 +724,18 @@ extension UserQuerySortThenBy on QueryBuilder<User, User, QSortThenBy> {
     });
   }
 
+  QueryBuilder<User, User, QAfterSortBy> thenByLastDailySequenceDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDailySequenceDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<User, User, QAfterSortBy> thenByLastDailySequenceDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDailySequenceDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<User, User, QAfterSortBy> thenByLevel() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'level', Sort.asc);
@@ -675,6 +780,12 @@ extension UserQueryWhereDistinct on QueryBuilder<User, User, QDistinct> {
     });
   }
 
+  QueryBuilder<User, User, QDistinct> distinctByLastDailySequenceDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastDailySequenceDate');
+    });
+  }
+
   QueryBuilder<User, User, QDistinct> distinctByLevel() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'level');
@@ -705,6 +816,13 @@ extension UserQueryProperty on QueryBuilder<User, User, QQueryProperty> {
   QueryBuilder<User, int, QQueryOperations> dailySequenceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dailySequence');
+    });
+  }
+
+  QueryBuilder<User, DateTime?, QQueryOperations>
+      lastDailySequenceDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastDailySequenceDate');
     });
   }
 
