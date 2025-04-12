@@ -11,24 +11,29 @@ List<RouteEntity> get routes => [
     routeBuilder: b2Builder,
   ),
   RouteEntity(
+    key: '/minigames/snake/snake_game',
+    uri: Uri.parse('/minigames/snake/snake_game'),
+    routeBuilder: b3Builder,
+  ),
+  RouteEntity(
     key: '/module/[id]/show',
     uri: Uri.parse('/module/[id]/show'),
-    routeBuilder: b3Builder,
+    routeBuilder: b4Builder,
   ),
   RouteEntity(
     key: '/quiz/[id]/quiz',
     uri: Uri.parse('/quiz/[id]/quiz'),
-    routeBuilder: b4Builder,
+    routeBuilder: b5Builder,
   ),
   RouteEntity(
     key: '/settings',
     uri: Uri.parse('/settings'),
-    routeBuilder: b5Builder,
+    routeBuilder: b6Builder,
   ),
   RouteEntity(
     key: '/splash',
     uri: Uri.parse('/splash'),
-    routeBuilder: b6Builder,
+    routeBuilder: b7Builder,
   ),
 ];
 
@@ -39,6 +44,7 @@ const routePaths = (
   minigames: (
     path: '/minigames',
     minigameSelection: '/minigames/minigame_selection',
+    snake: (path: '/minigames/snake', snakeGame: '/minigames/snake/snake_game'),
   ),
   module: (
     path: '/module',
