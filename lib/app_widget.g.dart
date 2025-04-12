@@ -3,16 +3,16 @@
 part of 'app_widget.dart';
 
 List<RouteEntity> get routes => [
-  RouteEntity(key: '/login', uri: Uri.parse('/login'), routeBuilder: b0Builder),
+  RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b0Builder),
+  RouteEntity(key: '/login', uri: Uri.parse('/login'), routeBuilder: b1Builder),
   RouteEntity(
-    key: '/splash',
-    uri: Uri.parse('/splash'),
-    routeBuilder: b1Builder,
+    key: '/minigames/minigame_selection',
+    uri: Uri.parse('/minigames/minigame_selection'),
+    routeBuilder: b2Builder,
   ),
-  RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b2Builder),
   RouteEntity(
-    key: '/quiz/[id]/quiz',
-    uri: Uri.parse('/quiz/[id]/quiz'),
+    key: '/minigames/snake/snake_game',
+    uri: Uri.parse('/minigames/snake/snake_game'),
     routeBuilder: b3Builder,
   ),
   RouteEntity(
@@ -21,21 +21,36 @@ List<RouteEntity> get routes => [
     routeBuilder: b4Builder,
   ),
   RouteEntity(
+    key: '/quiz/[id]/quiz',
+    uri: Uri.parse('/quiz/[id]/quiz'),
+    routeBuilder: b5Builder,
+  ),
+  RouteEntity(
     key: '/settings',
     uri: Uri.parse('/settings'),
-    routeBuilder: b5Builder,
+    routeBuilder: b6Builder,
+  ),
+  RouteEntity(
+    key: '/splash',
+    uri: Uri.parse('/splash'),
+    routeBuilder: b7Builder,
   ),
 ];
 
 const routePaths = (
   path: '/',
-  login: '/login',
-  splash: '/splash',
   home: '/home',
-  quiz: (path: '/quiz', $id: (path: '/quiz/[id]', quiz: '/quiz/[id]/quiz')),
+  login: '/login',
+  minigames: (
+    path: '/minigames',
+    minigameSelection: '/minigames/minigame_selection',
+    snake: (path: '/minigames/snake', snakeGame: '/minigames/snake/snake_game'),
+  ),
   module: (
     path: '/module',
     $id: (path: '/module/[id]', show: '/module/[id]/show'),
   ),
+  quiz: (path: '/quiz', $id: (path: '/quiz/[id]', quiz: '/quiz/[id]/quiz')),
   settings: '/settings',
+  splash: '/splash',
 );
