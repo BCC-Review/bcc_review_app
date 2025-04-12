@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
       //Botão de redicionamento para os minijogos
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Routefly.push('/minigames');
+          Routefly.push('/minigames/minigame_selection');
         },
         child: const Icon(Icons.videogame_asset),
         tooltip: 'Abrir Minijogos',
