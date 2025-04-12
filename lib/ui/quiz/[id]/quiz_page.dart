@@ -1,4 +1,5 @@
 import 'package:asuka/asuka.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/ui/widgets/custom_elevated_button.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
@@ -9,6 +10,8 @@ import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_defeat_state.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_victory_state.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
+
+final AudioPlayer _audioPlayer = AudioPlayer();
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -27,6 +30,7 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
+    _audioPlayer.setVolume(0.7); // Volume do reprodutor de som
     viewModel.loadQuiz(moduleId);
   }
 
@@ -36,6 +40,9 @@ class _QuizPageState extends State<QuizPage> {
     final isCorrect = await viewModel.submitAnswer(answerIndex);
 
     if (isCorrect) {
+      // Reproduzindo som de acerto
+      await _audioPlayer.play(AssetSource('audio/correct.mp3'));
+      await Future.delayed(Duration(seconds: 1));
       // Adicionar feedback positivo
       Asuka.showModalBottomSheet(
         builder: (context) {
@@ -72,9 +79,11 @@ class _QuizPageState extends State<QuizPage> {
                     Routefly.pop(context);
                     if (viewModel.isQuizFinished) {
                       setState(() {
+                        _audioPlayer.play(AssetSource('audio/victory.mp3'));
                         _showFinalResults = true;
                       });
                     } else {
+                      _audioPlayer.play(AssetSource('audio/progress.mp3'));
                       viewModel.nextQuestion();
                     }
                   },
@@ -87,6 +96,9 @@ class _QuizPageState extends State<QuizPage> {
         isDismissible: false,
       );
     } else {
+      // Reproduzindo som de erro
+      await _audioPlayer.play(AssetSource('audio/wrong.mp3'));
+      await Future.delayed(Duration(seconds: 1));
       // Adicionar feedback negativo
       await Asuka.showModalBottomSheet(
         builder: (context) {
@@ -152,9 +164,11 @@ class _QuizPageState extends State<QuizPage> {
                     Routefly.pop(context);
                     if (viewModel.isQuizFinished) {
                       setState(() {
+                        _audioPlayer.play(AssetSource('audio/defeat.mp3'));
                         _showFinalResults = true;
                       });
                     } else {
+                      _audioPlayer.play(AssetSource('audio/progress.mp3'));
                       viewModel.nextQuestion();
                     }
                   },
@@ -369,19 +383,32 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                         ...List.generate(
                           currentQuestion.alternatives.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: QuizAlternative(
-                              index: index,
-                              text: currentQuestion.alternatives[index],
-                              isSelected:
-                                  viewModel.selectedAnswerIndex == index,
-                              showResult: viewModel.selectedAnswerIndex != null,
-                              isCorrect:
-                                  viewModel.selectedAnswerIndex != null &&
-                                  index == currentQuestion.correctAnswerIndex,
-                              onTap: () => _handleAnswerSubmission(index),
+                              (index) => TweenAnimationBuilder<Offset>(
+                            key: ValueKey('${viewModel.currentQuestionIndex}-$index'),
+                            duration: Duration(milliseconds: 300 + index * 100),
+                            curve: Curves.easeOut,
+                            tween: Tween<Offset>(
+                              begin: const Offset(0, 0.2),
+                              end: Offset.zero,
                             ),
+                            builder: (context, offset, child) => Transform.translate(
+                              offset: offset * MediaQuery.of(context).size.height,
+                              child: child,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: QuizAlternative(
+                                index: index,
+                                text: currentQuestion.alternatives[index],
+                                isSelected:
+                                viewModel.selectedAnswerIndex == index,
+                                showResult: viewModel.selectedAnswerIndex != null,
+                                isCorrect:
+                                viewModel.selectedAnswerIndex != null &&
+                                    index == currentQuestion.correctAnswerIndex,
+                                onTap: () => _handleAnswerSubmission(index),
+                              ),
+                          ),
                           ),
                         ),
                       ],
