@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:routefly/routefly.dart';
 
 class MinigameSelectionPage extends StatelessWidget {
   const MinigameSelectionPage({super.key});
 
-  //Lista de Minijogos
+  // Lista de Minijogos
   final List<Map<String, String>> minigames = const [
     {'name': 'Cobrinha 0/1', 'image': 'assets/images/minigame-1-icon.png'},
     {'name': 'Forca', 'image': 'assets/images/minigame-2-icon.png'},
@@ -16,7 +17,7 @@ class MinigameSelectionPage extends StatelessWidget {
     {'name': 'Memorização', 'image': 'assets/images/minigame-9-icon.png'},
   ];
 
-  //Mapa da Descrição dos Minijogos
+  // Mapa da Descrição dos Minijogos
   final Map<String, String> descriptions = const {
     'Cobrinha 0/1': 'Desvie dos obstáculos e coma os pontos para crescer!',
     'Forca': 'Adivinhe a palavra antes que o boneco seja enforcado.',
@@ -27,6 +28,19 @@ class MinigameSelectionPage extends StatelessWidget {
     'Arranha-Céu': 'Monte os prédios na ordem certa sem pistas diretas.',
     'Dividir e Conquistar': 'Quebre o problema em partes e vença etapas.',
     'Memorização': 'Teste sua memória com padrões visuais rápidos.',
+  };
+
+  // Mapa de Rotas dos Minijogos
+  final Map<String, String> minigameRoutes = const {
+    'Cobrinha 0/1': '/minigames/snake/snake_game',
+    'Forca': '/minigames/hangman/hangman_game',
+    'Jogo da Velha': '/minigames/tictactoe/tictactoe_game',
+    'Tênis de Mesa': '/minigames/pingpong/pingpong_game',
+    'Soma Saga': '/minigames/somasaga/somasaga_game',
+    'Palavras Cruzadas': '/minigames/crosswords/crosswords_game',
+    'Arranha-Céu': '/minigames/skyscraper/skyscraper_game',
+    'Dividir e Conquistar': '/minigames/divide/divide_game',
+    'Memorização': '/minigames/memory/memory_game',
   };
 
   @override
@@ -111,7 +125,7 @@ class MinigameSelectionPage extends StatelessWidget {
                   ),
                 ],
               ),
-              //Conteúdo da Descrição do Jogo + Botão de Jogar
+              // Conteúdo da Descrição do Jogo + Botão de Jogar
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -136,8 +150,14 @@ class MinigameSelectionPage extends StatelessWidget {
                       label: const Text("Jogar"),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // Aqui chamaremos a navegação para o jogo
-                        // Routefly.push('/minigames/[id]/game');
+                        final route = minigameRoutes[name];
+                        if (route != null) {
+                          Routefly.push(route);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Rota do minijogo não encontrada.')),
+                          );
+                        }
                       },
                     ),
                   ],
