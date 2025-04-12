@@ -3,21 +3,21 @@
 part of 'app_widget.dart';
 
 List<RouteEntity> get routes => [
-  RouteEntity(key: '/login', uri: Uri.parse('/login'), routeBuilder: b0Builder),
+  RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b0Builder),
+  RouteEntity(key: '/login', uri: Uri.parse('/login'), routeBuilder: b1Builder),
   RouteEntity(
-    key: '/splash',
-    uri: Uri.parse('/splash'),
-    routeBuilder: b1Builder,
-  ),
-  RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b2Builder),
-  RouteEntity(
-    key: '/quiz/[id]/quiz',
-    uri: Uri.parse('/quiz/[id]/quiz'),
-    routeBuilder: b3Builder,
+    key: '/minigames/minigame_selection',
+    uri: Uri.parse('/minigames/minigame_selection'),
+    routeBuilder: b2Builder,
   ),
   RouteEntity(
     key: '/module/[id]/show',
     uri: Uri.parse('/module/[id]/show'),
+    routeBuilder: b3Builder,
+  ),
+  RouteEntity(
+    key: '/quiz/[id]/quiz',
+    uri: Uri.parse('/quiz/[id]/quiz'),
     routeBuilder: b4Builder,
   ),
   RouteEntity(
@@ -25,17 +25,26 @@ List<RouteEntity> get routes => [
     uri: Uri.parse('/settings'),
     routeBuilder: b5Builder,
   ),
+  RouteEntity(
+    key: '/splash',
+    uri: Uri.parse('/splash'),
+    routeBuilder: b6Builder,
+  ),
 ];
 
 const routePaths = (
   path: '/',
-  login: '/login',
-  splash: '/splash',
   home: '/home',
-  quiz: (path: '/quiz', $id: (path: '/quiz/[id]', quiz: '/quiz/[id]/quiz')),
+  login: '/login',
+  minigames: (
+    path: '/minigames',
+    minigameSelection: '/minigames/minigame_selection',
+  ),
   module: (
     path: '/module',
     $id: (path: '/module/[id]', show: '/module/[id]/show'),
   ),
+  quiz: (path: '/quiz', $id: (path: '/quiz/[id]', quiz: '/quiz/[id]/quiz')),
   settings: '/settings',
+  splash: '/splash',
 );
