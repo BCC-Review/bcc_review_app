@@ -48,7 +48,7 @@ dependencies:
   asuka: ^2.2.1
 
   # manipulacao de audio
-  just_audio: ^0.9.36
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -76,7 +76,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/sounds/
+    - assets/sounds/correct_answer.mp3
 
   fonts:
     - family: Exo2
