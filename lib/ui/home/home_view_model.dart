@@ -10,6 +10,9 @@ class HomeViewModel extends ChangeNotifier {
   final SubjectRepository _subjectRepository;
   HomeViewModel(this._subjectRepository, this._userRepository);
 
+  bool isStatsPanelVisible = false;
+  bool showStatsPanelContent = false;
+
   User? user;
   bool isLoading = false;
   final List<Subject> _subjects = [];
