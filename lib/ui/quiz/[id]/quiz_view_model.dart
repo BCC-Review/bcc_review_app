@@ -66,7 +66,7 @@ class QuizViewModel extends ChangeNotifier {
       (success) {
         quizQuestions = success;
         currentQuestionIndex = 0;
-        lives = 3;
+        lives = quizQuestions.length > 3 ? 3 : quizQuestions.length;
         totalXPEarned = 0;
         selectedAnswerIndex = null;
       },

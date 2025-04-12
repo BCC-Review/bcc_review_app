@@ -8,7 +8,7 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress = total > 0 ? (current + 1) / total : 0;
+    final double progress = total > 0 ? (current) / total : 0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
