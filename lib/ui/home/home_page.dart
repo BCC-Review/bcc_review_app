@@ -141,10 +141,10 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Routefly.push('/minigames/minigame_selection');
         },
-        child: const Icon(Icons.videogame_asset),
         tooltip: 'Abrir Minijogos',
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
+        child: const Icon(Icons.videogame_asset),
       ),
     );
   }

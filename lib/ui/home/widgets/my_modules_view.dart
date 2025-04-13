@@ -1,5 +1,7 @@
+import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:routefly/routefly.dart';
 
 class MyModulesView extends StatefulWidget {
   final HomeViewModel viewModel;
@@ -49,7 +51,7 @@ class _MyModulesViewState extends State<MyModulesView> {
               const SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Implementar navegação para a tela de criação de módulo
+                  Routefly.push(routePaths.module.create.createModule);
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Criar Novo Módulo'),

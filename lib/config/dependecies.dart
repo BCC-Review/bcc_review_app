@@ -18,6 +18,7 @@ import 'package:bcc_review_app/data/services/user/user_local_service.dart';
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
 import 'package:bcc_review_app/ui/login/login_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
+import 'package:bcc_review_app/ui/module/create/create_module_view_model.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
 import 'package:bcc_review_app/ui/settings/settings_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +62,7 @@ Future<void> setupDependencies() async {
   injector.addLazySingleton(SettingsViewModel.new);
   injector.addLazySingleton(ModuleShowViewModel.new);
   injector.addLazySingleton(QuizViewModel.new);
+  injector.addLazySingleton(CreateModuleViewModel.new);
 
   injector.commit();
 }
