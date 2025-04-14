@@ -1,5 +1,4 @@
 import 'package:bcc_review_app/app_widget.dart';
-import 'package:bcc_review_app/ui/home/home_view_model.dart';
 import 'package:bcc_review_app/ui/home/my_modules/my_modules_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/widgets/module_list_item.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:routefly/routefly.dart';
 
 class MyModulesView extends StatefulWidget {
   final MyModulesViewModel viewModel;
+
   const MyModulesView({super.key, required this.viewModel});
 
   @override
@@ -15,6 +15,7 @@ class MyModulesView extends StatefulWidget {
 
 class _MyModulesViewState extends State<MyModulesView> {
   MyModulesViewModel? viewModel;
+
   @override
   void initState() {
     viewModel = widget.viewModel;
@@ -65,7 +66,11 @@ class _MyModulesViewState extends State<MyModulesView> {
                   SizedBox(height: 32),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Routefly.push(routePaths.module.create.createModule);
+                      Routefly.push(routePaths.module.create.createModule).then(
+                        (value) {
+                          viewModel!.getMyModules();
+                        },
+                      );
                     },
                     icon: Icon(Icons.add),
                     label: Text('Criar Novo Módulo'),
