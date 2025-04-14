@@ -7,6 +7,7 @@ import 'package:routefly/routefly.dart';
 
 class MyModulesView extends StatefulWidget {
   final MyModulesViewModel viewModel;
+
   const MyModulesView({super.key, required this.viewModel});
 
   @override
@@ -15,6 +16,7 @@ class MyModulesView extends StatefulWidget {
 
 class _MyModulesViewState extends State<MyModulesView> {
   MyModulesViewModel? viewModel;
+
   @override
   void initState() {
     viewModel = widget.viewModel;
@@ -65,7 +67,11 @@ class _MyModulesViewState extends State<MyModulesView> {
                   SizedBox(height: 32),
                   ElevatedButton.icon(
                     onPressed: () {
-                      Routefly.push(routePaths.module.create.createModule);
+                      Routefly.push(routePaths.module.create.createModule).then(
+                        (value) {
+                          viewModel!.getMyModules();
+                        },
+                      );
                     },
                     icon: Icon(Icons.add),
                     label: Text('Criar Novo Módulo'),
