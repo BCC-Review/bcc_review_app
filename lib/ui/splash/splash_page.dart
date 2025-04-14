@@ -8,7 +8,9 @@ import 'package:routefly/routefly.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  final bool skipNavigation;
+
+  const SplashPage({super.key, this.skipNavigation = false});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -27,6 +29,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   init() async {
+    if (widget.skipNavigation) return;
     await database.connection;
     await database.seed(injector.get<SharedPreferences>());
     final user = await userRepository.getUser();

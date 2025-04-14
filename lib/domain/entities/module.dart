@@ -26,7 +26,7 @@ class Module {
     required this.isOfficial,
     required this.icon,
   });
-
+  
   static IconPickerIcon? getIcon(String icon) {
     if (icon.isEmpty) return null;
 
@@ -37,4 +37,5 @@ class Module {
       return null;
     }
   }
+
 }
