@@ -2,8 +2,8 @@ import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/extensions/date_only_compare.dart';
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
-import 'package:bcc_review_app/ui/home/widgets/my_modules_view.dart';
-import 'package:bcc_review_app/ui/home/widgets/official_modules_view.dart';
+import 'package:bcc_review_app/ui/home/my_modules/my_modules_view.dart';
+import 'package:bcc_review_app/ui/home/official_modules/official_modules_view.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
 
@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     viewModel.getUser();
-    viewModel.refreshSubjects();
     super.initState();
   }
 
@@ -112,8 +111,11 @@ class _HomePageState extends State<HomePage> {
         controller: pageController,
         physics: const BouncingScrollPhysics(),
         children: [
-          OfficialModulesView(viewModel: viewModel),
-          MyModulesView(viewModel: viewModel),
+          OfficialModulesView(
+            viewModel: injector.get(),
+            homeViewModel: viewModel,
+          ),
+          MyModulesView(viewModel: injector.get()),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -137,6 +139,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Routefly.push('/minigames/minigame_selection');

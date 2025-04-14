@@ -68,6 +68,46 @@ class QuestionLocalService {
     }
   }
 
+  AsyncResult<Unit> addMultipleChoiceQuestions(
+    List<MultipleChoice> questions,
+    int moduleId,
+  ) async {
+    try {
+      final connection = await _database.connection;
+      await connection.writeTxn(() async {
+        // Buscar o módulo
+        final module = await connection.modules.get(moduleId);
+        if (module == null) {
+          // Lança uma exceção que será capturada pelo catch externo.
+          throw QuestionLocalServiceException(
+            'Módulo com ID $moduleId não encontrado.',
+            StackTrace.current,
+          );
+        }
+
+        // Iterar e salvar as questões, associando ao módulo
+        for (var question in questions) {
+          question.module.value = module;
+          await question.module.save();
+
+          int id = await connection.multipleChoices.put(question);
+          question.id = id; // Atualiza o ID da questão
+          module.multipleChoiceQuestions.add(question);
+          await module.multipleChoiceQuestions.save();
+        }
+      });
+      return Success(unit);
+    } catch (e, s) {
+      // Se o erro for a exceção que lançamos, podemos personalizar a mensagem.
+      if (e is QuestionLocalServiceException &&
+          e.message.contains('Módulo com ID')) {
+        return Failure(e);
+      }
+      // Outros erros genéricos
+      return Failure(QuestionLocalServiceException(e.toString(), s));
+    }
+  }
+
   AsyncResult<List<MultipleChoice>> getQuizQuestions(int moduleId) async {
     const maxQuestions = 10;
     try {

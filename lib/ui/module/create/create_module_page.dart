@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:asuka/asuka.dart';
-import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/exceptions/app_exception.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
+import 'package:bcc_review_app/domain/validators/module_validator.dart';
 import 'package:bcc_review_app/ui/module/create/create_module_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/Models/configuration.dart';
@@ -27,6 +27,10 @@ class _CreateModulePageState extends State<CreateModulePage> {
   final viewmodel = injector.get<CreateModuleViewModel>();
   IconPickerIcon? _icon;
 
+  bool _firstIconValidation = false;
+
+  ModuleValidator validator = ModuleValidator();
+
   _pickIcon() async {
     IconPickerIcon? iconPickerIcon = await showIconPicker(
       context,
@@ -46,14 +50,12 @@ class _CreateModulePageState extends State<CreateModulePage> {
         _icon = iconPickerIcon;
         module.icon = JsonEncoder().convert(serializeIcon(_icon!));
       });
-      print('Icon selected: ${module.icon}');
     }
   }
 
   Module module = Module(
     name: '',
     description: '',
-    difficultyLevel: DifficultyLevel.easy,
     isOfficial: false,
     icon: '',
   );
@@ -110,12 +112,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (value) => module.name = value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira um nome para o módulo';
-                      }
-                      return null;
-                    },
+                    validator: validator.byField(module, 'name'),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -126,12 +123,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                     ),
                     maxLines: 3,
                     onChanged: (value) => module.description = value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira uma descrição para o módulo';
-                      }
-                      return null;
-                    },
+                    validator: validator.byField(module, 'description'),
                   ),
                   const SizedBox(height: 24),
 
@@ -150,15 +142,20 @@ class _CreateModulePageState extends State<CreateModulePage> {
                           height: 100,
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardTheme.color,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color:
-                                  Theme.of(context)
-                                      .inputDecorationTheme
-                                      .enabledBorder!
-                                      .borderSide
-                                      .color,
-                              width: 1,
+                                  _icon == null && _firstIconValidation
+                                      ? Theme.of(context).colorScheme.error
+                                      : Theme.of(context)
+                                          .inputDecorationTheme
+                                          .enabledBorder!
+                                          .borderSide
+                                          .color,
+                              width:
+                                  _icon == null && _firstIconValidation
+                                      ? 1.5
+                                      : 0.5,
                             ),
                           ),
                           child: Center(
@@ -217,6 +214,21 @@ class _CreateModulePageState extends State<CreateModulePage> {
                           ),
                         ),
                       ),
+                      Visibility(
+                        visible: _icon == null && _firstIconValidation,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4, left: 22),
+                          child: Text(
+                            'Escolha um ícone para o módulo',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall!.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -231,17 +243,13 @@ class _CreateModulePageState extends State<CreateModulePage> {
                                   ? null
                                   : () {
                                     if (_formKey.currentState!.validate()) {
+                                      setState(() {
+                                        _firstIconValidation = true;
+                                      });
                                       if (module.icon.isEmpty) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Por favor, escolha um ícone para o módulo',
-                                            ),
-                                            backgroundColor: Colors.orange,
-                                          ),
-                                        );
+                                        AsukaSnackbar.alert(
+                                          'Escolha um ícone',
+                                        ).show();
                                         return;
                                       }
                                       viewmodel.createModuleCommand.execute(

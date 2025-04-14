@@ -16,9 +16,13 @@ import 'package:bcc_review_app/data/services/settings/local_storage_preferences_
 import 'package:bcc_review_app/data/services/subject/subject_local_service.dart';
 import 'package:bcc_review_app/data/services/user/user_local_service.dart';
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
+import 'package:bcc_review_app/ui/home/my_modules/my_modules_view.dart';
+import 'package:bcc_review_app/ui/home/my_modules/my_modules_view_model.dart';
+import 'package:bcc_review_app/ui/home/official_modules/official_modules_view_model.dart';
 import 'package:bcc_review_app/ui/login/login_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
 import 'package:bcc_review_app/ui/module/create/create_module_view_model.dart';
+import 'package:bcc_review_app/ui/module/create_questions/%5BmoduleId%5D/form_questions_view_model.dart';
 import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
 import 'package:bcc_review_app/ui/settings/settings_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,6 +67,9 @@ Future<void> setupDependencies() async {
   injector.addLazySingleton(ModuleShowViewModel.new);
   injector.addLazySingleton(QuizViewModel.new);
   injector.addLazySingleton(CreateModuleViewModel.new);
+  injector.addLazySingleton(OfficialModulesViewModel.new);
+  injector.addLazySingleton(MyModulesViewModel.new);
+  injector.addLazySingleton(FormQuestionsViewModel.new);
 
   injector.commit();
 }

@@ -36,9 +36,14 @@ List<RouteEntity> get routes => [
     routeBuilder: b7Builder,
   ),
   RouteEntity(
+    key: '/module/create_questions/[moduleId]/form_questions',
+    uri: Uri.parse('/module/create_questions/[moduleId]/form_questions'),
+    routeBuilder: b8Builder,
+  ),
+  RouteEntity(
     key: '/settings',
     uri: Uri.parse('/settings'),
-    routeBuilder: b8Builder,
+    routeBuilder: b9Builder,
   ),
 ];
 
@@ -59,6 +64,13 @@ const routePaths = (
     create: (
       path: '/module/create',
       createModule: '/module/create/create_module',
+    ),
+    createQuestions: (
+      path: '/module/create_questions',
+      $moduleId: (
+        path: '/module/create_questions/[moduleId]',
+        formQuestions: '/module/create_questions/[moduleId]/form_questions',
+      ),
     ),
   ),
   settings: '/settings',

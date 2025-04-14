@@ -9,8 +9,9 @@ import 'ui/minigames/minigame_selection_page.dart' as a0;
 import 'ui/minigames/snake/snake_game_page.dart' as a1;
 import 'ui/module/[id]/show_page.dart' as a6;
 import 'ui/module/create/create_module_page.dart' as a7;
+import 'ui/module/create_questions/[moduleId]/form_questions_page.dart' as a8;
 import 'ui/quiz/[id]/quiz_page.dart' as a5;
-import 'ui/settings/settings_page.dart' as a8;
+import 'ui/settings/settings_page.dart' as a9;
 import 'ui/splash/splash_page.dart' as a3;
 
 Route b0Builder(BuildContext ctx, RouteSettings settings) =>
@@ -34,4 +35,6 @@ Route b6Builder(BuildContext ctx, RouteSettings settings) =>
 Route b7Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(ctx, settings, const a7.CreateModulePage());
 Route b8Builder(BuildContext ctx, RouteSettings settings) =>
-    Routefly.defaultRouteBuilder(ctx, settings, const a8.SettingsPage());
+    Routefly.defaultRouteBuilder(ctx, settings, const a8.CreateQuestionsPage());
+Route b9Builder(BuildContext ctx, RouteSettings settings) =>
+    Routefly.defaultRouteBuilder(ctx, settings, const a9.SettingsPage());

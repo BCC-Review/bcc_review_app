@@ -23,6 +23,20 @@ class ModuleLocalService {
     }
   }
 
+  AsyncResult<List<Module>> getMyModules() async {
+    try {
+      final connection = await _database.connection;
+      final allModules =
+          await connection.modules.filter().isOfficialEqualTo(false).findAll();
+      for (final module in allModules) {
+        await module.multipleChoiceQuestions.load();
+      }
+      return Success(allModules);
+    } catch (e) {
+      return Failure(Exception("Erro ao buscar módulos: $e"));
+    }
+  }
+
   AsyncResult<Module> getModule(int moduleId) async {
     try {
       final connection = await _database.connection;
@@ -41,7 +55,12 @@ class ModuleLocalService {
   AsyncResult<int> addModule(Module module) async {
     try {
       final connection = await _database.connection;
-      int id = await connection.modules.put(module);
+      final id = await connection.writeTxn(() async {
+        await module.multipleChoiceQuestions.save();
+        await module.subject.save();
+        return await connection.modules.put(module);
+      });
+
       return Success(id);
     } catch (e) {
       return Failure(Exception("Erro ao adicionar módulo: $e"));
@@ -51,7 +70,11 @@ class ModuleLocalService {
   AsyncResult<Unit> updateModule(Module module) async {
     try {
       final connection = await _database.connection;
-      await connection.modules.put(module);
+      await connection.writeTxn(() async {
+        await module.multipleChoiceQuestions.save();
+        await module.subject.save();
+        await connection.modules.put(module);
+      });
       return Success(unit);
     } catch (e) {
       return Failure(Exception("Erro ao atualizar módulo: $e"));
@@ -61,7 +84,9 @@ class ModuleLocalService {
   AsyncResult<Unit> deleteModule(int moduleId) async {
     try {
       final connection = await _database.connection;
-      await connection.modules.delete(moduleId);
+      await connection.writeTxn(() async {
+        await connection.modules.delete(moduleId);
+      });
       return const Success(unit);
     } catch (e) {
       return Failure(Exception("Erro ao deletar módulo: $e"));
