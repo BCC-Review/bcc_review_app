@@ -45,63 +45,64 @@ class _HomePageState extends State<HomePage> {
           listenable: viewModel,
           builder: (context, _) {
             return Row(
-              spacing: 8,
               children: [
                 const CircleAvatar(
                   radius: 17,
                   child: Icon(Icons.person, size: 20),
                 ),
-                AnimatedCrossFade(
-                  duration: const Duration(milliseconds: 300),
-                  firstChild: const Text('Carregando...'),
-                  secondChild: Text(viewModel.user?.name ?? "..."),
-                  crossFadeState:
-                      viewModel.user == null
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 300),
+                    firstChild: const Text('Carregando...'),
+                    secondChild: Text(
+                      viewModel.user?.name ?? "...",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    crossFadeState: viewModel.user == null
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                  ),
                 ),
-                Spacer(flex: 2),
-                Visibility(
-                  visible: pageController.page == 0,
-                  child: InkWell(
+                if (pageController.hasClients && pageController.page == 0)
+                  InkWell(
                     onTap: () {
                       setState(() {
                         viewModel.isStatsPanelVisible =
-                            !viewModel.isStatsPanelVisible;
+                        !viewModel.isStatsPanelVisible;
                         if (viewModel.showStatsPanelContent) {
                           viewModel.showStatsPanelContent =
-                              !viewModel.showStatsPanelContent;
+                          !viewModel.showStatsPanelContent;
                         }
                       });
                     },
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
-                        spacing: 8,
                         children: [
                           Icon(Icons.school, color: Colors.blue),
+                          const SizedBox(width: 4),
                           Text('${viewModel.user?.level ?? 0}'),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 8),
                           Icon(
                             Icons.local_fire_department,
-                            color:
-                                viewModel.user != null &&
-                                        viewModel.user?.lastDailySequenceDate !=
-                                            null &&
-                                        viewModel.user!.lastDailySequenceDate!
-                                            .isSameDate(DateTime.now())
-                                    ? Colors.orange[900]
-                                    : Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withAlpha(100),
+                            color: viewModel.user != null &&
+                                viewModel.user?.lastDailySequenceDate != null &&
+                                viewModel.user!.lastDailySequenceDate!
+                                    .isSameDate(DateTime.now())
+                                ? Colors.orange[900]
+                                : Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withAlpha(100),
                           ),
+                          const SizedBox(width: 4),
                           Text('${viewModel.user?.dailySequence ?? 0}'),
                         ],
                       ),
                     ),
                   ),
-                ),
               ],
             );
           },
@@ -117,16 +118,19 @@ class _HomePageState extends State<HomePage> {
           ),
           MyModulesView(viewModel: injector.get()),
         ],
+        onPageChanged: (index) {
+          setState(() => currentIndex = index);
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: Icon(Icons.home),
             label: 'Início',
             tooltip: 'Início',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.menu_book_rounded),
+            icon: Icon(Icons.menu_book_rounded),
             label: 'Meus Módulos',
             tooltip: 'Meus Módulos',
           ),
@@ -135,7 +139,7 @@ class _HomePageState extends State<HomePage> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
-            pageController.jumpToPage(currentIndex);
+            pageController.jumpToPage(index);
           });
         },
       ),
