@@ -162,7 +162,7 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Próximo nível: $xpToNext XP',
+                        'Faltam $xpToNext XP para o próximo nível',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(
                             context,

@@ -41,12 +41,8 @@ class User {
 
   // Calcula quanto XP falta para o próximo nível
   int xpToNextLevel() {
-    int currentLevel = level;
-
-    // XP necessário para o próximo nível
-    int requiredXpForNextLevel =
-        (baseXp * (growthRate * (currentLevel + 1))).round();
-    return requiredXpForNextLevel;
+    int nextLevelXp = xpForLevel(level + 1);
+    return nextLevelXp - totalXp;
   }
 
   // Calcula o XP total necessário para atingir um determinado nível
