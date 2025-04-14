@@ -282,42 +282,39 @@ class _QuizPageState extends State<QuizPage> {
         _handleCloseQuiz();
       },
       child: Scaffold(
-        appBar:
-            _showFinalResults
-                ? null
-                : AppBar(
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                    children: [
-                      IconButton(
-                        onPressed: _handleCloseQuiz,
-                        icon: const Icon(Icons.close_outlined),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: AnimatedBuilder(
-                            animation: viewModel,
-                            builder:
-                                (context, _) => ProgressBar(
-                                  current: viewModel.currentQuestionIndex,
-                                  total: viewModel.quizQuestions.length,
-                                ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: AnimatedBuilder(
-                          animation: viewModel,
-                          builder:
-                              (context, _) =>
-                                  LifeIndicator(lives: viewModel.lives),
-                        ),
-                      ),
-                    ],
+        appBar: _showFinalResults
+            ? null
+            : AppBar(
+          automaticallyImplyLeading: false,
+          title: Row(
+            children: [
+              IconButton(
+                onPressed: _handleCloseQuiz,
+                icon: const Icon(Icons.close_outlined),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: AnimatedBuilder(
+                    animation: viewModel,
+                    builder: (context, _) => ProgressBar(
+                      current: viewModel.currentQuestionIndex,
+                      total: viewModel.quizQuestions.length,
+                    ),
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: AnimatedBuilder(
+                  animation: viewModel,
+                  builder: (context, _) =>
+                      LifeIndicator(lives: viewModel.lives),
+                ),
+              ),
+            ],
+          ),
+        ),
         body: AnimatedBuilder(
           animation: viewModel,
           builder: (context, _) {
@@ -343,21 +340,24 @@ class _QuizPageState extends State<QuizPage> {
             if (_showFinalResults) {
               return viewModel.lives <= 0
                   ? QuizDefeatState(
-                    totalXPEarned: viewModel.totalXPEarned,
-                    onRetry: _retryQuiz,
-                    onBackToModules: _backToModules,
-                  )
+                totalXPEarned: viewModel.totalXPEarned,
+                onRetry: _retryQuiz,
+                onBackToModules: _backToModules,
+              )
                   : QuizVictoryState(
-                    totalXPEarned: viewModel.totalXPEarned,
-                    onRetry: _retryQuiz,
-                    onBackToModules: _backToModules,
-                  );
+                totalXPEarned: viewModel.totalXPEarned,
+                onRetry: _retryQuiz,
+                onBackToModules: _backToModules,
+              );
             }
 
             final currentQuestion = viewModel.currentQuestion;
             if (currentQuestion == null) {
               return const Center(child: Text('Nenhuma questão disponível.'));
             }
+
+            // Verificar se a questão é de revisão e se já foi respondida
+            final isAnswered = currentQuestion.isResponded;
 
             return Column(
               children: [
@@ -367,6 +367,32 @@ class _QuizPageState extends State<QuizPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Exibir o bloco verde de revisão somente se for uma questão de revisão e já tiver sido respondida
+                        if (isAnswered)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.blue[50],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.info_outline, color: Colors.blue),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Questão de Revisão',
+                                  style: TextStyle(
+                                    color: Colors.blue[900],
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
                         Card(
                           elevation: 4,
                           margin: const EdgeInsets.only(bottom: 24),
@@ -384,17 +410,20 @@ class _QuizPageState extends State<QuizPage> {
                         ...List.generate(
                           currentQuestion.alternatives.length,
                               (index) => TweenAnimationBuilder<Offset>(
-                            key: ValueKey('${viewModel.currentQuestionIndex}-$index'),
+                            key: ValueKey(
+                                '${viewModel.currentQuestionIndex}-$index'),
                             duration: Duration(milliseconds: 300 + index * 100),
                             curve: Curves.easeOut,
                             tween: Tween<Offset>(
                               begin: const Offset(0, 0.2),
                               end: Offset.zero,
                             ),
-                            builder: (context, offset, child) => Transform.translate(
-                              offset: offset * MediaQuery.of(context).size.height,
-                              child: child,
-                            ),
+                            builder: (context, offset, child) =>
+                                Transform.translate(
+                                  offset:
+                                  offset * MediaQuery.of(context).size.height,
+                                  child: child,
+                                ),
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: QuizAlternative(
@@ -402,13 +431,15 @@ class _QuizPageState extends State<QuizPage> {
                                 text: currentQuestion.alternatives[index],
                                 isSelected:
                                 viewModel.selectedAnswerIndex == index,
-                                showResult: viewModel.selectedAnswerIndex != null,
+                                showResult:
+                                viewModel.selectedAnswerIndex != null,
                                 isCorrect:
                                 viewModel.selectedAnswerIndex != null &&
-                                    index == currentQuestion.correctAnswerIndex,
+                                    index ==
+                                        currentQuestion.correctAnswerIndex,
                                 onTap: () => _handleAnswerSubmission(index),
                               ),
-                          ),
+                            ),
                           ),
                         ),
                       ],
