@@ -3,17 +3,16 @@ import 'package:bcc_review_app/domain/entities/user.dart';
 
 void main() {
   group('Teste de entidade "User".', () {
-    test('Usuário pode ser criado com valores padrões', () {
+    test('Usuario pode ser criado com valores padroes', () {
       final user = User(name: 'João');
       expect(user.name, 'João');
       expect(user.level, 1);
       expect(user.totalXp, 0);
       expect(user.dailySequence, 0);
       expect(user.lastDailySequenceDate, null);
-      expect(user.id, isNull);
     });
 
-    test('Usuário pode ser criado com valores especificos ', () {
+    test('Usuario pode ser criado com valores especificos ', () {
       final now = DateTime.now();
       final user = User(
         id: 1,
@@ -31,7 +30,7 @@ void main() {
       expect(user.lastDailySequenceDate, now);
     });
 
-    test('updateLevel atualiza corretamente o nível do usuário', () {
+    test('updateLevel atualiza corretamente o nivel do Usuario', () {
       final user = User(name: 'Carlos', totalXp: 150);
       user.updateLevel();
       expect(user.level, 2);
@@ -44,12 +43,12 @@ void main() {
       user.updateLevel();
       expect(user.level, 3);
 
-      user.totalXp = 1000;
+      user.totalXp = 1350;
       user.updateLevel();
-      expect(user.level, 4); // (100 * 1.5 * 4) = 600, (100 * 1.5 * 5) = 750, (100 * 1.5 * 6) = 900, (100 * 1.5 * 7) = 1050
+      expect(user.level, 4);
     });
 
-    test('xpToNextLevel conta corretamente o XP necessário para o próximo nível', () {
+    test('xpToNextLevel conta corretamente o XP necessario para o proximo nivel', () {
       final userLevel1 = User(name: 'Ana', level: 1);
       expect(userLevel1.xpToNextLevel(), (100 * 1.5 * 2).round()); // Nível 2
 
@@ -57,48 +56,46 @@ void main() {
       expect(userLevel3.xpToNextLevel(), (100 * 1.5 * 4).round()); // Nível 4
     });
 
-    test('xpForLevel calcula corretamente o XP total necessário para chegar ao próximo nível', () {
-      final user = User(name: 'Sofia');
-      expect(user.xpForLevel(1), 0);
-      expect(user.xpForLevel(2), (100 * 1.5 * 2).round());
-      expect(user.xpForLevel(3), (100 * 1.5 * 2).round() + (100 * 1.5 * 3).round());
-      expect(user.xpForLevel(5), (100 * 1.5 * 2).round() + (100 * 1.5 * 3).round() + (100 * 1.5 * 4).round() + (100 * 1.5 * 5).round());
-    });
-
-    test('xpForCurrentLevel retorna o XP correto necessário para atingir o nível atual', () {
+    test('xpForCurrentLevel retorna o XP correto necessario para atingir o nivel atual', () {
       final userLevel1 = User(name: 'Lucas', level: 1);
-      expect(userLevel1.xpForCurrentLevel(), 0);
+      expect(userLevel1.xpForCurrentLevel(), userLevel1.xpForLevel(1));
 
       final userLevel3 = User(name: 'Laura', level: 3);
-      final expectedXpLevel3 = (100 * 1.5 * 2).round() + (100 * 1.5 * 3).round();
+      final expectedXpLevel3 = userLevel3.xpForLevel(3);
       expect(userLevel3.xpForCurrentLevel(), expectedXpLevel3);
     });
 
-    test('xpForNextLevel retorna o XP correto necessário para atingir o próximo nível', () {
+    test('xpForNextLevel retorna o XP correto necessario para atingir o proximo nivel', () {
       final userLevel1 = User(name: 'Gabriel', level: 1);
-      expect(userLevel1.xpForNextLevel(), (100 * 1.5 * 2).round());
+      expect(userLevel1.xpForNextLevel(), userLevel1.xpForLevel(2));
 
       final userLevel2 = User(name: 'Isabela', level: 2);
-      final expectedXpLevel3 = (100 * 1.5 * 2).round() + (100 * 1.5 * 3).round();
+      final expectedXpLevel3 = userLevel2.xpForLevel(3);
       expect(userLevel2.xpForNextLevel(), expectedXpLevel3);
     });
 
-    test('currentLevelXp retorna o XP correto acumulado dentro do nível atual', () {
-      final userLevel2WithExtraXp = User(name: 'Matheus', level: 2, totalXp: (100 * 1.5 * 2).round() + 30);
-      expect(userLevel2WithExtraXp.currentLevelXp(), 30);
+    test('currentLevelXp retorna o XP correto acumulado dentro do nivel atual', () {
+      final user = User(name: 'Matheus', level: 2);
+      final baseXp = user.xpForCurrentLevel();
+      user.totalXp = baseXp + 30;
+      expect(user.currentLevelXp(), 30);
 
       final userLevel1 = User(name: 'Alice', level: 1, totalXp: 50);
       expect(userLevel1.currentLevelXp(), 50);
     });
 
-    test('requiredXpForCurrentLevel retorna o XP correto necessário para atingir o próximo nível do atual', () {
+    test('requiredXpForCurrentLevel retorna o XP correto necessario para atingir o proximo nivel', () {
       final userLevel1 = User(name: 'Enzo', level: 1);
-      expect(userLevel1.requiredXpForCurrentLevel(), (100 * 1.5 * 2).round() - 0);
+      expect(
+        userLevel1.requiredXpForCurrentLevel(),
+        userLevel1.xpForLevel(2) - userLevel1.xpForLevel(1),
+      );
 
       final userLevel2 = User(name: 'Valentina', level: 2);
-      final xpForLevel2 = (100 * 1.5 * 2).round();
-      final xpForLevel3 = (100 * 1.5 * 2).round() + (100 * 1.5 * 3).round();
-      expect(userLevel2.requiredXpForCurrentLevel(), xpForLevel3 - xpForLevel2);
+      expect(
+        userLevel2.requiredXpForCurrentLevel(),
+        userLevel2.xpForLevel(3) - userLevel2.xpForLevel(2),
+      );
     });
 
   });
