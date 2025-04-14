@@ -1,5 +1,4 @@
 import 'package:bcc_review_app/app_widget.dart';
-import 'package:bcc_review_app/ui/home/home_view_model.dart';
 import 'package:bcc_review_app/ui/home/my_modules/my_modules_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/widgets/module_list_item.dart';
 import 'package:flutter/material.dart';
