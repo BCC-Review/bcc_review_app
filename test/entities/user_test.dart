@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bcc_review_app/domain/entities/user.dart ';
+import 'package:bcc_review_app/domain/entities/user.dart';
 
 void main() {
   group('Teste de entidade "User".', () {
@@ -12,7 +12,7 @@ void main() {
       expect(user.lastDailySequenceDate, null);
       expect(user.id, isNull);
     });
- /*
+
     test('Usuário pode ser criado com valores especificos ', () {
       final now = DateTime.now();
       final user = User(
@@ -101,6 +101,5 @@ void main() {
       expect(userLevel2.requiredXpForCurrentLevel(), xpForLevel3 - xpForLevel2);
     });
 
-  */
   });
 }

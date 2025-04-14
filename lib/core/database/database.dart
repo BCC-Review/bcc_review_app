@@ -109,7 +109,6 @@ class Database {
             final module = Module(
               name: moduleData['name'],
               description: moduleData['description'],
-              difficultyLevel: moduleData['difficultyLevel'],
               isOfficial: moduleData['isOfficial'],
               icon: moduleData['icon'],
             );

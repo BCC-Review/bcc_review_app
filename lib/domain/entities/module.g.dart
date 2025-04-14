@@ -22,24 +22,18 @@ const ModuleSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'difficultyLevel': PropertySchema(
-      id: 1,
-      name: r'difficultyLevel',
-      type: IsarType.string,
-      enumMap: _ModuledifficultyLevelEnumValueMap,
-    ),
     r'icon': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'icon',
       type: IsarType.string,
     ),
     r'isOfficial': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'isOfficial',
       type: IsarType.bool,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     )
@@ -78,7 +72,6 @@ int _moduleEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.description.length * 3;
-  bytesCount += 3 + object.difficultyLevel.name.length * 3;
   bytesCount += 3 + object.icon.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
@@ -91,10 +84,9 @@ void _moduleSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.description);
-  writer.writeString(offsets[1], object.difficultyLevel.name);
-  writer.writeString(offsets[2], object.icon);
-  writer.writeBool(offsets[3], object.isOfficial);
-  writer.writeString(offsets[4], object.name);
+  writer.writeString(offsets[1], object.icon);
+  writer.writeBool(offsets[2], object.isOfficial);
+  writer.writeString(offsets[3], object.name);
 }
 
 Module _moduleDeserialize(
@@ -105,13 +97,10 @@ Module _moduleDeserialize(
 ) {
   final object = Module(
     description: reader.readString(offsets[0]),
-    difficultyLevel: _ModuledifficultyLevelValueEnumMap[
-            reader.readStringOrNull(offsets[1])] ??
-        DifficultyLevel.easy,
-    icon: reader.readString(offsets[2]),
+    icon: reader.readString(offsets[1]),
     id: id,
-    isOfficial: reader.readBool(offsets[3]),
-    name: reader.readString(offsets[4]),
+    isOfficial: reader.readBool(offsets[2]),
+    name: reader.readString(offsets[3]),
   );
   return object;
 }
@@ -126,30 +115,15 @@ P _moduleDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (_ModuledifficultyLevelValueEnumMap[
-              reader.readStringOrNull(offset)] ??
-          DifficultyLevel.easy) as P;
-    case 2:
       return (reader.readString(offset)) as P;
-    case 3:
+    case 2:
       return (reader.readBool(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
-
-const _ModuledifficultyLevelEnumValueMap = {
-  r'easy': r'easy',
-  r'medium': r'medium',
-  r'hard': r'hard',
-};
-const _ModuledifficultyLevelValueEnumMap = {
-  r'easy': DifficultyLevel.easy,
-  r'medium': DifficultyLevel.medium,
-  r'hard': DifficultyLevel.hard,
-};
 
 Id _moduleGetId(Module object) {
   return object.id ?? Isar.autoIncrement;
@@ -367,138 +341,6 @@ extension ModuleQueryFilter on QueryBuilder<Module, Module, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelEqualTo(
-    DifficultyLevel value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition>
-      difficultyLevelGreaterThan(
-    DifficultyLevel value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelLessThan(
-    DifficultyLevel value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelBetween(
-    DifficultyLevel lower,
-    DifficultyLevel upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'difficultyLevel',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'difficultyLevel',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'difficultyLevel',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition> difficultyLevelIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'difficultyLevel',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterFilterCondition>
-      difficultyLevelIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'difficultyLevel',
         value: '',
       ));
     });
@@ -936,18 +778,6 @@ extension ModuleQuerySortBy on QueryBuilder<Module, Module, QSortBy> {
     });
   }
 
-  QueryBuilder<Module, Module, QAfterSortBy> sortByDifficultyLevel() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'difficultyLevel', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterSortBy> sortByDifficultyLevelDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'difficultyLevel', Sort.desc);
-    });
-  }
-
   QueryBuilder<Module, Module, QAfterSortBy> sortByIcon() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'icon', Sort.asc);
@@ -995,18 +825,6 @@ extension ModuleQuerySortThenBy on QueryBuilder<Module, Module, QSortThenBy> {
   QueryBuilder<Module, Module, QAfterSortBy> thenByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterSortBy> thenByDifficultyLevel() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'difficultyLevel', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Module, Module, QAfterSortBy> thenByDifficultyLevelDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'difficultyLevel', Sort.desc);
     });
   }
 
@@ -1067,14 +885,6 @@ extension ModuleQueryWhereDistinct on QueryBuilder<Module, Module, QDistinct> {
     });
   }
 
-  QueryBuilder<Module, Module, QDistinct> distinctByDifficultyLevel(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'difficultyLevel',
-          caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<Module, Module, QDistinct> distinctByIcon(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1106,13 +916,6 @@ extension ModuleQueryProperty on QueryBuilder<Module, Module, QQueryProperty> {
   QueryBuilder<Module, String, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
-    });
-  }
-
-  QueryBuilder<Module, DifficultyLevel, QQueryOperations>
-      difficultyLevelProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'difficultyLevel');
     });
   }
 

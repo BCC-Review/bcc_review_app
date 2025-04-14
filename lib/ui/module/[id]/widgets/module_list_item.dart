@@ -9,17 +9,6 @@ class ModuleListItem extends StatelessWidget {
     _calcProgress();
   }
 
-  Color _getDifficultyColor() {
-    switch (module.difficultyLevel) {
-      case DifficultyLevel.easy:
-        return Colors.green;
-      case DifficultyLevel.medium:
-        return Colors.orange;
-      case DifficultyLevel.hard:
-        return Colors.red;
-    }
-  }
-
   double progress = 0;
   int questionsLenght = 0;
   int respondedLenght = 0;
