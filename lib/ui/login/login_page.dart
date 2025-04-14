@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      key: const Key('username_field'),
                       focusNode: _usernameFocus,
                       decoration: InputDecoration(
                         hintText: 'Digite seu nome de usuário',
@@ -87,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                         listenable: viewmodel.loginCommand,
                         builder: (context, _) {
                           return ElevatedButton(
+                            key: const Key('login_button'),
                             onPressed:
                                 viewmodel.loginCommand.isRunning
                                     ? null
