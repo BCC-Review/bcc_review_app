@@ -1,11 +1,20 @@
+import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:routefly/routefly.dart';
 
 class ModuleListItem extends StatelessWidget {
   final Module module;
   final VoidCallback? onTap;
+  final VoidCallback? onTapEdit;
 
-  ModuleListItem({super.key, required this.module, this.onTap}) {
+  ModuleListItem({
+    super.key,
+    required this.module,
+    this.onTap,
+    this.onTapEdit,
+  }) {
     _calcProgress();
   }
 
@@ -21,6 +30,7 @@ class ModuleListItem extends StatelessWidget {
     });
     questionsLenght = questions.length;
     respondedLenght = responded.length;
+    if (questionsLenght == 0) return 0;
     progress = ((100 * responded.length) / questions.length) / 100;
     isComplete = questionsLenght > 0 && respondedLenght == questionsLenght;
     return progress;
@@ -28,90 +38,96 @@ class ModuleListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            spacing: 8,
-            children: [
-              // Ícone do módulo
-              IconModule(
-                icon: module.icon,
-                size: 18,
-                progress: progress,
-                isComplete: isComplete,
+    return Stack(
+      children: [
+        if (questionsLenght == 0)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.only(
+                top: 30,
+                bottom: 6,
+                left: 16,
+                right: 16,
               ),
-              const SizedBox(width: 12),
-              // Conteúdo principal
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.amber[900],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "Adicione questões para começar a revisar!",
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.white),
+              ),
+            ),
+          ),
+        Card(
+          margin: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: questionsLenght == 0 ? 34 : 8,
+          ),
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                spacing: 8,
+                children: [
+                  IconModule(
+                    icon: module.icon,
+                    size: 18,
+                    progress: progress,
+                    isComplete: isComplete,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            module.name,
-                            style: Theme.of(context).textTheme.titleSmall,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                module.name,
+                                style: Theme.of(context).textTheme.titleSmall,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
+                        Text(
+                          module.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        // Indicador de quandidade de questoes / respondidas
+                        Text("$respondedLenght / $questionsLenght"),
                       ],
                     ),
-
-                    Text(
-                      module.description,
-                      style: Theme.of(context).textTheme.bodySmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  if (onTapEdit != null)
+                    IconButton(
+                      onPressed: onTapEdit,
+                      icon: const Icon(Icons.edit),
                     ),
-                    // Indicador de quandidade de questoes / respondidas
-                    Text("$respondedLenght / $questionsLenght"),
-
-                    // Indicador de dificuldade
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: 8,
-                    //     vertical: 2,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     color: _getDifficultyColor().withAlpha(60),
-                    //     borderRadius: BorderRadius.circular(16),
-                    //   ),
-                    //   child: Row(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     children: [
-                    //       Icon(
-                    //         Icons.trending_up,
-                    //         size: 10,
-                    //         color: _getDifficultyColor(),
-                    //       ),
-                    //       const SizedBox(width: 4),
-                    //       Text(
-                    //         module.difficultyLevel.label,
-                    //         style: TextStyle(
-                    //           fontSize: 10,
-                    //           fontWeight: FontWeight.w500,
-                    //           color: _getDifficultyColor(),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -130,24 +146,13 @@ class IconModule extends StatelessWidget {
   final double progress;
   final bool isComplete;
 
-  IconData _getIconFromString(String iconName) {
-    switch (iconName) {
-      case 'functions':
-        return Icons.functions;
-      case 'data_object':
-        return Icons.data_object;
-      case 'view_list':
-        return Icons.view_list;
-      case 'link':
-        return Icons.link;
-      case 'code': // Adicionando caso para 'code' (usado em Subject, mas pode ser útil)
-        return Icons.code;
-      case 'data_usage': // Adicionando caso para 'data_usage' (usado em Subject)
-        return Icons.data_usage;
-      // Adicione mais casos conforme necessário
-      default:
-        return Icons.extension; // Ícone padrão de fallback
-    }
+  IconPickerIcon _getIconFromString(String iconName) {
+    return Module.getIcon(iconName) ??
+        IconPickerIcon(
+          name: iconName,
+          data: Icons.question_mark,
+          pack: IconPack.roundedMaterial,
+        );
   }
 
   @override
@@ -180,7 +185,7 @@ class IconModule extends StatelessWidget {
                           ),
                         ),
                         Icon(
-                          _getIconFromString(icon),
+                          _getIconFromString(icon).data,
                           size: size * 1.2,
                           color: const Color.fromARGB(255, 104, 74, 0),
                         ),
@@ -188,7 +193,7 @@ class IconModule extends StatelessWidget {
                     ),
                   )
                   : Icon(
-                    _getIconFromString(icon),
+                    _getIconFromString(icon).data,
                     size: size * 1.2,
                     color: Theme.of(context).colorScheme.primary,
                   ),

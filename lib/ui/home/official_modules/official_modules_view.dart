@@ -1,17 +1,30 @@
 import 'package:bcc_review_app/ui/home/home_view_model.dart';
+import 'package:bcc_review_app/ui/home/official_modules/official_modules_view_model.dart';
 import 'package:bcc_review_app/ui/home/widgets/subject_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
 
 class OfficialModulesView extends StatefulWidget {
-  final HomeViewModel viewModel;
-  const OfficialModulesView({super.key, required this.viewModel});
+  final OfficialModulesViewModel viewModel;
+  final HomeViewModel homeViewModel;
+  const OfficialModulesView({
+    super.key,
+    required this.viewModel,
+    required this.homeViewModel,
+  });
 
   @override
   State<OfficialModulesView> createState() => _OfficialModulesViewState();
 }
 
 class _OfficialModulesViewState extends State<OfficialModulesView> {
+  @override
+  void initState() {
+    widget.viewModel.getUser();
+    widget.viewModel.refreshSubjects();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -92,7 +105,8 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
 
   Widget _buildStatsPanel() {
     final showPanel =
-        widget.viewModel.user != null && widget.viewModel.isStatsPanelVisible;
+        widget.viewModel.user != null &&
+        widget.homeViewModel.isStatsPanelVisible;
 
     final user = widget.viewModel.user;
     final currentXp = user?.currentLevelXp() ?? 0;
@@ -107,7 +121,7 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
       curve: Curves.easeInOut,
       onEnd: () {
         setState(() {
-          widget.viewModel.showStatsPanelContent = true;
+          widget.homeViewModel.showStatsPanelContent = true;
         });
       },
       child: AnimatedSwitcher(
@@ -162,7 +176,7 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Próximo nível: $xpToNext XP',
+                        'Faltam $xpToNext XP para o próximo nível',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(
                             context,
@@ -176,9 +190,10 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                widget.viewModel.isStatsPanelVisible =
-                                    !widget.viewModel.isStatsPanelVisible;
-                                widget.viewModel.showStatsPanelContent = false;
+                                widget.homeViewModel.isStatsPanelVisible =
+                                    !widget.homeViewModel.isStatsPanelVisible;
+                                widget.homeViewModel.showStatsPanelContent =
+                                    false;
                               });
                             },
                             child: Icon(

@@ -38,4 +38,15 @@ class QuestionRepositoryImpl implements QuestionRepository {
   AsyncResult<List<MultipleChoice>> getQuizQuestions(int moduleId) {
     return _questionLocalService.getQuizQuestions(moduleId);
   }
+
+  @override
+  AsyncResult<Unit> addMultipleChoiceQuestions(
+    List<MultipleChoice> questions,
+    int moduleId,
+  ) {
+    return _questionLocalService.addMultipleChoiceQuestions(
+      questions,
+      moduleId,
+    );
+  }
 }

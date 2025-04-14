@@ -1,7 +1,9 @@
 import 'package:bcc_review_app/config/dependecies.dart';
+import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/widgets/module_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:routefly/routefly.dart';
 
 class ModulePage extends StatefulWidget {
@@ -19,32 +21,6 @@ class _ModulePageState extends State<ModulePage> {
   void initState() {
     viewModel.refreshModules(subjectId);
     super.initState();
-  }
-
-  // Função auxiliar para mapear o nome do ícone (string) para IconData
-  IconData _getIconFromString(String iconName) {
-    switch (iconName) {
-      case 'functions':
-        return Icons.functions;
-      case 'data_object':
-        return Icons.data_object;
-      case 'view_list':
-        return Icons.view_list;
-      case 'link':
-        return Icons.link;
-      case 'code':
-        return Icons.code;
-      case 'data_usage':
-        return Icons.data_usage;
-      case 'psychology':
-        return Icons.psychology;
-      case 'memory':
-        return Icons.memory;
-      case 'integration_instructions':
-        return Icons.integration_instructions;
-      default:
-        return Icons.extension; // Ícone padrão de fallback
-    }
   }
 
   @override

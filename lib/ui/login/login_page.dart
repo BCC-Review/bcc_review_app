@@ -1,3 +1,4 @@
+import 'package:asuka/snackbars/asuka_snack_bar.dart';
 import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/exceptions/app_exception.dart';
@@ -43,14 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     } else if (viewmodel.loginCommand.isFailure) {
       final failure = viewmodel.loginCommand.value as FailureCommand;
       final exception = failure.error as AppException;
-      final SnackBar snackBar = SnackBar(
-        content: Text(
-          exception.message,
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      AsukaSnackbar.alert(exception.message).show();
     }
   }
 

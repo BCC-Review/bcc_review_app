@@ -31,6 +31,11 @@ class ModuleRepositoryImpl implements ModuleRepository {
   }
 
   @override
+  AsyncResult<List<Module>> getMyModules() {
+    return _moduleLocalService.getMyModules();
+  }
+
+  @override
   AsyncResult<Unit> updateModule(Module module) {
     return _moduleLocalService.updateModule(module);
   }
