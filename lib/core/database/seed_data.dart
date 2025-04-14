@@ -1,4 +1,3 @@
-import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';
 
 // Estrutura de dados centralizada para o seeding inicial do banco de dados.
@@ -12,15 +11,14 @@ final List<Map<String, dynamic>> seedSubjectsData = [
     'description':
         'Conceitos fundamentais de programação utilizando pseudocódigo e introdução a linguagens.',
     'period': 1,
-    'icon': 'code',
+    'icon': '{"pack":"roundedMaterial","key":"code_rounded"}',
     'modules': [
       {
         'name': 'Algoritmos e Lógica de Programação',
         'description':
             'Fundamentos de algoritmos, estruturas de decisão (if/else) e repetição (while/for), e lógica básica de programação.',
-        'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
-        'icon': 'functions', // Adicionando ícone
+        'icon': '{"pack":"roundedMaterial","key":"functions_rounded"}',
         'questions': [
           {
             'type': QuestionType.multipleChoice,
@@ -178,9 +176,8 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'name': 'Variáveis e Tipos de Dados',
         'description':
             'Aprendizado sobre diferentes tipos de dados (inteiro, real, caractere, lógico), declaração de variáveis e operações básicas.',
-        'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
-        'icon': 'data_object', // Adicionando ícone
+        'icon': '{"pack":"roundedMaterial","key":"data_object_rounded"}',
         'questions': [
           {
             'type': QuestionType.multipleChoice,
@@ -208,9 +205,8 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'name': 'Estruturas de Dados Fundamentais (Introdução)',
         'description':
             'Introdução a vetores (arrays) para armazenamento de coleções de dados do mesmo tipo.',
-        'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
-        'icon': 'view_list', // Adicionando ícone
+        'icon': '{"pack":"roundedMaterial","key":"view_list_rounded"}',
         'questions': [
           // Questão 1.3.1
           {
@@ -242,14 +238,13 @@ final List<Map<String, dynamic>> seedSubjectsData = [
     'description':
         'Estudo aprofundado de estruturas para organizar e manipular dados eficientemente.',
     'period': 2,
-    'icon': 'data_usage',
+    'icon': '{"pack":"roundedMaterial","key":"data_usage_rounded"}',
     'modules': [
       {
         'name': 'Listas Encadeadas',
         'description': 'Implementação e uso de listas lineares dinâmicas.',
-        'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
-        'icon': 'link', // Adicionando ícone
+        'icon': '{"pack":"roundedMaterial","key":"link_rounded"}',
         'questions': [
           {
             'type': QuestionType.multipleChoice,

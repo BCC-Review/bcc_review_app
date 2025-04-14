@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bcc_review_app/domain/entities/question.dart';
 import 'package:bcc_review_app/domain/entities/subject.dart';
 import 'package:isar/isar.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
 part 'module.g.dart';
 
@@ -11,9 +14,6 @@ class Module {
   String description;
   String icon;
 
-  @Enumerated(EnumType.name)
-  DifficultyLevel difficultyLevel;
-
   final multipleChoiceQuestions = IsarLinks<MultipleChoice>();
   final subject = IsarLink<Subject>();
 
@@ -23,22 +23,18 @@ class Module {
     this.id,
     required this.name,
     required this.description,
-    required this.difficultyLevel,
     required this.isOfficial,
     required this.icon,
   });
-}
 
-enum DifficultyLevel {
-  easy(label: 'Fácil'),
-  medium(label: 'Médio'),
-  hard(label: 'Difícil');
+  static IconPickerIcon? getIcon(String icon) {
+    if (icon.isEmpty) return null;
 
-  final String label;
-
-  const DifficultyLevel({required this.label});
-
-  String getLabel() {
-    return label;
+    Map<String, dynamic> iconMap = json.decode(icon) as Map<String, dynamic>;
+    try {
+      return deserializeIcon(iconMap);
+    } catch (e) {
+      return null;
+    }
   }
 }
