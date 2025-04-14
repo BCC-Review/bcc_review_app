@@ -18,7 +18,6 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'name': 'Algoritmos e Lógica de Programação',
         'description':
             'Fundamentos de algoritmos, estruturas de decisão (if/else) e repetição (while/for), e lógica básica de programação.',
-        'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
         'icon': 'functions', // Adicionando ícone
         'questions': [
@@ -178,7 +177,6 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'name': 'Variáveis e Tipos de Dados',
         'description':
             'Aprendizado sobre diferentes tipos de dados (inteiro, real, caractere, lógico), declaração de variáveis e operações básicas.',
-        'difficultyLevel': DifficultyLevel.easy,
         'isOfficial': true,
         'icon': 'data_object', // Adicionando ícone
         'questions': [
@@ -208,7 +206,6 @@ final List<Map<String, dynamic>> seedSubjectsData = [
         'name': 'Estruturas de Dados Fundamentais (Introdução)',
         'description':
             'Introdução a vetores (arrays) para armazenamento de coleções de dados do mesmo tipo.',
-        'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
         'icon': 'view_list', // Adicionando ícone
         'questions': [
@@ -247,7 +244,6 @@ final List<Map<String, dynamic>> seedSubjectsData = [
       {
         'name': 'Listas Encadeadas',
         'description': 'Implementação e uso de listas lineares dinâmicas.',
-        'difficultyLevel': DifficultyLevel.medium,
         'isOfficial': true,
         'icon': 'link', // Adicionando ícone
         'questions': [
