@@ -32,6 +32,12 @@ class _CreateModulePageState extends State<CreateModulePage> {
   ModuleValidator validator = ModuleValidator();
 
   _pickIcon() async {
+    // Remove o foco atual (fecha o teclado)
+    FocusScope.of(context).unfocus();
+
+    // Aguarda um frame para garantir que o foco foi removido completamente
+    await Future.delayed(Duration(milliseconds: 100));
+
     IconPickerIcon? iconPickerIcon = await showIconPicker(
       context,
       configuration: SinglePickerConfiguration(
@@ -78,12 +84,6 @@ class _CreateModulePageState extends State<CreateModulePage> {
   void _listenable() {
     if (viewmodel.createModuleCommand.isSuccess) {
       Routefly.pop(context);
-      Routefly.push(
-        '/module/create_questions/[moduleId]/form_questions'.replaceAll(
-          '[moduleId]',
-          viewmodel.createdModule!.id.toString(),
-        ),
-      );
     } else if (viewmodel.createModuleCommand.isFailure) {
       final failure = viewmodel.createModuleCommand.value as FailureCommand;
       final exception = failure.error as AppException;
@@ -112,6 +112,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    key: const Key('module_name_field'),
                     controller: _nameController,
                     decoration: const InputDecoration(
                       labelText: 'Nome do Módulo',
@@ -122,6 +123,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    key: const Key('module_description_field'),
                     controller: _descriptionController,
                     decoration: const InputDecoration(
                       labelText: 'Descrição',
@@ -143,6 +145,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                       const SizedBox(height: 12),
                       // Exibição do ícone selecionado
                       InkWell(
+                        key: const Key('module_icon_picker'),
                         onTap: _pickIcon,
                         child: Container(
                           height: 100,
@@ -244,6 +247,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                       listenable: viewmodel.createModuleCommand,
                       builder: (context, _) {
                         return ElevatedButton(
+                          key: const Key('module_save_button'),
                           onPressed:
                               viewmodel.createModuleCommand.isRunning
                                   ? null
@@ -272,7 +276,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                                       child: CircularProgressIndicator(),
                                     ),
                                   )
-                                  : const Text('Criar Módulo'),
+                                  : const Text('Salvar Módulo'),
                         );
                       },
                     ),

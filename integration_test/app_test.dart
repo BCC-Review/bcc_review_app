@@ -31,18 +31,22 @@ void main() {
 
     // Espera que a tela principal carregue
     expect(find.text(username), findsOneWidget);
+    await tester.pump(Duration(seconds: 2));
 
     /* FLUXO 2: QUIZZES PRÉ-DEFINIDOS */
     // Navegar para Período->Módulos->Disciplinas->Questionários
 
     await tester.tap(find.text('Período 1'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     await tester.tap(find.text('Introdução à Programação'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     await tester.tap(find.text('Algoritmos e Lógica de Programação'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     for (int i = 0; i < 12; i++) {
       await tester.pumpAndSettle();
@@ -60,6 +64,7 @@ void main() {
       // Clique na alternativa aleatória
       await tester.tap(randomAlternative);
       await tester.pumpAndSettle();
+      await tester.pump(Duration(seconds: 2));
 
       // Verifica se o feedback "Correto" ou "Incorreto" aparece
       if (find.text('Correto').evaluate().isNotEmpty) {
@@ -73,32 +78,86 @@ void main() {
       // Pressiona o botão de "Ok"
       await tester.tap(find.byKey(Key('ok_button')));
       await tester.pumpAndSettle();
+      await tester.pump(Duration(seconds: 3));
     }
 
     await tester.tap(find.text('Tentar Novamente'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('x_button')));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     await tester.tap(find.text('Sair'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     /* FLUXO 3: VER EXPERIÊNCIA ADQUIRIDA */
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
 
-    await tester.tap(find.byKey(Key('xp_button')));
+    await tester.tap(find.byKey(Key('xp_button')), warnIfMissed: false);
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
     /* FLUXO 4: QUIZZES PERSONALIZADOS */
 
     await tester.tap(find.text('Meus Módulos'));
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
 
-    /* FLUXO 5: MINIJOGOS INTERATIVOS */
-    /* FLUXO 6: SAÍDA */
+    await tester.tap(find.byKey(Key('create_module_button')));
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+
+    final moduleName = "Trigonometria";
+    final moduleDescription = "Estudo dos ângulos.";
+
+    await tester.enterText(find.byKey(Key('module_name_field')), moduleName);
+    await tester.enterText(find.byKey(Key('module_description_field')), moduleDescription);
+    await tester.tap(find.byKey(Key('module_icon_picker')));
+    await tester.pump(Duration(seconds: 2));
+    final Size screenSize = tester.getSize(find.byType(MaterialApp));
+    final Offset top = Offset(screenSize.width / 2, 180);
+    final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
+    final Offset bottom = Offset(screenSize.width / 2, screenSize.height / 2 + 180);
+    await tester.tapAt(center);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+    await tester.tapAt(bottom);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+
+    await tester.tap(find.text('Trigonometria'));
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+
+    // Preenche o campo de enunciado
+    await tester.enterText(find.byKey(Key('question_statement_field')),
+        'Qual é a hipotenusa de um triângulo CA = 2 metros e cos 45º?');
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+
+    // Preenche as alternativas
+    final alternativeFields = find.byKey(const Key('alternative_fields'));
+
+    await tester.enterText(alternativeFields.at(0), '2 metros');
+    await tester.enterText(alternativeFields.at(1), '3 metros');
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+    await tester.tapAt(top);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+
+    // Clica no botão de salvar
+    final saveButton = find.text('Salvar Todas as Questões');
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+
   });
 }

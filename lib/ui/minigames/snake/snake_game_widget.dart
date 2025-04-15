@@ -19,11 +19,17 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
   static const Duration tickRate = Duration(milliseconds: 200);
 
   List<Point<int>> snake = [const Point(10, 10)];
-  Point<int> food = const Point(5, 5);
+  Point<int>? blueFood;
+  Point<int>? redFood;
   Direction direction = Direction.right;
   Timer? timer;
   bool gameOver = false;
   int score = 0;
+
+  late String logicExpression;
+  late int logicResult;
+
+  final Random _rng = Random();
 
   @override
   void initState() {
@@ -35,11 +41,57 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
     timer?.cancel();
     snake = [const Point(10, 10)];
     direction = Direction.right;
-    food = generateNewFood();
     gameOver = false;
     score = 0;
 
-    timer = Timer.periodic(tickRate, (_) => updateGame());
+    generateNewExpression();
+    spawnFood();
+
+    // Inicia o jogo apenas depois de o pop-up ser fechado
+    Future.delayed(Duration.zero, () async {
+      await showInstructionsDialog();
+      timer = Timer.periodic(tickRate, (_) => updateGame());
+    });
+  }
+
+  void generateNewExpression() {
+    final a = _rng.nextBool() ? 1 : 0;
+    final b = _rng.nextBool() ? 1 : 0;
+    final operators = ['AND', 'OR', 'XOR', 'NOR'];
+    final op = operators[_rng.nextInt(operators.length)];
+
+    logicExpression = '$a $op $b';
+    logicResult = evaluateLogicExpression(a, b, op);
+  }
+
+  int evaluateLogicExpression(int a, int b, String op) {
+    switch (op) {
+      case 'AND':
+        return a & b;
+      case 'OR':
+        return a | b;
+      case 'XOR':
+        return a ^ b;
+      case 'NOR':
+        return ~(a | b) & 1;
+      default:
+        return 0;
+    }
+  }
+
+  void spawnFood() {
+    Point<int> newBlue;
+    Point<int> newRed;
+    do {
+      newBlue = Point(_rng.nextInt(columns), _rng.nextInt(rows));
+    } while (snake.contains(newBlue));
+
+    do {
+      newRed = Point(_rng.nextInt(columns), _rng.nextInt(rows));
+    } while (snake.contains(newRed) || newRed == newBlue);
+
+    blueFood = newBlue;
+    redFood = newRed;
   }
 
   void updateGame() {
@@ -69,28 +121,30 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
           snake.contains(newHead)) {
         gameOver = true;
         timer?.cancel();
-
         Future.delayed(Duration.zero, showGameOverDialog);
         return;
       }
 
       snake.insert(0, newHead);
-      if (newHead == food) {
-        food = generateNewFood();
+
+      final targetFood = logicResult == 1 ? blueFood : redFood;
+
+      if (newHead == targetFood) {
         score += 10;
+        generateNewExpression();
+        spawnFood();
       } else {
+        // Se pegar o alimento errado, o jogo termina
+        if ((newHead == blueFood && logicResult == 0) ||
+            (newHead == redFood && logicResult == 1)) {
+          gameOver = true;
+          timer?.cancel();
+          Future.delayed(Duration.zero, showGameOverDialog);
+          return;
+        }
         snake.removeLast();
       }
     });
-  }
-
-  Point<int> generateNewFood() {
-    final rng = Random();
-    Point<int> newFood;
-    do {
-      newFood = Point(rng.nextInt(columns), rng.nextInt(rows));
-    } while (snake.contains(newFood));
-    return newFood;
   }
 
   void onPanUpdate(DragUpdateDetails details) {
@@ -112,6 +166,33 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
     }
   }
 
+  Future<void> showInstructionsDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // Não permite fechar clicando fora
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Como Jogar'),
+          content: const Text(
+            'Neste jogo, a cobra deve comer o alimento correto baseado em uma expressão lógica.\n\n'
+                'A cada comida, uma nova expressão é gerada. Se o resultado for 1, a cobra deve pegar os alimentos azuis.\n'
+                'Se o resultado for 0, a cobra deve pegar os alimentos vermelhos.\n\n'
+                'Evite pegar o alimento errado, caso contrário, o jogo acabará! Toque na tela para controlar a direção da cobra.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha a tela de instruções
+              },
+              child: const Text('Entendido'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void showGameOverDialog() {
     showDialog(
       context: context,
@@ -123,8 +204,8 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // fecha o dialog
-                startGame(); // reinicia o jogo
+                Navigator.of(context).pop(); // Fecha o dialog
+                startGame(); // Reinicia o jogo
               },
               child: const Text('Reiniciar'),
             ),
@@ -163,7 +244,9 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
                   color = Colors.green.shade700;
                 } else if (snake.contains(point)) {
                   color = Colors.green;
-                } else if (point == food) {
+                } else if (point == blueFood) {
+                  color = Colors.blue;
+                } else if (point == redFood) {
                   color = Colors.red;
                 } else {
                   color = Colors.grey.shade200;
@@ -178,6 +261,10 @@ class _SnakeGameWidgetState extends State<SnakeGameWidget> {
                 );
               },
             ),
+          ),
+          Text(
+            'Expressão lógica: $logicExpression',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           Padding(
             padding: const EdgeInsets.all(12),
