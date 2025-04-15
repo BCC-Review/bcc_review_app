@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
+                        key: const Key('xp_button'),
                         children: [
                           Icon(Icons.school, color: Colors.blue),
                           const SizedBox(width: 4),
@@ -145,6 +146,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        key: const Key('minigames_button'),
         onPressed: () {
           Routefly.push('/minigames/minigame_selection');
         },
