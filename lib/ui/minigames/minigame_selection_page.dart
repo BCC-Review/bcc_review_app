@@ -4,17 +4,17 @@ import 'package:routefly/routefly.dart';
 class MinigameSelectionPage extends StatelessWidget {
   const MinigameSelectionPage({super.key});
 
-  // Lista de Minijogos
-  final List<Map<String, String>> minigames = const [
-    {'name': 'Cobrinha 0/1', 'image': 'assets/images/minigame-1-icon.png'},
-    {'name': 'Forca', 'image': 'assets/images/minigame-2-icon.png'},
-    {'name': 'Jogo da Velha', 'image': 'assets/images/minigame-3-icon.png'},
-    {'name': 'Tênis de Mesa', 'image': 'assets/images/minigame-4-icon.png'},
-    {'name': 'Soma Saga', 'image': 'assets/images/minigame-5-icon.png'},
-    {'name': 'Palavras Cruzadas', 'image': 'assets/images/minigame-6-icon.png'},
-    {'name': 'Arranha-Céu', 'image': 'assets/images/minigame-7-icon.png'},
-    {'name': 'Dividir e Conquistar', 'image': 'assets/images/minigame-8-icon.png'},
-    {'name': 'Memorização', 'image': 'assets/images/minigame-9-icon.png'},
+  // Lista de Minijogos com controle de bloqueio
+  final List<Map<String, dynamic>> minigames = const [
+    {'name': 'Cobrinha 0/1', 'image': 'assets/images/minigame-1-icon.png', 'locked': false, 'index': 1},
+    {'name': 'Forca', 'image': 'assets/images/minigame-2-icon.png', 'locked': true, 'index': 2},
+    {'name': 'Jogo da Velha', 'image': 'assets/images/minigame-3-icon.png', 'locked': true, 'index': 3},
+    {'name': 'Tênis de Mesa', 'image': 'assets/images/minigame-4-icon.png', 'locked': true, 'index': 4},
+    {'name': 'Soma Saga', 'image': 'assets/images/minigame-5-icon.png', 'locked': true, 'index': 5},
+    {'name': 'Palavras Cruzadas', 'image': 'assets/images/minigame-6-icon.png', 'locked': true, 'index': 6},
+    {'name': 'Arranha-Céu', 'image': 'assets/images/minigame-7-icon.png', 'locked': true, 'index': 7},
+    {'name': 'Dividir e Conquistar', 'image': 'assets/images/minigame-8-icon.png', 'locked': true, 'index': 8},
+    {'name': 'Memorização', 'image': 'assets/images/minigame-9-icon.png', 'locked': true, 'index': 9},
   ];
 
   // Mapa da Descrição dos Minijogos
@@ -54,41 +54,66 @@ class MinigameSelectionPage extends StatelessWidget {
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
           children: minigames.map((minigame) {
+            final isLocked = minigame['locked'] as bool;
+            final index = minigame['index'] as int;
+
             return GestureDetector(
               onTap: () {
-                showMinigameDialog(
-                  context,
-                  minigame['name']!,
-                  minigame['image']!,
-                  descriptions[minigame['name']] ?? 'Descrição indisponível.',
-                );
+                if (!isLocked) {
+                  showMinigameDialog(
+                    context,
+                    minigame['name']!,
+                    minigame['image']!,
+                    descriptions[minigame['name']] ?? 'Descrição indisponível.',
+                  );
+                }
               },
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          minigame['image']!,
-                          fit: BoxFit.contain,
+              child: Stack(
+                children: [
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              minigame['image']!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          minigame['name']!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                  if (isLocked)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$index',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      minigame['name']!,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
+                ],
               ),
             );
           }).toList(),
