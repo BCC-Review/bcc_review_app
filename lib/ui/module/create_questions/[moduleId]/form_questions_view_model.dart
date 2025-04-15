@@ -17,6 +17,7 @@ class FormQuestionsViewModel extends ChangeNotifier {
 
   FormQuestionsViewModel(this._questionRepository, this._moduleRepository);
 
+  bool isLoading = false;
   final List<MultipleChoice> _questions = [];
   List<MultipleChoice> get questions => List.unmodifiable(_questions);
 
@@ -30,14 +31,31 @@ class FormQuestionsViewModel extends ChangeNotifier {
 
   Module? module;
   Future<void> getModule(int moduleId) async {
+    isLoading = true;
+    notifyListeners();
+
     final result = await _moduleRepository.getModule(moduleId);
     result
-        .onSuccess((module) {
+        .onSuccess((module) async {
           this.module = module;
+          _questions.clear();
+
+          // Carrega explicitamente as questões associadas
+          await module.multipleChoiceQuestions.load();
+          _questions.addAll(module.multipleChoiceQuestions);
+
+          // Adiciona uma questão vazia apenas se não houver nenhuma
+          if (_questions.isEmpty) {
+            addEmptyQuestion();
+          }
+
+          isLoading = false;
           notifyListeners();
         })
         .onFailure((error) {
           debugPrint('Erro ao obter o módulo: $error');
+          isLoading = false;
+          notifyListeners();
         });
   }
 
@@ -80,7 +98,16 @@ class FormQuestionsViewModel extends ChangeNotifier {
   // Adiciona uma alternativa vazia a uma questão específica
   void addAlternative(int questionIndex) {
     if (questionIndex >= 0 && questionIndex < _questions.length) {
-      _questions[questionIndex].alternatives.add('');
+      final question = _questions[questionIndex];
+      final newAlternatives = List<String>.from(question.alternatives)..add('');
+      _questions[questionIndex] = MultipleChoice(
+        statement: question.statement,
+        alternatives: newAlternatives,
+        correctAnswerIndex: question.correctAnswerIndex,
+        xpInitial: question.xpInitial,
+        xpReview: question.xpReview,
+        isOfficial: question.isOfficial,
+      );
       // Limpa erro específico da nova alternativa, se houver
       _validationErrors[questionIndex]?.remove(
         'alternative_${_questions[questionIndex].alternatives.length - 1}',

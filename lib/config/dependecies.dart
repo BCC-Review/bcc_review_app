@@ -69,7 +69,7 @@ Future<void> setupDependencies() async {
   injector.addLazySingleton(CreateModuleViewModel.new);
   injector.addLazySingleton(OfficialModulesViewModel.new);
   injector.addLazySingleton(MyModulesViewModel.new);
-  injector.addLazySingleton(FormQuestionsViewModel.new);
+  injector.add(FormQuestionsViewModel.new);
 
   injector.commit();
 }
