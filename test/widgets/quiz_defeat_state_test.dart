@@ -1,4 +1,4 @@
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_defeat_state.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_defeat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,7 +9,9 @@ class MockCallback extends Mock {
 }
 
 void main() {
-  testWidgets('QuizDefeatState deve exibir os elementos corretamente', (WidgetTester tester) async {
+  testWidgets('QuizDefeatState deve exibir os elementos corretamente', (
+    WidgetTester tester,
+  ) async {
     // Funções mock para os callbacks
     final mockOnRetry = MockCallback();
     final mockOnBackToModules = MockCallback();
@@ -20,8 +22,8 @@ void main() {
         home: Scaffold(
           body: QuizDefeatState(
             totalXPEarned: 0,
-            onRetry: mockOnRetry,
-            onBackToModules: mockOnBackToModules,
+            onRetry: mockOnRetry.call,
+            onBackToModules: mockOnBackToModules.call,
           ),
         ),
       ),
@@ -43,7 +45,9 @@ void main() {
     expect(find.text('Tentar Novamente'), findsOneWidget);
   });
 
-  testWidgets('QuizDefeatState deve chamar os callbacks ao clicar nos botões', (WidgetTester tester) async {
+  testWidgets('QuizDefeatState deve chamar os callbacks ao clicar nos botões', (
+    WidgetTester tester,
+  ) async {
     // Funções mock para os callbacks
     final mockOnRetry = MockCallback();
     final mockOnBackToModules = MockCallback();
@@ -54,8 +58,8 @@ void main() {
         home: Scaffold(
           body: QuizDefeatState(
             totalXPEarned: 0,
-            onRetry: mockOnRetry,
-            onBackToModules: mockOnBackToModules,
+            onRetry: mockOnRetry.call,
+            onBackToModules: mockOnBackToModules.call,
           ),
         ),
       ),

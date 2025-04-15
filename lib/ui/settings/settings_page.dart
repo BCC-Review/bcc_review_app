@@ -19,6 +19,8 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     viewModel.logoutCommand.addListener(_logoutListenable);
     viewModel.restoreAppCommand.addListener(_restoreAppListenable);
+    viewModel.saveApiKeyCommand.addListener(_saveApiKeyListenable);
+    viewModel.deleteApiKeyCommand.addListener(_deleteApiKeyListenable);
     super.initState();
   }
 
@@ -26,13 +28,35 @@ class _SettingsPageState extends State<SettingsPage> {
   void dispose() {
     viewModel.logoutCommand.removeListener(_logoutListenable);
     viewModel.restoreAppCommand.removeListener(_restoreAppListenable);
+    viewModel.saveApiKeyCommand.removeListener(_saveApiKeyListenable);
+    viewModel.deleteApiKeyCommand.removeListener(_deleteApiKeyListenable);
     super.dispose();
   }
 
+  void _deleteApiKeyListenable() {
+    if (!mounted) return;
+
+    if (viewModel.deleteApiKeyCommand.isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Chave API excluída com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (viewModel.deleteApiKeyCommand.isFailure) {
+      final failure = viewModel.deleteApiKeyCommand.value as FailureCommand;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao excluir a chave: ${failure.error}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void _logoutListenable() {
-    if (!mounted) return; // Check if the widget is still in the tree
+    if (!mounted) return;
     if (viewModel.logoutCommand.isSuccess) {
-      // Navega para o login após o logout bem-sucedido
       Routefly.navigate(routePaths.login);
     } else if (viewModel.logoutCommand.isFailure) {
       final failure = viewModel.logoutCommand.value as FailureCommand;
@@ -46,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _restoreAppListenable() {
-    if (!mounted) return; // Check if the widget is still in the tree
+    if (!mounted) return;
     if (viewModel.restoreAppCommand.isSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -66,10 +90,30 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _saveApiKeyListenable() {
+    if (!mounted) return;
+    if (viewModel.saveApiKeyCommand.isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Chave API salva com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (viewModel.saveApiKeyCommand.isFailure) {
+      final failure = viewModel.saveApiKeyCommand.value as FailureCommand;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao salvar a chave: ${failure.error}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   Future<void> _showRestoreConfirmationDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must tap button!
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Confirmar Restauração'),
@@ -106,6 +150,92 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Future<void> _showApiKeyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Configurar Chave API Gemini'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Digite sua chave API do Gemini para habilitar recursos de IA.',
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: viewModel.apiKeyController,
+                  decoration: const InputDecoration(
+                    hintText: 'Digite sua chave API aqui',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            if (viewModel.apiKey != null)
+              TextButton(
+                onPressed: () {
+                  viewModel.deleteApiKeyCommand.execute().then((_) {
+                    Navigator.of(dialogContext).pop();
+                  });
+                },
+                child: const Text(
+                  'Excluir',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            TextButton(
+              onPressed: () {
+                viewModel.apiKeyController.text = '';
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            ValueListenableBuilder(
+              valueListenable: viewModel.apiKeyController,
+              builder: (context, value, child) {
+                return ListenableBuilder(
+                  listenable: viewModel.saveApiKeyCommand,
+                  builder: (context, _) {
+                    final isRunning = viewModel.saveApiKeyCommand.isRunning;
+                    final isEmpty = value.text.trim().isEmpty;
+
+                    return TextButton(
+                      onPressed:
+                          isRunning || isEmpty
+                              ? null
+                              : () {
+                                viewModel.saveApiKeyCommand.execute().then((_) {
+                                  Navigator.of(dialogContext).pop();
+                                });
+                              },
+                      child:
+                          isRunning
+                              ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Text('Salvar'),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -118,24 +248,41 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               // Modo Escuro
               ListenableBuilder(
-                listenable:
-                    viewModel, // Ou viewModel.darkModeNotifier se tiver um dedicado
+                listenable: viewModel,
                 builder: (context, _) {
                   return ListTile(
                     leading: const Icon(Icons.dark_mode_outlined),
                     title: const Text('Modo Escuro'),
                     trailing: Switch(
                       value: viewModel.isDarkMode,
-                      // Corrigido: Envolve a chamada async em uma função síncrona
                       onChanged: (value) => viewModel.toggleDarkMode(),
                     ),
-                    onTap:
-                        viewModel
-                            .toggleDarkMode, // Permite clicar na linha toda
+                    onTap: viewModel.toggleDarkMode,
                   );
                 },
               ),
               const Divider(),
+              // API Key Gemini
+              ListenableBuilder(
+                listenable: viewModel,
+                builder: (context, _) {
+                  return ListTile(
+                    leading: const Icon(Icons.key),
+                    title: const Text('Chave API Gemini'),
+                    subtitle: Text(
+                      viewModel.apiKey != null
+                          ? 'Chave configurada'
+                          : 'Chave não configurada',
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: _showApiKeyDialog,
+                    ),
+                  );
+                },
+              ),
+              const Divider(),
+              // Restaurar Aplicativo
               ListenableBuilder(
                 listenable: viewModel.restoreAppCommand,
                 builder: (context, _) {

@@ -1,4 +1,4 @@
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_alternative.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_alternative.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,7 +9,9 @@ class MockCallback extends Mock {
 }
 
 void main() {
-  testWidgets('QuizAlternative deve exibir a alternativa corretamente', (WidgetTester tester) async {
+  testWidgets('QuizAlternative deve exibir a alternativa corretamente', (
+    WidgetTester tester,
+  ) async {
     // Variáveis para os testes
     const index = 0;
     const text = 'Alternativa A';
@@ -30,7 +32,7 @@ void main() {
             isSelected: isSelected,
             showResult: showResult,
             isCorrect: isCorrect,
-            onTap: mockOnTap.call,  // Passa o MockCallback para onTap
+            onTap: mockOnTap.call, // Passa o MockCallback para onTap
           ),
         ),
       ),
@@ -50,10 +52,10 @@ void main() {
           body: QuizAlternative(
             index: index,
             text: text,
-            isSelected: true,  // Altera para 'selecionado'
-            showResult: true,  // Mostra o resultado
-            isCorrect: true,   // Marca como correto
-            onTap: mockOnTap,
+            isSelected: true, // Altera para 'selecionado'
+            showResult: true, // Mostra o resultado
+            isCorrect: true, // Marca como correto
+            onTap: mockOnTap.call,
           ),
         ),
       ),
@@ -78,7 +80,7 @@ void main() {
             isSelected: true,
             showResult: true,
             isCorrect: false, // Marca como incorreto
-            onTap: mockOnTap,
+            onTap: mockOnTap.call,
           ),
         ),
       ),

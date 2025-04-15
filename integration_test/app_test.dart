@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_alternative.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_alternative.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -48,10 +48,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pump(Duration(seconds: 1));
 
-    for(int i = 0; i < 12; i++)
-    {
+    for (int i = 0; i < 12; i++) {
       await tester.pumpAndSettle();
-      if(find.text('Tentar Novamente').evaluate().isNotEmpty) {
+      if (find.text('Tentar Novamente').evaluate().isNotEmpty) {
         break;
       }
       // Encontre e verifique as alternativas disponíveis
@@ -68,16 +67,10 @@ void main() {
       await tester.pump(Duration(seconds: 2));
 
       // Verifica se o feedback "Correto" ou "Incorreto" aparece
-      if (find
-          .text('Correto')
-          .evaluate()
-          .isNotEmpty) {
+      if (find.text('Correto').evaluate().isNotEmpty) {
         expect(find.text('Correto'), findsOneWidget);
         print("CORRETO");
-      } else if (find
-          .text('Incorreto')
-          .evaluate()
-          .isNotEmpty) {
+      } else if (find.text('Incorreto').evaluate().isNotEmpty) {
         expect(find.text('Incorreto'), findsOneWidget);
         print("INCORRETO");
       }
@@ -167,5 +160,4 @@ void main() {
     await tester.pump(Duration(seconds: 2));
 
   });
-
 }

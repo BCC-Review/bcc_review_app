@@ -23,7 +23,8 @@ import 'package:bcc_review_app/ui/login/login_view_model.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
 import 'package:bcc_review_app/ui/module/create/create_module_view_model.dart';
 import 'package:bcc_review_app/ui/module/create_questions/%5BmoduleId%5D/form_questions_view_model.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/quiz_view_model.dart';
+import 'package:bcc_review_app/ui/quiz/%5Bid%5D/explanation/explanation_view_model.dart';
 import 'package:bcc_review_app/ui/settings/settings_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,6 +71,7 @@ Future<void> setupDependencies() async {
   injector.addLazySingleton(OfficialModulesViewModel.new);
   injector.addLazySingleton(MyModulesViewModel.new);
   injector.add(FormQuestionsViewModel.new);
+  injector.add(ExplanationViewModel.new);
 
   injector.commit();
 }

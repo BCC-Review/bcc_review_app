@@ -21,29 +21,34 @@ List<RouteEntity> get routes => [
   ),
   RouteEntity(key: '/home', uri: Uri.parse('/home'), routeBuilder: b4Builder),
   RouteEntity(
-    key: '/quiz/[id]/quiz',
-    uri: Uri.parse('/quiz/[id]/quiz'),
+    key: '/quiz/[id]/explanation',
+    uri: Uri.parse('/quiz/[id]/explanation'),
     routeBuilder: b5Builder,
+  ),
+  RouteEntity(
+    key: '/quiz/[moduleId]/quiz',
+    uri: Uri.parse('/quiz/[moduleId]/quiz'),
+    routeBuilder: b6Builder,
   ),
   RouteEntity(
     key: '/module/[id]/show',
     uri: Uri.parse('/module/[id]/show'),
-    routeBuilder: b6Builder,
+    routeBuilder: b7Builder,
   ),
   RouteEntity(
     key: '/module/create/create_module',
     uri: Uri.parse('/module/create/create_module'),
-    routeBuilder: b7Builder,
+    routeBuilder: b8Builder,
   ),
   RouteEntity(
     key: '/module/create_questions/[moduleId]/form_questions',
     uri: Uri.parse('/module/create_questions/[moduleId]/form_questions'),
-    routeBuilder: b8Builder,
+    routeBuilder: b9Builder,
   ),
   RouteEntity(
     key: '/settings',
     uri: Uri.parse('/settings'),
-    routeBuilder: b9Builder,
+    routeBuilder: b10Builder,
   ),
 ];
 
@@ -57,7 +62,11 @@ const routePaths = (
   login: '/login',
   splash: '/splash',
   home: '/home',
-  quiz: (path: '/quiz', $id: (path: '/quiz/[id]', quiz: '/quiz/[id]/quiz')),
+  quiz: (
+    path: '/quiz',
+    $id: (path: '/quiz/[id]', explanation: '/quiz/[id]/explanation'),
+    $moduleId: (path: '/quiz/[moduleId]', quiz: '/quiz/[moduleId]/quiz'),
+  ),
   module: (
     path: '/module',
     $id: (path: '/module/[id]', show: '/module/[id]/show'),
