@@ -93,7 +93,12 @@ class _CreateQuestionsPageState extends State<CreateQuestionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+        onTap: () {
+          // Esconde o teclado
+          FocusScope.of(context).unfocus();
+        },
+    child: Scaffold(
       appBar: AppBar(
         title: Text(
           'Criar Questões',
@@ -189,6 +194,7 @@ class _CreateQuestionsPageState extends State<CreateQuestionsPage> {
           );
         },
       ),
+    )
     );
   }
 }
@@ -421,6 +427,7 @@ class _QuestionFormCardState extends State<_QuestionFormCard> {
                         const SizedBox(height: 16),
                         // Campo Enunciado
                         TextFormField(
+                          key: const Key('question_statement_field'),
                           controller: _statementController,
                           decoration: InputDecoration(
                             labelText: 'Enunciado da Questão',
@@ -471,6 +478,7 @@ class _QuestionFormCardState extends State<_QuestionFormCard> {
                                   ),
                                   // Campo de Texto da Alternativa
                                   Expanded(
+                                    key: const Key('alternative_fields'),
                                     child: TextFormField(
                                       controller:
                                           _alternativeControllers[altIndex],
@@ -483,6 +491,9 @@ class _QuestionFormCardState extends State<_QuestionFormCard> {
                                             errors['alternative_$altIndex'], // Exibe erro da alternativa
                                       ),
                                       textInputAction: TextInputAction.next,
+                                      onEditingComplete: () {
+                                        FocusScope.of(context).unfocus();
+                                      },
                                     ),
                                   ),
                                   // Botão Remover Alternativa (se houver mais de 2)

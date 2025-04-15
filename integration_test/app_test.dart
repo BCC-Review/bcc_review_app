@@ -33,7 +33,7 @@ void main() {
     expect(find.text(username), findsOneWidget);
     await tester.pump(Duration(seconds: 2));
 
-    /* FLUXO 2: QUIZZES PRÉ-DEFINIDOS
+    /* FLUXO 2: QUIZZES PRÉ-DEFINIDOS */
     // Navegar para Período->Módulos->Disciplinas->Questionários
 
     await tester.tap(find.text('Período 1'));
@@ -101,7 +101,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pump(Duration(seconds: 1));
 
-     FLUXO 3: VER EXPERIÊNCIA ADQUIRIDA
+    /* FLUXO 3: VER EXPERIÊNCIA ADQUIRIDA */
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
@@ -109,7 +109,7 @@ void main() {
 
     await tester.tap(find.byKey(Key('xp_button')), warnIfMissed: false);
     await tester.pumpAndSettle();
-    await tester.pump(Duration(seconds: 1));*/
+    await tester.pump(Duration(seconds: 1));
 
     /* FLUXO 4: QUIZZES PERSONALIZADOS */
 
@@ -129,13 +129,43 @@ void main() {
     await tester.tap(find.byKey(Key('module_icon_picker')));
     await tester.pump(Duration(seconds: 2));
     final Size screenSize = tester.getSize(find.byType(MaterialApp));
+    final Offset top = Offset(screenSize.width / 2, 180);
     final Offset center = Offset(screenSize.width / 2, screenSize.height / 2);
     final Offset bottom = Offset(screenSize.width / 2, screenSize.height / 2 + 180);
     await tester.tapAt(center);
     await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
     await tester.tapAt(bottom);
     await tester.pumpAndSettle();
     await tester.pump(Duration(seconds: 2));
+
+    await tester.tap(find.text('Trigonometria'));
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+
+    // Preenche o campo de enunciado
+    await tester.enterText(find.byKey(Key('question_statement_field')),
+        'Qual é a hipotenusa de um triângulo CA = 2 metros e cos 45º?');
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+
+    // Preenche as alternativas
+    final alternativeFields = find.byKey(const Key('alternative_fields'));
+
+    await tester.enterText(alternativeFields.at(0), '2 metros');
+    await tester.enterText(alternativeFields.at(1), '3 metros');
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 1));
+    await tester.tapAt(top);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+
+    // Clica no botão de salvar
+    final saveButton = find.text('Salvar Todas as Questões');
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+    await tester.pump(Duration(seconds: 2));
+
   });
 
 }
