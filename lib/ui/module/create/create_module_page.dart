@@ -78,12 +78,6 @@ class _CreateModulePageState extends State<CreateModulePage> {
   void _listenable() {
     if (viewmodel.createModuleCommand.isSuccess) {
       Routefly.pop(context);
-      Routefly.push(
-        '/module/create_questions/[moduleId]/form_questions'.replaceAll(
-          '[moduleId]',
-          viewmodel.createdModule!.id.toString(),
-        ),
-      );
     } else if (viewmodel.createModuleCommand.isFailure) {
       final failure = viewmodel.createModuleCommand.value as FailureCommand;
       final exception = failure.error as AppException;
@@ -107,6 +101,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                    key: const Key('module_name_field'),
                     'Informações do Módulo',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -122,6 +117,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    key: const Key('module_description_field'),
                     controller: _descriptionController,
                     decoration: const InputDecoration(
                       labelText: 'Descrição',
@@ -143,6 +139,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                       const SizedBox(height: 12),
                       // Exibição do ícone selecionado
                       InkWell(
+                        key: const Key('module_icon_picker'),
                         onTap: _pickIcon,
                         child: Container(
                           height: 100,
