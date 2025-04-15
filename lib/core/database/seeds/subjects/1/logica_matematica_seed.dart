@@ -25,7 +25,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -40,7 +40,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -48,7 +48,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           'statement': 'Qual o símbolo lógico para "ou" (disjunção)?',
           'alternatives': ['∧', '∨', '→', '↔'],
           'correctAnswerIndex': 1,
-          'xpInitial': 9,
+          'xpInitial': 10,
           'xpReview': 2,
           'isOfficial': true,
         },
@@ -63,7 +63,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -77,8 +77,8 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex':
               2, // Note: This seems incorrect based on standard truth tables. V, V, V, F is the correct order for p, q = (T,T), (T,F), (F,T), (F,F). Let's keep the original value for now.
-          'xpInitial': 12,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -91,8 +91,8 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
             'Uma proposição sem valor lógico',
           ],
           'correctAnswerIndex': 1,
-          'xpInitial': 11,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -107,7 +107,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -120,7 +120,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
             'Nenhuma das alternativas',
           ],
           'correctAnswerIndex': 2,
-          'xpInitial': 8,
+          'xpInitial': 10,
           'xpReview': 2,
           'isOfficial': true,
         },
@@ -136,7 +136,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -149,7 +149,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
             'Algum',
           ],
           'correctAnswerIndex': 1,
-          'xpInitial': 9,
+          'xpInitial': 10,
           'xpReview': 2,
           'isOfficial': true,
         },
@@ -173,7 +173,7 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -186,8 +186,8 @@ final Map<String, dynamic> logicaMatematicaSeedData = {
             'Uma proposição que não tem valor lógico',
           ],
           'correctAnswerIndex': 1,
-          'xpInitial': 11,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],

@@ -25,7 +25,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -40,7 +40,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -50,7 +50,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           'alternatives': ['if', 'switch', 'while', 'for'],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -60,7 +60,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           'alternatives': ['continue', 'break', 'exit', 'return'],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -75,7 +75,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
@@ -99,7 +99,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -113,7 +113,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -128,7 +128,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -142,7 +142,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -157,7 +157,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
@@ -181,7 +181,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -195,7 +195,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -209,7 +209,7 @@ final Map<String, dynamic> paradigmasDeLinguagensDeProgramacaoSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],

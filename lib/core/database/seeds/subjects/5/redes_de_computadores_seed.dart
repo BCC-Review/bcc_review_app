@@ -26,7 +26,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -36,7 +36,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           'alternatives': ['Estrela', 'Barramento', 'Anel', 'Malha'],
           'correctAnswerIndex': 3,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -50,7 +50,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -64,7 +64,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -74,7 +74,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           'alternatives': ['IP', 'TCP', 'HTTP', 'Ethernet'],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
@@ -93,7 +93,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           'alternatives': ['DNS', 'TCP', 'HTTP', 'ARP'],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -107,7 +107,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -121,7 +121,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -135,7 +135,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -149,7 +149,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
@@ -172,7 +172,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -186,7 +186,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -200,7 +200,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -210,7 +210,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           'alternatives': ['Switch', 'Hub', 'Gateway', 'Repeater'],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -224,7 +224,7 @@ final Map<String, dynamic> redesDeComputadoresSeedData = {
           ],
           'correctAnswerIndex': 2,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],

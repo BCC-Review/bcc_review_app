@@ -25,7 +25,7 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -40,7 +40,7 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -54,8 +54,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'x₁ - x₂ + y₁ - y₂',
           ],
           'correctAnswerIndex': 0,
-          'xpInitial': 12,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -69,8 +69,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'y = -0.5x + 2', // Corrected: Should be y = -0.5x + 2.5. Keeping original for now.
           ],
           'correctAnswerIndex': 3,
-          'xpInitial': 11,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -85,7 +85,7 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
           ],
           'correctAnswerIndex': 0,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -99,8 +99,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'y = 2x - 1',
           ],
           'correctAnswerIndex': 1,
-          'xpInitial': 12,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -109,8 +109,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
               'Qual é o ponto médio entre os pontos P(1, 2) e Q(3, 4)?',
           'alternatives': ['(2, 3)', '(1, 2)', '(4, 6)', '(2, 4)'],
           'correctAnswerIndex': 0,
-          'xpInitial': 9,
-          'xpReview': 3,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -126,7 +126,7 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
           'correctAnswerIndex':
               3, // Corrected: Should be 1. Keeping original for now.
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -141,7 +141,7 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
           ],
           'correctAnswerIndex': 1,
           'xpInitial': 10,
-          'xpReview': 3,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -155,8 +155,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'θ = arctan(|m₁ - m₂|)',
           ],
           'correctAnswerIndex': 0,
-          'xpInitial': 11,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
@@ -179,8 +179,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'x₂ - x₁ + y₂ - y₁ + z₂ - z₁',
           ],
           'correctAnswerIndex': 0,
-          'xpInitial': 12,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
         {
@@ -194,8 +194,8 @@ final Map<String, dynamic> geometriaAnaliticaSeedData = {
             'x² + y² = r²',
           ],
           'correctAnswerIndex': 0,
-          'xpInitial': 12,
-          'xpReview': 4,
+          'xpInitial': 10,
+          'xpReview': 2,
           'isOfficial': true,
         },
       ],
