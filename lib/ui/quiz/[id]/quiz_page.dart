@@ -30,7 +30,7 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    _audioPlayer.setVolume(0.7); // Volume do reprodutor de som
+    _audioPlayer.setVolume(0.85); // Volume do reprodutor de som
     viewModel.loadQuiz(moduleId);
   }
 
@@ -41,8 +41,7 @@ class _QuizPageState extends State<QuizPage> {
 
     if (isCorrect) {
       // Reproduzindo som de acerto
-      await _audioPlayer.play(AssetSource('audio/correct.mp3'));
-      await Future.delayed(Duration(seconds: 1));
+      _audioPlayer.play(AssetSource('audio/correct.mp3'));
       // Adicionar feedback positivo
       Asuka.showModalBottomSheet(
         builder: (context) {
@@ -72,6 +71,7 @@ class _QuizPageState extends State<QuizPage> {
                   ],
                 ),
                 CustomElevatedButton(
+                  key: const Key('ok_button'),
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.green,
                   shadowColor: Colors.green[700],
@@ -79,10 +79,12 @@ class _QuizPageState extends State<QuizPage> {
                     Routefly.pop(context);
                     if (viewModel.isQuizFinished) {
                       setState(() {
+                        _audioPlayer.stop();
                         _audioPlayer.play(AssetSource('audio/victory.mp3'));
                         _showFinalResults = true;
                       });
                     } else {
+                      _audioPlayer.stop();
                       _audioPlayer.play(AssetSource('audio/progress.mp3'));
                       viewModel.nextQuestion();
                     }
@@ -97,8 +99,7 @@ class _QuizPageState extends State<QuizPage> {
       );
     } else {
       // Reproduzindo som de erro
-      await _audioPlayer.play(AssetSource('audio/wrong.mp3'));
-      await Future.delayed(Duration(seconds: 1));
+      _audioPlayer.play(AssetSource('audio/wrong.mp3'));
       // Adicionar feedback negativo
       await Asuka.showModalBottomSheet(
         builder: (context) {
@@ -156,6 +157,7 @@ class _QuizPageState extends State<QuizPage> {
                   },
                 ),
                 CustomElevatedButton(
+                  key: const Key('ok_button'),
                   backgroundColor: Colors.white,
                   foregroundColor: Theme.of(context).colorScheme.error,
                   shadowColor: Colors.red[900],
@@ -289,6 +291,7 @@ class _QuizPageState extends State<QuizPage> {
           title: Row(
             children: [
               IconButton(
+                key: const Key('x_button'),
                 onPressed: _handleCloseQuiz,
                 icon: const Icon(Icons.close_outlined),
               ),
