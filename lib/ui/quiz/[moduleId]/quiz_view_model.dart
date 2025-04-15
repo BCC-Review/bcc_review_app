@@ -2,6 +2,7 @@ import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/core/extensions/date_only_compare.dart';
 import 'package:bcc_review_app/data/repositories/module/module_repository.dart';
 import 'package:bcc_review_app/data/repositories/question/question_repository.dart';
+import 'package:bcc_review_app/data/repositories/settings/settings_repository.dart';
 import 'package:bcc_review_app/data/repositories/user/user_repository.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/domain/entities/question.dart';
@@ -16,11 +17,13 @@ class QuizViewModel extends ChangeNotifier {
   final UserRepository userRepository;
   final QuestionRepository questionRepository;
   final ModuleRepository moduleRepository;
+  final SettingsRepository _settingsRepository;
 
   QuizViewModel(
     this.userRepository,
     this.questionRepository,
     this.moduleRepository,
+    this._settingsRepository,
   );
 
   bool isLoading = false;
@@ -45,6 +48,20 @@ class QuizViewModel extends ChangeNotifier {
   bool get isQuizSuccessful =>
       lives > 0 && currentQuestionIndex == quizQuestions.length - 1;
   bool get isQuizFailed => lives <= 0;
+
+  bool isGeminiEnabled = false;
+
+  Future<void> loadGemini() async {
+    final result = await _settingsRepository.getGeminiApiKey();
+    result
+        .onSuccess((apiKey) {
+          isGeminiEnabled = apiKey.isNotEmpty;
+          notifyListeners();
+        })
+        .onFailure((error) {
+          isGeminiEnabled = false;
+        });
+  }
 
   Future<void> loadQuiz(int moduleId) async {
     isLoading = true;

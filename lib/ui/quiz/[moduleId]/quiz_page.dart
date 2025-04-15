@@ -34,6 +34,7 @@ class _QuizPageState extends State<QuizPage> {
     print(moduleId);
     _audioPlayer.setVolume(0.85); // Volume do reprodutor de som
     viewModel.loadQuiz(moduleId);
+    viewModel.loadGemini();
   }
 
   Future<void> _handleAnswerSubmission(int answerIndex) async {
@@ -148,24 +149,36 @@ class _QuizPageState extends State<QuizPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                CustomElevatedButton(
-                  backgroundColor: Colors.black,
-                  foregroundColor: const Color(0xFF36C8FD),
-                  shadowColor: Colors.red[900],
-                  text: 'EXPLIQUE MEU ERRO COM IA',
-                  onPressed: () {
-                    Routefly.push(
-                      routePaths.quiz.$id.explanation.replaceAll(
-                        '[id]',
-                        viewModel.currentQuestion!.id.toString(),
-                      ),
-                      arguments: {
-                        'id': viewModel.currentQuestion!.id,
-                        'selectedIndex': viewModel.selectedAnswerIndex,
-                      },
-                    );
-                  },
-                ),
+                if (viewModel.isGeminiEnabled)
+                  CustomElevatedButton(
+                    backgroundColor: Colors.black,
+                    foregroundColor: const Color(0xFF36C8FD),
+                    shadowColor: Colors.red[900],
+                    text: 'EXPLIQUE MEU ERRO COM IA',
+                    onPressed: () {
+                      Routefly.pop(context);
+                      Routefly.push(
+                        routePaths.quiz.$id.explanation.replaceAll(
+                          '[id]',
+                          viewModel.currentQuestion!.id.toString(),
+                        ),
+                        arguments: {
+                          'id': viewModel.currentQuestion!.id,
+                          'selectedIndex': viewModel.selectedAnswerIndex,
+                        },
+                      ).then((value) {
+                        if (viewModel.isQuizFinished) {
+                          setState(() {
+                            _audioPlayer.play(AssetSource('audio/defeat.mp3'));
+                            _showFinalResults = true;
+                          });
+                        } else {
+                          _audioPlayer.play(AssetSource('audio/progress.mp3'));
+                          viewModel.nextQuestion();
+                        }
+                      });
+                    },
+                  ),
                 CustomElevatedButton(
                   key: const Key('ok_button'),
                   backgroundColor: Colors.white,

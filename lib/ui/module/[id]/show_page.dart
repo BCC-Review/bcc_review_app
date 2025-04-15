@@ -72,23 +72,6 @@ class _ModulePageState extends State<ModulePage> {
                         ),
                       ),
                     ),
-                    Container(
-                      width: 2,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withAlpha(50),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton(
-                        icon: const Icon(Icons.book),
-                        onPressed: () {},
-                      ),
-                    ),
                   ],
                 ),
               ),
