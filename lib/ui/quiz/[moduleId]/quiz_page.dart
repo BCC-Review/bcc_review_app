@@ -1,13 +1,14 @@
 import 'package:asuka/asuka.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/core/ui/widgets/custom_elevated_button.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/quiz_view_model.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/life_indicator.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/progress_bar.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_alternative.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_defeat_state.dart';
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_victory_state.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/quiz_view_model.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/life_indicator.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/progress_bar.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_alternative.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_defeat_state.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_victory_state.dart';
 import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
 
@@ -21,7 +22,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  final moduleId = int.tryParse(Routefly.query['id'].toString()) ?? 0;
+  final moduleId = int.tryParse(Routefly.query['moduleId'].toString()) ?? 0;
   final viewModel = injector.get<QuizViewModel>();
   bool _showFinalResults = false;
   bool canPop = false;
@@ -30,6 +31,7 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
+    print(moduleId);
     _audioPlayer.setVolume(0.85); // Volume do reprodutor de som
     viewModel.loadQuiz(moduleId);
   }
@@ -152,7 +154,16 @@ class _QuizPageState extends State<QuizPage> {
                   shadowColor: Colors.red[900],
                   text: 'EXPLIQUE MEU ERRO COM IA',
                   onPressed: () {
-                    AsukaMaterialBanner.warning('Em breve').show();
+                    Routefly.push(
+                      routePaths.quiz.$id.explanation.replaceAll(
+                        '[id]',
+                        viewModel.currentQuestion!.id.toString(),
+                      ),
+                      arguments: {
+                        'id': viewModel.currentQuestion!.id,
+                        'selectedIndex': viewModel.selectedAnswerIndex,
+                      },
+                    );
                   },
                 ),
                 CustomElevatedButton(
@@ -283,40 +294,43 @@ class _QuizPageState extends State<QuizPage> {
         _handleCloseQuiz();
       },
       child: Scaffold(
-        appBar: _showFinalResults
-            ? null
-            : AppBar(
-          automaticallyImplyLeading: false,
-          title: Row(
-            children: [
-              IconButton(
-                key: const Key('x_button'),
-                onPressed: _handleCloseQuiz,
-                icon: const Icon(Icons.close_outlined),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: AnimatedBuilder(
-                    animation: viewModel,
-                    builder: (context, _) => ProgressBar(
-                      current: viewModel.currentQuestionIndex,
-                      total: viewModel.quizQuestions.length,
-                    ),
+        appBar:
+            _showFinalResults
+                ? null
+                : AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Row(
+                    children: [
+                      IconButton(
+                        key: const Key('x_button'),
+                        onPressed: _handleCloseQuiz,
+                        icon: const Icon(Icons.close_outlined),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: AnimatedBuilder(
+                            animation: viewModel,
+                            builder:
+                                (context, _) => ProgressBar(
+                                  current: viewModel.currentQuestionIndex,
+                                  total: viewModel.quizQuestions.length,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: AnimatedBuilder(
+                          animation: viewModel,
+                          builder:
+                              (context, _) =>
+                                  LifeIndicator(lives: viewModel.lives),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: AnimatedBuilder(
-                  animation: viewModel,
-                  builder: (context, _) =>
-                      LifeIndicator(lives: viewModel.lives),
-                ),
-              ),
-            ],
-          ),
-        ),
         body: AnimatedBuilder(
           animation: viewModel,
           builder: (context, _) {
@@ -342,15 +356,15 @@ class _QuizPageState extends State<QuizPage> {
             if (_showFinalResults) {
               return viewModel.lives <= 0
                   ? QuizDefeatState(
-                totalXPEarned: viewModel.totalXPEarned,
-                onRetry: _retryQuiz,
-                onBackToModules: _backToModules,
-              )
+                    totalXPEarned: viewModel.totalXPEarned,
+                    onRetry: _retryQuiz,
+                    onBackToModules: _backToModules,
+                  )
                   : QuizVictoryState(
-                totalXPEarned: viewModel.totalXPEarned,
-                onRetry: _retryQuiz,
-                onBackToModules: _backToModules,
-              );
+                    totalXPEarned: viewModel.totalXPEarned,
+                    onRetry: _retryQuiz,
+                    onBackToModules: _backToModules,
+                  );
             }
 
             final currentQuestion = viewModel.currentQuestion;
@@ -373,7 +387,10 @@ class _QuizPageState extends State<QuizPage> {
                         if (isAnswered)
                           Container(
                             margin: const EdgeInsets.only(bottom: 8),
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.blue[50],
                               borderRadius: BorderRadius.circular(10),
@@ -381,7 +398,10 @@ class _QuizPageState extends State<QuizPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.info_outline, color: Colors.blue),
+                                const Icon(
+                                  Icons.info_outline,
+                                  color: Colors.blue,
+                                ),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Questão de Revisão',
@@ -411,19 +431,21 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                         ...List.generate(
                           currentQuestion.alternatives.length,
-                              (index) => TweenAnimationBuilder<Offset>(
+                          (index) => TweenAnimationBuilder<Offset>(
                             key: ValueKey(
-                                '${viewModel.currentQuestionIndex}-$index'),
+                              '${viewModel.currentQuestionIndex}-$index',
+                            ),
                             duration: Duration(milliseconds: 300 + index * 100),
                             curve: Curves.easeOut,
                             tween: Tween<Offset>(
                               begin: const Offset(0, 0.2),
                               end: Offset.zero,
                             ),
-                            builder: (context, offset, child) =>
-                                Transform.translate(
+                            builder:
+                                (context, offset, child) => Transform.translate(
                                   offset:
-                                  offset * MediaQuery.of(context).size.height,
+                                      offset *
+                                      MediaQuery.of(context).size.height,
                                   child: child,
                                 ),
                             child: Padding(
@@ -432,13 +454,12 @@ class _QuizPageState extends State<QuizPage> {
                                 index: index,
                                 text: currentQuestion.alternatives[index],
                                 isSelected:
-                                viewModel.selectedAnswerIndex == index,
+                                    viewModel.selectedAnswerIndex == index,
                                 showResult:
-                                viewModel.selectedAnswerIndex != null,
+                                    viewModel.selectedAnswerIndex != null,
                                 isCorrect:
-                                viewModel.selectedAnswerIndex != null &&
-                                    index ==
-                                        currentQuestion.correctAnswerIndex,
+                                    viewModel.selectedAnswerIndex != null &&
+                                    index == currentQuestion.correctAnswerIndex,
                                 onTap: () => _handleAnswerSubmission(index),
                               ),
                             ),

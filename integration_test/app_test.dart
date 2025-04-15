@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bcc_review_app/ui/quiz/%5Bid%5D/widgets/quiz_alternative.dart';
+import 'package:bcc_review_app/ui/quiz/%5BmoduleId%5D/widgets/quiz_alternative.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -44,10 +44,9 @@ void main() {
     await tester.tap(find.text('Algoritmos e Lógica de Programação'));
     await tester.pumpAndSettle();
 
-    for(int i = 0; i < 12; i++)
-    {
+    for (int i = 0; i < 12; i++) {
       await tester.pumpAndSettle();
-      if(find.text('Tentar Novamente').evaluate().isNotEmpty) {
+      if (find.text('Tentar Novamente').evaluate().isNotEmpty) {
         break;
       }
       // Encontre e verifique as alternativas disponíveis
@@ -63,16 +62,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verifica se o feedback "Correto" ou "Incorreto" aparece
-      if (find
-          .text('Correto')
-          .evaluate()
-          .isNotEmpty) {
+      if (find.text('Correto').evaluate().isNotEmpty) {
         expect(find.text('Correto'), findsOneWidget);
         print("CORRETO");
-      } else if (find
-          .text('Incorreto')
-          .evaluate()
-          .isNotEmpty) {
+      } else if (find.text('Incorreto').evaluate().isNotEmpty) {
         expect(find.text('Incorreto'), findsOneWidget);
         print("INCORRETO");
       }
@@ -108,5 +101,4 @@ void main() {
     /* FLUXO 5: MINIJOGOS INTERATIVOS */
     /* FLUXO 6: SAÍDA */
   });
-
 }

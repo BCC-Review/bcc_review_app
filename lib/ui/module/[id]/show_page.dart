@@ -1,3 +1,4 @@
+import 'package:bcc_review_app/app_widget.dart';
 import 'package:bcc_review_app/config/dependecies.dart';
 import 'package:bcc_review_app/domain/entities/module.dart';
 import 'package:bcc_review_app/ui/module/%5Bid%5D/module_show_view_model.dart';
@@ -99,9 +100,12 @@ class _ModulePageState extends State<ModulePage> {
                     return ModuleListItem(
                       module: module,
                       onTap:
-                          () => Routefly.push('/quiz/${module.id}/quiz').then((
-                            value,
-                          ) {
+                          () => Routefly.push(
+                            routePaths.quiz.$moduleId.quiz.replaceAll(
+                              '[moduleId]',
+                              module.id.toString(),
+                            ),
+                          ).then((value) {
                             viewModel.refreshModules(subjectId);
                           }),
                     );
