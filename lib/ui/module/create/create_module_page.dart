@@ -32,6 +32,12 @@ class _CreateModulePageState extends State<CreateModulePage> {
   ModuleValidator validator = ModuleValidator();
 
   _pickIcon() async {
+    // Remove o foco atual (fecha o teclado)
+    FocusScope.of(context).unfocus();
+
+    // Aguarda um frame para garantir que o foco foi removido completamente
+    await Future.delayed(Duration(milliseconds: 100));
+
     IconPickerIcon? iconPickerIcon = await showIconPicker(
       context,
       configuration: SinglePickerConfiguration(
@@ -101,12 +107,12 @@ class _CreateModulePageState extends State<CreateModulePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    key: const Key('module_name_field'),
                     'Informações do Módulo',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    key: const Key('module_name_field'),
                     controller: _nameController,
                     decoration: const InputDecoration(
                       labelText: 'Nome do Módulo',
@@ -241,6 +247,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                       listenable: viewmodel.createModuleCommand,
                       builder: (context, _) {
                         return ElevatedButton(
+                          key: const Key('module_save_button'),
                           onPressed:
                               viewmodel.createModuleCommand.isRunning
                                   ? null
@@ -269,7 +276,7 @@ class _CreateModulePageState extends State<CreateModulePage> {
                                       child: CircularProgressIndicator(),
                                     ),
                                   )
-                                  : const Text('Criar Módulo'),
+                                  : const Text('Salvar Módulo'),
                         );
                       },
                     ),
