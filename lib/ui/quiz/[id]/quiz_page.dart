@@ -79,7 +79,6 @@ class _QuizPageState extends State<QuizPage> {
                     Routefly.pop(context);
                     if (viewModel.isQuizFinished) {
                       setState(() {
-                        _audioPlayer.stop();
                         _audioPlayer.play(AssetSource('audio/victory.mp3'));
                         _showFinalResults = true;
                       });
