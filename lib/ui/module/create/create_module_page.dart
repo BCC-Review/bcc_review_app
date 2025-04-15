@@ -78,6 +78,12 @@ class _CreateModulePageState extends State<CreateModulePage> {
   void _listenable() {
     if (viewmodel.createModuleCommand.isSuccess) {
       Routefly.pop(context);
+      Routefly.push(
+        '/module/create_questions/[moduleId]/form_questions'.replaceAll(
+          '[moduleId]',
+          viewmodel.createdModule!.id.toString(),
+        ),
+      );
     } else if (viewmodel.createModuleCommand.isFailure) {
       final failure = viewmodel.createModuleCommand.value as FailureCommand;
       final exception = failure.error as AppException;

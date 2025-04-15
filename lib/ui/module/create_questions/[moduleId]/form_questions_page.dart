@@ -29,14 +29,10 @@ class _CreateQuestionsPageState extends State<CreateQuestionsPage> {
 
     // Obtém a instância do ViewModel via injector
     viewModel = injector.get<FormQuestionsViewModel>();
-    viewModel.getModule(moduleId);
     // Adiciona um listener para reagir aos resultados do comando de salvar
     viewModel.saveQuestionsCommand.addListener(_listenable);
-
-    // Adiciona a primeira questão vazia ao iniciar a página
-    if (viewModel.questions.isEmpty) {
-      viewModel.addEmptyQuestion();
-    }
+    // Carrega o módulo e suas questões
+    viewModel.getModule(moduleId);
   }
 
   @override
@@ -107,6 +103,10 @@ class _CreateQuestionsPageState extends State<CreateQuestionsPage> {
       body: ListenableBuilder(
         listenable: viewModel,
         builder: (context, _) {
+          if (viewModel.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
             child: Column(

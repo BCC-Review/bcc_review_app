@@ -86,6 +86,7 @@ class _OfficialModulesViewState extends State<OfficialModulesView> {
                                       ).then((value) {
                                         widget.viewModel.refreshSubjects();
                                         widget.viewModel.getUser();
+                                        widget.homeViewModel.getUser();
                                       });
                                     },
                                   ),

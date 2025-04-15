@@ -10,7 +10,14 @@ class CreateModuleViewModel extends ChangeNotifier {
   CreateModuleViewModel(this._moduleRepository);
   late final createModuleCommand = Command1(_createModule);
 
+  Module? createdModule;
+
   AsyncResult<int> _createModule(Module module) async {
-    return _moduleRepository.addModule(module);
+    final result = await _moduleRepository.addModule(module);
+    result.onSuccess((createdModuleId) {
+      createdModule = module;
+      createdModule!.id = createdModuleId;
+    });
+    return result;
   }
 }

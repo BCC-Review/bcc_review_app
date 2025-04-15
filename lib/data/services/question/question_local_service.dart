@@ -87,13 +87,13 @@ class QuestionLocalService {
 
         // Iterar e salvar as questões, associando ao módulo
         for (var question in questions) {
-          question.module.value = module;
-          await question.module.save();
-
           int id = await connection.multipleChoices.put(question);
           question.id = id; // Atualiza o ID da questão
           module.multipleChoiceQuestions.add(question);
           await module.multipleChoiceQuestions.save();
+
+          question.module.value = module;
+          await question.module.save();
         }
       });
       return Success(unit);
