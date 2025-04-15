@@ -99,22 +99,36 @@ class ExplanationViewModel extends ChangeNotifier {
 
     // Construir o prompt
     final prompt = """
-    Explique de forma clara e concisa por que a resposta para a seguinte questão de múltipla escolha está incorreta e qual é a resposta correta.
+    **Contexto:** Você é um tutor paciente e experiente explicando um erro em uma questão de múltipla escolha para um estudante. O objetivo é ajudar o estudante a entender *por que* a resposta dele está errada e *qual* o raciocínio correto.
 
-    **Questão:**
-    ${question.statement}
+    **Tarefa:** Forneça uma explicação clara e pedagógica, seguindo a estrutura abaixo.
 
-    **Alternativas:**
-    ${question.alternatives.asMap().entries.map((e) => "${String.fromCharCode(65 + e.key)}. ${e.value}").join('\n')}
+    **Dados da Questão:**
+    *   **Enunciado:** ${question.statement}
+    *   **Alternativas:**
+        ${question.alternatives.asMap().entries.map((e) => "    ${String.fromCharCode(65 + e.key)}. ${e.value}").join('\n')}
+    *   **Resposta do Estudante (Incorreta):** ${String.fromCharCode(65 + _selectedIndex!)}. ${question.alternatives[_selectedIndex!]}
+    *   **Resposta Correta:** ${String.fromCharCode(65 + question.correctAnswerIndex)}. ${question.alternatives[question.correctAnswerIndex]}
 
-    **Resposta do Usuário (Incorreta):**
-    ${String.fromCharCode(65 + _selectedIndex!)}. $selectedAnswer
+    **Estrutura da Explicação (Siga esta ordem):**
 
-    **Resposta Correta:**
-    ${String.fromCharCode(65 + question.correctAnswerIndex)}. $correctAnswer
+    1.  **Análise da Resposta do Estudante:**
+        *   Comece reconhecendo a resposta escolhida pelo estudante.
+        *   Explique **por que a alternativa '${String.fromCharCode(65 + _selectedIndex!)}' está incorreta**. Tente identificar o possível erro de conceito ou a armadilha que pode ter levado a essa escolha. Seja específico sobre o erro naquela alternativa.
 
-    **Explicação:**
-    (Forneça a explicação aqui, focando no erro conceitual do usuário e reforçando o conceito correto. Use markdown para formatação, se necessário.)
+    2.  **Explicação da Resposta Correta:**
+        *   Apresente a **resposta correta: '${String.fromCharCode(65 + question.correctAnswerIndex)}'**.
+        *   Explique **por que esta alternativa é a correta**. Detalhe o conceito, a regra, o cálculo ou o raciocínio que justifica essa escolha. Use exemplos simples, se aplicável.
+
+    3.  **Ponto Chave / Resumo:**
+        *   Conclua com uma frase curta que reforce o principal aprendizado ou o conceito fundamental testado pela questão.
+
+    **Diretrizes Adicionais:**
+    *   Use **linguagem clara e acessível**, evitando jargões excessivos.
+    *   Mantenha um **tom encorajador e didático**.
+    *   Use **Markdown** para formatação (negrito **para ênfase**, listas `*` ou `1.` se necessário).
+    *   **Foque na compreensão conceitual**, não apenas em dizer "errado" e "certo".
+    *   **Seja conciso**, mas garanta que a explicação seja completa para o entendimento do erro.
     """;
 
     try {

@@ -33,7 +33,14 @@ class _ExplanationPageState extends State<ExplanationPage> {
           'Explicação da Questão',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            onPressed: () {
+              viewModel.init(_questionId, _selectedIndex);
+            },
+          ),
+        ],
         elevation: 2,
         toolbarHeight: 70,
         bottom: PreferredSize(
