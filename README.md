@@ -17,8 +17,8 @@ Para tornar a experiência de aprendizado ainda mais envolvente, o BCC Review co
 
 - **Vidas (Corações):** Ao iniciar um quiz, o usuário possui **3 vidas (corações)**. A cada resposta incorreta, o usuário perde 1 vida. Caso perca todas as vidas, o quiz é reiniciado.
 - **XP por Perguntas:** Cada pergunta respondida corretamente concede uma quantidade de **XP**. O XP varia dependendo se a pergunta está sendo realizada pela primeira vez ou durante uma revisão do conteúdo. O ganho de XP é aplicável apenas aos materiais de estudo oficiais do BCC Review.
-  - **Pergunta inédita:** 10 XP
-  - **Pergunta revisada:** 2 XP
+  - **Pergunta respondida pela primeira vez:** 10 XP
+  - **Pergunta respondida em revisão:** 2 XP
 - **Níveis de Usuário:** O usuário acumula XP, subindo de nível conforme avança. A quantidade de XP necessária para subir de nível aumenta progressivamente conforme o usuário atinge novos marcos de experiência.
 - **Sequência Diária:** O BCC Review recompensa o usuário por manter uma sequência de dias seguidos em que pratica no aplicativo. Quanto maior a sequência de dias consecutivos praticando, mais recompensas ou bônus o usuário poderá receber, criando um hábito de estudo consistente.
 - **Feedback Visual e Motivacional:** Após cada interação, o usuário recebe feedback visual imediato, como animações exibindo o XP ganho, vidas restantes, progresso de nível e status da sua sequência diária, reforçando o sentimento de realização e incentivando a continuidade dos estudos.
@@ -37,7 +37,8 @@ Facilitar a revisão de conteúdos fundamentais da Ciência da Computação, tor
 - **Módulos de aprendizado** organizados por temas e níveis de dificuldade.
 - **Quizzes interativos** com feedback instantâneo.
 - **Sistema de progresso** com XP, níveis e sequência diária.
-- **Explicações detalhadas** para respostas erradas, incentivando o aprendizado contínuo.
+- **Explicações detalhadas** para respostas erradas com o Gemini, para ajudar na compreensão do conteúdo, utilizando a própria chave de API nas configurações do app.
+- **Criação de conteúdo** pelos usuários, permitindo a personalização do aprendizado.
 
 ## Protótipo
 
