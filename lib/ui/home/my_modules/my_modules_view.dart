@@ -65,6 +65,7 @@ class _MyModulesViewState extends State<MyModulesView> {
                   ),
                   SizedBox(height: 32),
                   ElevatedButton.icon(
+                    key: const Key('create_module_button'),
                     onPressed: () {
                       Routefly.push(routePaths.module.create.createModule).then(
                         (value) {
@@ -108,6 +109,7 @@ class _MyModulesViewState extends State<MyModulesView> {
                     SizedBox(
                       height: 56,
                       child: ElevatedButton(
+                        key: const Key('create_module_button'),
                         onPressed: () {
                           Routefly.push(
                             routePaths.module.create.createModule,
