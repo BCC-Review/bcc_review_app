@@ -5,22 +5,17 @@ import 'package:bcc_review_app/domain/entities/question.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:result_dart/result_dart.dart';
+import 'package:bcc_review_app/core/constants/gemini_models.dart';
 
 class ExplanationViewModel extends ChangeNotifier {
   final QuestionRepository _questionRepository;
   final SettingsRepository _settingsRepository;
   // A instância do GenerativeModel será criada após obter a chave API
   GenerativeModel? _generativeModel;
-  String _selectedModel =
-      'gemini-2.0-flash-thinking-exp-01-21'; // Modelo padrão
+  String _selectedModel = geminiDefaultModel; // Modelo padrão
 
   // Lista de modelos disponíveis
-  final List<String> availableModels = [
-    'gemini-2.0-flash',
-    'gemini-2.0-flash-lite-001',
-    'gemini-2.0-flash-thinking-exp-01-21',
-    'gemini-2.5-pro-preview-03-25',
-  ];
+  final List<String> availableModels = geminiAvailableModels;
 
   String get selectedModel => _selectedModel;
 
