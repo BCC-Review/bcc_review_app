@@ -1,3 +1,4 @@
+import 'package:bcc_review_app/core/constants/gemini_models.dart';
 import 'package:bcc_review_app/core/exceptions/app_exception.dart';
 import 'package:bcc_review_app/data/repositories/question/question_repository.dart';
 import 'package:bcc_review_app/data/repositories/settings/settings_repository.dart';
@@ -11,16 +12,10 @@ class ExplanationViewModel extends ChangeNotifier {
   final SettingsRepository _settingsRepository;
   // A instância do GenerativeModel será criada após obter a chave API
   GenerativeModel? _generativeModel;
-  String _selectedModel =
-      'gemini-2.0-flash-thinking-exp-01-21'; // Modelo padrão
+  String _selectedModel = defaultGeminiModel; // Modelo padrão
 
   // Lista de modelos disponíveis
-  final List<String> availableModels = [
-    'gemini-2.0-flash',
-    'gemini-2.0-flash-lite-001',
-    'gemini-2.0-flash-thinking-exp-01-21',
-    'gemini-2.5-pro-preview-03-25',
-  ];
+  final List<String> availableModels = availableGeminiModels;
 
   String get selectedModel => _selectedModel;
 
